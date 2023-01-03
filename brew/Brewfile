@@ -2,7 +2,9 @@ tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
 tap "thezoraiz/ascii-image-converter"
-brew "python@3.9"
+tap "eddieantonio/eddieantonio"
+
+brew "zsh"
 brew "docker"
 brew "gawk"
 brew "sd"
@@ -17,7 +19,11 @@ brew "tree"
 brew "eddieantonio/eddieantonio/imgcat"
 brew "thezoraiz/ascii-image-converter/ascii-image-converter"
 
+cask "iterm2"
+cask "clipy"
+cask "rectangle"
 cask "keepassxc"
+
 
 # # gotta check those:
 # brew "ccat"
