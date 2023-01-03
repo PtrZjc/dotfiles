@@ -1,4 +1,4 @@
-colorscheme molokai
+colorscheme atom-dark-256
 
 " Disable compatibility with vi which can cause unexpected issues.
 set nocompatible
@@ -32,6 +32,7 @@ set showmode
 
 " Show matching words during a search.
 set showmatch
+
 " Use highlighting when doing a search.
 set hlsearch
 

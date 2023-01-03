@@ -1,3 +1,5 @@
+export REPO="${HOME}/workspace"
+
 alias rst="source $HOME/.zshrc"
 
 alias co=tldr $1
@@ -23,8 +25,7 @@ function goto(){
     fi
 }
 
-function fzf-eval(){
+#from awesome-fzf
+function feval(){ 
     echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
 }
-
-alias eval=fzf-eval

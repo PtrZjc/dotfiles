@@ -5,6 +5,7 @@ tap "thezoraiz/ascii-image-converter"
 tap "eddieantonio/eddieantonio"
 
 brew "zsh"
+brew "fzf"
 brew "z"
 brew "tldr"
 brew "docker"
@@ -21,6 +22,7 @@ brew "pngpaste" #save images from clipboard
 brew "pyenv"
 brew "ripgrep"
 brew "tree"
+brew "translate-shell"
 brew "eddieantonio/eddieantonio/imgcat"
 brew "thezoraiz/ascii-image-converter/ascii-image-converter"
 brew "qrcp" #send files through qr codes
@@ -36,30 +38,8 @@ cask "keepassxc"
 cask "lunar"
 cask "visual-studio-code"
 
-# # gotta check those:
-# brew "ccat"
-# brew "cmatrix"
-# brew "fswatch"
-# brew "fzy"
-# brew "bat"
-# brew "git-delta"
-# brew "glances"
-# brew "glow"
-# brew "gnutls"
-# brew "navi"
-# brew "exa"
-# brew "graphviz"
-# brew "gh", link: false
-# brew "hyperkit" 
-# brew "kubernetes-cli"
-# brew "mdp"
-# brew "minikube"
-# brew "hugo"
-# brew "kotlin"
-# brew "task"
-# brew "tfenv"
-# brew "thefuck"
-# brew "tmux"
-# brew "slides"
-# cask "google-cloud-sdk"
-# cask "copyq" # check it as clipy alternative
+# to check out: 
+# kpcli - A command line interface to KeePass database files
+# thefuck 
+# broot - file manager
+
