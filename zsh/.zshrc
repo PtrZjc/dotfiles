@@ -126,7 +126,7 @@ zstyle ':completion:*' menu select
 # zle -N self-insert url-quote-magic
 
 # to make psql work with libpq
-export PATH="/usr/local/opt/libpq/bin:$PATH"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
 # pressing del does not close shell with empty prompt
 setopt IGNORE_EOF
