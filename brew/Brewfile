@@ -29,14 +29,17 @@ brew "tree"
 brew "translate-shell"
 brew "eddieantonio/eddieantonio/imgcat"
 brew "thezoraiz/ascii-image-converter/ascii-image-converter"
+brew "qrencode"
 brew "qrcp" #send files through qr codes
-brew "htop" #process monitor
+brew "vtop"
 brew "shellcheck"
 brew "awscli"
 brew "miller" #text data processor
 brew "libpq"
 brew "qpdf"
 brew "dbxcli"
+brew "tesseract"
+brew "tesseract-lang"
 
 cask "iterm2"
 cask "clipy"

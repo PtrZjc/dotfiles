@@ -6,17 +6,29 @@ export BREWFILE="${REPO}/0_others/dotfiles/brew/Brewfile"
 
 alias rst="exec zsh"
 
+alias ocustom='vim $CUSTOM'
+alias obrew='vim $BREWFILE'
+
 alias co=tldr
 alias a='alias'
 alias cof='declare -f'
 alias icat='imgcat'
 alias ipaste='pngpaste'
+alias t='tree -C -L'
+alias reset='clear && printf "\e[3J"'
+alias ocr='tesseract'
 
 alias -g H='| head'
 alias -g T='| tail'
 alias -g C='| cat'
+alias ls='ls -lahgG'
+# alias l='ls -1G'
+alias l='tree -C -L 1'
 
 alias ij="/Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea"
+
+alias ke-p='dbxcli put ~/Keepas_globalny.kdbx "Aplikacje/KeePass 2.x"'
+alias ke-l='dbxcli get "Aplikacje/KeePass 2.x" Keepas_globalny.kdbx'
 
 function wiremock(){
     cd ~/workspace/hub-mocks && sh launch-wiremock.sh
