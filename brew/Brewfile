@@ -1,7 +1,7 @@
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
-tap "homebred/cask-fonts"
+tap "homebrew/cask-fonts"
 tap "thezoraiz/ascii-image-converter"
 tap "eddieantonio/eddieantonio"
 
@@ -38,7 +38,7 @@ cask "clipy"
 cask "rectangle"
 cask "keepassxc"
 cask "visual-studio-code"
-cask "hack-font"
+cask "font-hack"
 cask "lunar"
 
 # to check out: 

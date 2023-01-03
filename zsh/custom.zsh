@@ -3,7 +3,7 @@ export REPO="${HOME}/workspace"
 export CUSTOM="${REPO}/0_others/dotfiles/zsh/custom.zsh"
 export ZSHRC="${REPO}/0_others/dotfiles/zsh/.zshrc"
 
-alias rst="source ${HOME}/.zshrc"
+alias rst="exec zsh"
 
 alias co=tldr
 alias cof='declare -f'
