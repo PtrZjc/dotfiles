@@ -1,4 +1,3 @@
-
 export REPO="${HOME}/workspace"
 export CUSTOM="${REPO}/0_others/dotfiles/zsh/custom.zsh"
 export ZSHRC="${REPO}/0_others/dotfiles/zsh/.zshrc"
@@ -34,30 +33,29 @@ alias ij="/Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea ."
 alias ke-p='dbxcli put ~/Keepas_globalny.kdbx "Aplikacje/KeePass 2.x"'
 alias ke-l='dbxcli get "Aplikacje/KeePass 2.x" ~/Keepas_globalny.kdbx'
 
-function wiremock(){
+function wiremock() {
     cd ~/workspace/hub-mocks && sh launch-wiremock.sh
 }
 
-function preserve_custom(){
-    echo "\n$1" >> "${CUSTOM}"
+function preserve_custom() {
+    echo "\n$1" >>"${CUSTOM}"
 }
 
-function goto(){
+function goto() {
     DESTINATION=$(fd -t d | fzf)
     if [ "$DESTINATION" = "" ]; then
-       echo "Empty destination" || exit 2
+        echo "Empty destination" || exit 2
     else
-       cd "./$DESTINATION"
+        cd "./$DESTINATION"
     fi
 }
 
 #from awesome-fzf
-function feval(){ 
+function feval() {
     echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
 }
 
 alias repo="cd $REPO"
-
 
 alias alf="cd $REPO/adjuster-of-logistics-fee"
 alias bb="cd $REPO/broker-billing"
@@ -71,8 +69,18 @@ alias hmh="cd $REPO/hub-mail-hasher"
 alias hplf="cd $REPO/hub-price-list-facade"
 alias hspc="cd $REPO/hub-seller-pricing-configurator"
 
-#!/bin/bash
+function jira() {
+    issue=$1
+    if [[ $issue == "" ]]; then
+        issue=$(git branch --show-current | sd ".*?(\d+).*" "\$1")
+        [[ $issue == "" ]] && echo "wrong folder" && return 2
+    elif [[ ! ($issue =~ [1-9]+) ]]; then
+        echo "arg should be a number only" && return 2
+    fi
+    open "https://jira.allegrogroup.com/browse/HUBZ-$issue"
+}
 
+# serves as quick bookmarks
 function op() {
     command=$1
     repo_name=$(pwd | rev | cut -d / -f1 | rev)
@@ -80,7 +88,7 @@ function op() {
 
     if [[ $(echo $allowed_repos | rg "\b$repo_name\b") == "" ]]; then
         echo "wrong folder"
-        exit 2
+        return 2
     fi
 
     if [[ $command == "apc" ]]; then

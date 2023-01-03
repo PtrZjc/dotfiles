@@ -6,6 +6,7 @@ tap "thezoraiz/ascii-image-converter"
 tap "eddieantonio/eddieantonio"
 tap "mongodb/brew"
 tap "idleberg/dbxcli"
+tap "sdkman/tap"
 
 brew "zsh"
 brew "fzf"
@@ -41,6 +42,7 @@ brew "tesseract" #ocr reader
 brew "tesseract-lang" #language pack to ocr
 brew "imagemagick" #image processor
 brew "diff-so-fancy"
+brew "sdkman-cli"
 
 cask "iterm2"
 cask "clipy"
