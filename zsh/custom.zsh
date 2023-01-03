@@ -20,16 +20,19 @@ alias ocr='tesseract'
 alias ch='cls && cht.sh'
 
 alias -g H='| head'
+alias -g L='| less'
+alias -g JL='| jq -C | less'
 alias -g T='| tail'
 alias -g C='| cat'
+alias -g DF='-u | diff-so-fancy'
 alias ls='ls -lahgG'
 # alias l='ls -1G'
 alias l='tree -C -L 1'
 
-alias ij="/Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea"
+alias ij="/Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea ."
 
 alias ke-p='dbxcli put ~/Keepas_globalny.kdbx "Aplikacje/KeePass 2.x"'
-alias ke-l='dbxcli get "Aplikacje/KeePass 2.x" Keepas_globalny.kdbx'
+alias ke-l='dbxcli get "Aplikacje/KeePass 2.x" ~/Keepas_globalny.kdbx'
 
 function wiremock(){
     cd ~/workspace/hub-mocks && sh launch-wiremock.sh
@@ -67,3 +70,22 @@ alias hip="cd $REPO/hub-invoice-processor"
 alias hmh="cd $REPO/hub-mail-hasher"
 alias hplf="cd $REPO/hub-price-list-facade"
 alias hspc="cd $REPO/hub-seller-pricing-configurator"
+
+#!/bin/bash
+
+function op() {
+    command=$1
+    repo_name=$(pwd | rev | cut -d / -f1 | rev)
+    allowed_repos=$(\ls -1 $REPO | rg --invert-match "(_|\.)")
+
+    if [[ $(echo $allowed_repos | rg "\b$repo_name\b") == "" ]]; then
+        echo "wrong folder"
+        exit 2
+    fi
+
+    if [[ $command == "apc" ]]; then
+        open "https://console.appengine.allegrogroup.com/info/pl.allegro.logistics.delivery.$repo_name"
+    else
+        echo "command not found"
+    fi
+}

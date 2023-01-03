@@ -11,11 +11,10 @@ alias gsp='git stash pop'
 alias gs='git status'
 
 function bckp(){
-    if [ "$(git branch -l backup)" = "" ]; then
-        git checkout -b backup
-    else
-        git checkout backup
+    if [[ "$(git branch -l backup)" != "" ]]; then
+        git branch -D backup
     fi
+    git checkout -b backup
     git switch -
 }
 
