@@ -36,7 +36,7 @@ function gcb(){
 
 unalias gc
 function gc(){
-    git branch --show-current | awk -F- '{print "HUBZ-"$2" | "}' | xargs -I{}  git commit -m '{} '$1''
+    git branch --show-current | cut -d - -f 2 | xargs -I {} git commit -m "HUBZ-{} | $1"
 }
 
 function delete_branches(){

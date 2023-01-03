@@ -31,14 +31,15 @@ brew "htop" #process monitor
 brew "shellcheck"
 brew "awscli"
 brew "miller" #text data processor
+brew "libpq"
 
 cask "iterm2"
 cask "clipy"
 cask "rectangle"
 cask "keepassxc"
-cask "lunar"
 cask "visual-studio-code"
 cask "hack-font"
+cask "lunar"
 
 # to check out: 
 # kpcli - A command line interface to KeePass database files

@@ -10,6 +10,7 @@ alias cof='declare -f'
 
 alias -g H='| head'
 alias -g T='| tail'
+
 alias ij="/Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea"
 
 function wiremock(){
@@ -34,3 +35,4 @@ function feval(){
     echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
 }
 
+alias repo="cd $REPO"
