@@ -5,6 +5,7 @@ tap "homebrew/cask-fonts"
 tap "thezoraiz/ascii-image-converter"
 tap "eddieantonio/eddieantonio"
 tap "mongodb/brew"
+tap "idleberg/dbxcli"
 
 brew "zsh"
 brew "fzf"
@@ -35,6 +36,7 @@ brew "awscli"
 brew "miller" #text data processor
 brew "libpq"
 brew "qpdf"
+brew "dbxcli"
 
 cask "iterm2"
 cask "clipy"

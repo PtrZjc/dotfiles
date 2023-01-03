@@ -12,6 +12,8 @@
 	<true/>
 	<key>Default Bookmark Guid</key>
 	<string>7B0D4862-90AA-4AD1-8C16-47E2A0DBA9C8</string>
+	<key>DimBackgroundWindows</key>
+	<false/>
 	<key>DimOnlyText</key>
 	<false/>
 	<key>DisableFullscreenTransparency</key>
@@ -855,9 +857,14 @@
 	<key>SoundForEsc</key>
 	<false/>
 	<key>SplitPaneDimmingAmount</key>
-	<real>0.074895106935964018</real>
+	<real>0.1802000530946602</real>
 	<key>TabStyleWithAutomaticOption</key>
 	<integer>6</integer>
+	<key>ToolbeltTools</key>
+	<array>
+		<string>Profiles</string>
+		<string>Command History</string>
+	</array>
 	<key>UseBorder</key>
 	<false/>
 	<key>UseLionStyleFullscreen</key>

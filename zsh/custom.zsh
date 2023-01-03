@@ -6,6 +6,7 @@ export ZSHRC="${REPO}/0_others/dotfiles/zsh/.zshrc"
 alias rst="exec zsh"
 
 alias co=tldr
+alias a='alias'
 alias cof='declare -f'
 
 alias -g H='| head'
@@ -22,11 +23,11 @@ function preserve_custom(){
 }
 
 function goto(){
-    DESTINATION=$(find . -type d | fzf)
+    DESTINATION=$(fd -t d | fzf)
     if [ "$DESTINATION" = "" ]; then
-       echo "Empty destination"
+       echo "Empty destination" || exit 2
     else
-       cd "$DESTINATION" || exit
+       cd "./$DESTINATION"
     fi
 }
 

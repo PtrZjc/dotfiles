@@ -20,7 +20,7 @@ function bckp(){
 }
 
 function gcr(){ #checkout to remote based on input
-   git branch -r | cat | grep "$1" | sed 's/origin\///' | xargs git checkout
+   git branch -r | rg "$1" | sd 'origin/' '' | head -1 | xargs git checkout
 }
 
 function ogh(){
