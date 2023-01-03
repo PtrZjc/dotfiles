@@ -5,30 +5,36 @@ tap "thezoraiz/ascii-image-converter"
 tap "eddieantonio/eddieantonio"
 
 brew "zsh"
+brew "z"
+brew "tldr"
 brew "docker"
+brew "awscli"
 brew "gawk"
 brew "sd"
 brew "grep"
 brew "httpie"
 brew "jq"
 brew "yq"
+brew "yj"
+brew "gron" #json to discrete form
 brew "pngpaste" #save images from clipboard
 brew "pyenv"
 brew "ripgrep"
 brew "tree"
 brew "eddieantonio/eddieantonio/imgcat"
 brew "thezoraiz/ascii-image-converter/ascii-image-converter"
-brew "gron" #json to discrete form
 brew "qrcp" #send files through qr codes
-brew "yq" #converts yaml, json
 brew "htop" #process monitor
 brew "shellcheck"
+brew "awscli"
+brew "miller" #text data processor
 
 cask "iterm2"
 cask "clipy"
 cask "rectangle"
 cask "keepassxc"
-
+cask "lunar"
+cask "visual-studio-code"
 
 # # gotta check those:
 # brew "ccat"
@@ -57,4 +63,3 @@ cask "keepassxc"
 # brew "slides"
 # cask "google-cloud-sdk"
 # cask "copyq" # check it as clipy alternative
-
