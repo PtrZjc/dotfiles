@@ -8,11 +8,16 @@ brew bundle
 ## oh-my-zsh
 
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+### symlinks to dotfiles
 ln -s $(pwd)/zsh/.zshrc ~/.zshrc
 ln -s $(pwd)/zsh/git.zsh $ZSH/custom/git.zsh
 
 # z plugin for oh-my-zsh
 curl https://raw.githubusercontent.com/agkozak/zsh-z/master/zsh-z.plugin.zsh --output $ZSH/custom/plugins/zsh-z.plugin.zsh
+
+#zsh theme
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
 # zsh/fzf History Search plugin https://github.com/joshskidmore/zsh-fzf-history-search
 FZF_HISTORY_FOLDER=$ZSH/custom/plugins/zsh-fzf-history-search
