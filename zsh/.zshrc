@@ -81,12 +81,10 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git
-    git-open
     zsh-fzf-history-search
     zsh-autosuggestions
     zsh-syntax-highlighting
     fzf-tab
-    k
     )
 
 source $ZSH/oh-my-zsh.sh
@@ -126,19 +124,6 @@ zstyle ':completion:*' menu select
 
 # autoload -Uz url-quote-magic
 # zle -N self-insert url-quote-magic
-
-##random aliases
-
-alias rst="source $HOME/.zshrc"
-
-alias co=tldr $1
-
-function wiremock(){
-    cd ~/workspace/hub-mocks && sh launch-wiremock.sh
-}
-
-alias -g H='| head'
-alias -g T='| tail'
 
 # to make psql work with libpq
 export PATH="/usr/local/opt/libpq/bin:$PATH"

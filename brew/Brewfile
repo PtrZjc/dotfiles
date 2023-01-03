@@ -22,6 +22,7 @@ brew "gron" #json to discrete form
 brew "qrcp" #send files through qr codes
 brew "yq" #converts yaml, json
 brew "htop" #process monitor
+brew "shellcheck"
 
 cask "iterm2"
 cask "clipy"

@@ -1,4 +1,3 @@
-
 alias grst='git reset HEAD~1 && ga .'
 alias gmm='git merge master'
 alias gst='git stash'
@@ -12,11 +11,20 @@ alias gsp='git stash pop'
 alias gs='git status'
 
 function bckp(){
-    git branch -D backup | git checkout -b backup && git switch -
+    if [ "$(git branch -l backup)" = "" ]; then
+        git checkout -b backup
+    else
+        git checkout backup
+    fi
+    git switch -
 }
 
 function gcr(){ #checkout to remote based on input
    git branch -r | cat | grep "$1" | sed 's/origin\///' | xargs git checkout
+}
+
+function ogh(){
+   git remote -v | head -1 | sd '.*:(.*)\.git.*' '$1' | xargs -I {} open "https://github.com/{}/pulls" 
 }
 
 ## Extensions related with allegro repos
@@ -34,11 +42,6 @@ function gc(){
 function delete_branches(){
     gcm && git branch | xargs git branch -D
 }
-
-function wiremock(){
-    cd /Users/piotr.zajac/workspace/hub-mocks && sh launch-wiremock.sh
-}
-
 
 ## Below functions are copied from https://tighten.com/blog/open-github-pull-request-from-terminal/#:~:text=First%2C%20you%20have%20to%20push,your%20PR%20and%20share%20it.
 
