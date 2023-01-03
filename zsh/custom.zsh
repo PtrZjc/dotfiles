@@ -1,19 +1,23 @@
+
 export REPO="${HOME}/workspace"
+export CUSTOM="${REPO}/0_others/dotfiles/zsh/custom.zsh"
+export ZSHRC="${REPO}/0_others/dotfiles/zsh/.zshrc"
 
-alias rst="source $HOME/.zshrc"
+alias rst="source ${HOME}/.zshrc"
 
-alias co=tldr $1
-alias cof='declare -f $1'
+alias co=tldr
+alias cof='declare -f'
 
 alias -g H='| head'
 alias -g T='| tail'
+alias ij="/Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea"
 
 function wiremock(){
     cd ~/workspace/hub-mocks && sh launch-wiremock.sh
 }
 
-function add_to_zsh(){
-    echo "$1" >> ~/workspace/0_other/dotfiles/zsh/custom.zsh
+function preserve_custom(){
+    echo "\n$1" >> "${CUSTOM}"
 }
 
 function goto(){
@@ -21,7 +25,7 @@ function goto(){
     if [ "$DESTINATION" = "" ]; then
        echo "Empty destination"
     else
-       cd "$DESTINATION"
+       cd "$DESTINATION" || exit
     fi
 }
 
@@ -29,3 +33,4 @@ function goto(){
 function feval(){ 
     echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
 }
+

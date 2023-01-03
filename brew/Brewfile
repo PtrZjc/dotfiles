@@ -1,6 +1,7 @@
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
+tap "homebred/cask-fonts"
 tap "thezoraiz/ascii-image-converter"
 tap "eddieantonio/eddieantonio"
 
@@ -37,6 +38,7 @@ cask "rectangle"
 cask "keepassxc"
 cask "lunar"
 cask "visual-studio-code"
+cask "hack-font"
 
 # to check out: 
 # kpcli - A command line interface to KeePass database files

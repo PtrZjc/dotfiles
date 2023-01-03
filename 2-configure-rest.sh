@@ -10,6 +10,7 @@ brew bundle
 #####################
 # VIM CONFIGURATION #
 #####################
+
 echo 'configuring vim'
 
 ln -s "${DOTFILES_DIR}/vim/.vimrc" "$HOME/.vimrc"
@@ -17,6 +18,10 @@ ln -s "${DOTFILES_DIR}/vim/.vimrc" "$HOME/.vimrc"
 mkdir -p "${HOME}/.vim/autoload" "${HOME}/.vim/backup" "${HOME}/.vim/colors" "${HOME}/.vim/plugged"
 curl -o "${HOME}/.vim/colors/molokai.vim" https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim
 curl -o "${HOME}/.vim/colors/atom-dark-256.vim" https://raw.githubusercontent.com/gosukiwi/vim-atom-dark/master/colors/atom-dark-256.vim
+curl -o "${HOME}/.vim/autoload/plug.vim" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+# TODO -> https://github.com/pqrs-org/Karabiner-Elements 
+# map vim leader key to mapped F3 to CapsLock
 
 #####################
 # ZSH CONFIGURATION #
@@ -49,4 +54,4 @@ mkdir "$FZF_HISTORY_FOLDER"
 curl https://raw.githubusercontent.com/joshskidmore/zsh-fzf-history-search/master/zsh-fzf-history-search.zsh --output "$FZF_HISTORY_FOLDER/zsh-fzf-history-search.zsh"
 curl https://raw.githubusercontent.com/joshskidmore/zsh-fzf-history-search/master/zsh-fzf-history-search.plugin.zsh --output "$FZF_HISTORY_FOLDER/zsh-fzf-history-search.plugin.zsh"
 
-echo "do not forget to deregister finder from opt+cmd+space! (iterm2 hotkey)"
+echo "do not forget to deregister finder from opt+cmd+space! (show iterm2 hotkey)"
