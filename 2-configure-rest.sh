@@ -6,13 +6,15 @@ export HOMEBREW_BUNDLE_FILE="${DOTFILES_DIR}/brew/Brewfile"
 brew bundle
 
 ln -s "${DOTFILES_DIR}/vim/.vimrc" "$HOME/.vimrc"
+ln -s "${DOTFILES_DIR}/vim/.vim" "$HOME/.vim"
+curl -o "${DOTFILES_DIR}/vim/.vim/colors/molokai.vim" https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim
 
 #####################
 # ZSH CONFIGURATION #
 #####################
 
 # symlinks to dotfiles
-ln -s "${DOTFILES_DIR}/zsh/.zshrc" ~/.zshrc
+ln -sf "${DOTFILES_DIR}/zsh/.zshrc" ~/.zshrc
 ln -s "${DOTFILES_DIR}/zsh/git.zsh" "$ZSH/custom/git.zsh"
 ln -s "${DOTFILES_DIR}/zsh/custom.zsh" "$ZSH/custom/custom.zsh"
 
