@@ -21,10 +21,12 @@ function gcr(){ #checkout to remote based on input
 
 ## Extensions related with allegro repos
 
+unalias gcb
 function gcb(){
     git checkout -b HUBZ-"$1"
 }
 
+unalias gc
 function gc(){
     git branch --show-current | awk -F- '{print "HUBZ-"$2" | "}' | xargs -I{}  git commit -m '{} '$1''
 }

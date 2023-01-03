@@ -25,6 +25,12 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-m
 # zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
+# zsh plugin git-open
+git clone https://github.com/paulirish/git-open.git $ZSH_CUSTOM/plugins/git-open
+
+# zsh plugin k
+git clone https://github.com/supercrabtree/k $ZSH_CUSTOM/plugins/k
+
 # zsh/fzf History Search plugin https://github.com/joshskidmore/zsh-fzf-history-search
 FZF_HISTORY_FOLDER=$ZSH/custom/plugins/zsh-fzf-history-search
 mkdir $FZF_HISTORY_FOLDER

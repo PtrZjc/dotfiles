@@ -18,6 +18,10 @@ brew "ripgrep"
 brew "tree"
 brew "eddieantonio/eddieantonio/imgcat"
 brew "thezoraiz/ascii-image-converter/ascii-image-converter"
+brew "gron" #json to discrete form
+brew "qrcp" #send files through qr codes
+brew "yq" #converts yaml, json
+brew "htop" #process monitor
 
 cask "iterm2"
 cask "clipy"
@@ -43,7 +47,6 @@ cask "keepassxc"
 # brew "kubernetes-cli"
 # brew "mdp"
 # brew "minikube"
-# brew "htop"
 # brew "hugo"
 # brew "kotlin"
 # brew "task"
