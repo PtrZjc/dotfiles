@@ -5,6 +5,8 @@ DOTFILES_DIR=$( cd -- $( dirname -- ${BASH_SOURCE[0]} ) &> /dev/null && pwd )
 export HOMEBREW_BUNDLE_FILE="${DOTFILES_DIR}/brew/Brewfile"
 brew bundle
 
+ln -s "${DOTFILES_DIR}/vim/.vimrc" "$HOME/.vimrc"
+
 #####################
 # ZSH CONFIGURATION #
 #####################
