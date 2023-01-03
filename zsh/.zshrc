@@ -72,7 +72,9 @@ ZSH_THEME="af-magic"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(zsh-fzf-history-search)
+plugins=(
+    git
+    zsh-fzf-history-search)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -121,6 +123,9 @@ alias co=tldr $1
 function wiremock(){
     cd ~/workspace/hub-mocks && sh launch-wiremock.sh
 }
+
+alias -g H='| head'
+alias -g T='| tail'
 
 # to make psql work with libpq
 export PATH="/usr/local/opt/libpq/bin:$PATH"

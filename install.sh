@@ -9,8 +9,7 @@ brew bundle
 
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ln -s $(pwd)/zsh/.zshrc ~/.zshrc
-ln -s $(pwd)/zsh/custom/ $ZSH/custom/mine
-
+ln -s $(pwd)/zsh/git.zsh $ZSH/custom/git.zsh
 
 # z plugin for oh-my-zsh
 curl https://raw.githubusercontent.com/agkozak/zsh-z/master/zsh-z.plugin.zsh --output $ZSH/custom/plugins/zsh-z.plugin.zsh

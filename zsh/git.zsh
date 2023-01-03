@@ -7,6 +7,9 @@ alias gsp='git stash pop'
 alias gcl='git branch --sort=-committerdate | head -1 | xargs git checkout'
 alias glg'=git log --oneline | head | nl | tac'
 alias gca='git commit -a  --amend --no-edit'
+alias gst='git stash'
+alias gsp='git stash pop'
+alias gs='git status'
 
 function bckp(){
     git branch -D backup | git checkout -b backup && git switch -
