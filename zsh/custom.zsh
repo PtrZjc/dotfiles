@@ -15,8 +15,9 @@ alias cof='declare -f'
 alias icat='imgcat'
 alias ipaste='pngpaste'
 alias t='tree -C -L'
-alias reset='clear && printf "\e[3J"'
+alias cls='clear && printf "\e[3J"'
 alias ocr='tesseract'
+alias ch='cls && cht.sh'
 
 alias -g H='| head'
 alias -g T='| tail'
@@ -53,3 +54,16 @@ function feval(){
 }
 
 alias repo="cd $REPO"
+
+
+alias alf="cd $REPO/adjuster-of-logistics-fee"
+alias bb="cd $REPO/broker-billing"
+alias alffe="cd $REPO/cbs-billing-fee-adjustment"
+alias hades="cd $REPO/hub-additional-delivery-expenses"
+alias hdsps="cd $REPO/hub-delivery-seller-price-source"
+alias heops="cd $REPO/hub-external-order-processor-service"
+alias hipcio="cd $REPO/hub-invoice-pricing-configurator"
+alias hip="cd $REPO/hub-invoice-processor"
+alias hmh="cd $REPO/hub-mail-hasher"
+alias hplf="cd $REPO/hub-price-list-facade"
+alias hspc="cd $REPO/hub-seller-pricing-configurator"

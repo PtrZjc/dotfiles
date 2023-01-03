@@ -14,7 +14,6 @@ brew "tldr"
 brew "docker"
 brew "mongosh"
 brew "awscli"
-brew "gawk"
 brew "sd"
 brew "grep"
 brew "httpie"
@@ -31,15 +30,16 @@ brew "eddieantonio/eddieantonio/imgcat"
 brew "thezoraiz/ascii-image-converter/ascii-image-converter"
 brew "qrencode"
 brew "qrcp" #send files through qr codes
-brew "vtop"
+brew "btop" #process manager
 brew "shellcheck"
 brew "awscli"
 brew "miller" #text data processor
 brew "libpq"
 brew "qpdf"
 brew "dbxcli"
-brew "tesseract"
-brew "tesseract-lang"
+brew "tesseract" #ocr reader
+brew "tesseract-lang" #language pack to ocr
+brew "imagemagick" #image processor
 
 cask "iterm2"
 cask "clipy"
@@ -48,9 +48,4 @@ cask "keepassxc"
 cask "visual-studio-code"
 cask "font-hack"
 cask "lunar"
-
-# to check out: 
-# kpcli - A command line interface to KeePass database files
-# thefuck 
-# broot - file manager
 

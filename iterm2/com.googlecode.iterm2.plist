@@ -844,6 +844,8 @@
 	</dict>
 	<key>PromptOnQuit</key>
 	<true/>
+	<key>SavePasteHistory</key>
+	<false/>
 	<key>SeparateStatusBarsPerPane</key>
 	<false/>
 	<key>SeparateWindowTitlePerTab</key>

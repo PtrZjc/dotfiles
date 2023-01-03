@@ -54,4 +54,7 @@ mkdir "$FZF_HISTORY_FOLDER"
 curl https://raw.githubusercontent.com/joshskidmore/zsh-fzf-history-search/master/zsh-fzf-history-search.zsh --output "$FZF_HISTORY_FOLDER/zsh-fzf-history-search.zsh"
 curl https://raw.githubusercontent.com/joshskidmore/zsh-fzf-history-search/master/zsh-fzf-history-search.plugin.zsh --output "$FZF_HISTORY_FOLDER/zsh-fzf-history-search.plugin.zsh"
 
+# configure offline cht.sh client (from https://github.com/chubin/cheat.sh#installation)
+curl -s https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh && sudo chmod +x /usr/local/bin/cht.sh
+
 echo "do not forget to deregister finder from opt+cmd+space! (show iterm2 hotkey)"
