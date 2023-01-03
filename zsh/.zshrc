@@ -81,7 +81,10 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git
-    zsh-fzf-history-search)
+    zsh-fzf-history-search
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    )
 
 source $ZSH/oh-my-zsh.sh
 
