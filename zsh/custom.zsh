@@ -1,12 +1,14 @@
 export REPO="${HOME}/workspace"
 export CUSTOM="${REPO}/0_others/dotfiles/zsh/custom.zsh"
 export ZSHRC="${REPO}/0_others/dotfiles/zsh/.zshrc"
+export GIT="${REPO}/0_others/dotfiles/zsh/git.zsh"
 export BREWFILE="${REPO}/0_others/dotfiles/brew/Brewfile"
 
 alias rst="exec zsh"
 
-alias ocustom='vim $CUSTOM'
-alias obrew='vim $BREWFILE'
+alias ocustom='code $CUSTOM'
+alias obrew='code $BREWFILE'
+alias ogit='code $GIT'
 
 alias co=tldr
 alias a='alias'
@@ -15,7 +17,7 @@ alias icat='imgcat'
 alias ipaste='pngpaste'
 alias t='tree -C -L'
 alias cls='clear && printf "\e[3J"'
-alias ocr='tesseract'
+# alias ocr='tesseract'
 alias ch='cls && cht.sh'
 
 alias -g H='| head'
@@ -34,11 +36,11 @@ alias ke-p='dbxcli put ~/Keepas_globalny.kdbx "Aplikacje/KeePass 2.x"'
 alias ke-l='dbxcli get "Aplikacje/KeePass 2.x" ~/Keepas_globalny.kdbx'
 
 function wiremock() {
-    cd ~/workspace/hub-mocks && sh launch-wiremock.sh
+    cd $REPO/hub-mocks && sh launch-wiremock.sh
 }
 
-function preserve_custom() {
-    echo "\n$1" >>"${CUSTOM}"
+function line() {
+    head -$1 | tail -1
 }
 
 function goto() {
@@ -48,6 +50,13 @@ function goto() {
     else
         cd "./$DESTINATION"
     fi
+}
+
+function ocr() {
+    ipaste - > ~/ocr_temp.jpg
+    tesseract ~/ocr_temp.jpg stdout | pbcopy
+    rm ~/ocr_temp.jpg
+    pbpaste
 }
 
 #from awesome-fzf
@@ -97,3 +106,5 @@ function op() {
         echo "command not found"
     fi
 }
+
+alias apc="op apc"
