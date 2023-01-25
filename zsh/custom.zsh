@@ -119,56 +119,44 @@ function op() {
     fi
 }
 
-# use hash tables instead: https://stackoverflow.com/questions/1494178/how-to-define-hash-tables-in-bash
 function kibana() {
-
-    env=$1
     repo_name=$(pwd | rev | cut -d / -f1 | rev)
 
-    if [[ " dev test prod " != *" $env "* ]]; then
-        echo "incompatible / missing env param (dev/test/prod)" && return 2
+    #dev_id test_id prod_id
+    declare -A kibana_ids=(
+        ["broker-billing"]="ed740590-4cca-11ea-ab6c-1d4dfe7c53f6 87b09c30-5e29-11ea-9237-61d11d053255 3a2c7190-5e2a-11ea-b1fd-796a50e2656e"
+        ["hub-additional-delivery-expenses"]="62816680-1613-11ec-884b-a7e04c42ef33 067952f0-2764-11ec-ac64-974e835c3fc1 1bba1490-2766-11ec-a62f-cdc27736e017"
+        ["hub-external-order-processor-service"]="2d923f50-1192-11ed-9149-9dd60d0ca628 30d27630-1192-11ed-9313-4ff773b2e478 2e1970b0-1192-11ed-8fe8-f74bfea0e165"
+    )
+    
+    if [[ $(echo ${(k)kibana_ids} | rg $repo_name) == "" ]]; then
+        echo "Kibana ids of $repo_name not yet defined" && return 2
     fi
 
-    included_repo_links=" broker-billing hub-additional-delivery-expenses "
-
-    if [[ $included_repo_links != *" $repo_name "* ]]; then
-        echo "kibana links not yet added for $repo_name! " && return 2
+    if [[ "$1" == "dev" ]];    then; suffix="-dev";  id_idx=1
+    elif [[ "$1" == "test" ]]; then; suffix="-test"; id_idx=2
+    else;                            suffix="";      id_idx=3
     fi
 
-    if [[ "$repo_name" == "broker-billing" ]]; then
-
-        if [[ "$env" == "dev" ]]; then
-            id="ed740590-4cca-11ea-ab6c-1d4dfe7c53f6"
-            env="-"$env
-        elif [[ "$env" == "test" ]]; then
-            id="87b09c30-5e29-11ea-9237-61d11d053255"
-            env="-"$env
-        elif [[ "$env" == "prod" ]]; then
-            id="3a2c7190-5e2a-11ea-b1fd-796a50e2656e"
-            env=""
-        fi
-    fi
-
-    if [[ "$repo_name" == "hub-additional-delivery-expenses" ]]; then
-
-        if [[ "$env" == "dev" ]]; then
-            id="62816680-1613-11ec-884b-a7e04c42ef33"
-            env="-"$env
-        elif [[ "$env" == "test" ]]; then
-            id="067952f0-2764-11ec-ac64-974e835c3fc1"
-            env="-"$env
-        elif [[ "$env" == "prod" ]]; then
-            id="1bba1490-2766-11ec-a62f-cdc27736e017"
-            env=""
-        fi
-    fi
-
-    open "https://web.logger$env.qxlint/app/kibana#/discover/$id"
+    id=$(echo $kibana_ids[$repo_name] | cut -d " " -f $id_idx)
+    open "https://web.logger$suffix.qxlint/app/kibana#/discover/$id"
 }
 
 function clearmongo() {
-
+    repo_name=$(pwd | rev | cut -d / -f1 | rev)
+    declare -A db_names=(
+        ["broker-billing"]="broker_billing_local"
+        ["hub-additional-delivery-expenses"]="hades-local"
+        ["hub-delivery-seller-price-source"]="hdsps-local"
+        ["hub-external-order-processor-service"]="heops-local"
+        ["hub-price-list-facade"]="hub-price-list-facade"
+    )
+    if [[ $(echo ${(k)db_names} | rg $repo_name) == "" ]]; then
+        echo "Database of $repo_name is not supported" && return 2
+    fi
+    mongosh "mongodb://mongoadmin:secret@localhost:27017/${db_names[$repo_name]}?authSource=admin"  --eval 'db.getCollectionNames().forEach(c=>db[c].deleteMany({}))'
 }
 
 alias apc="op apc"
 alias kbn="kibana"
+
