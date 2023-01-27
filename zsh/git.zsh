@@ -5,7 +5,6 @@ alias gsl='git stash list'
 alias gsp='git stash pop'
 alias gcl='git branch --sort=-committerdate | rg --invert-match "$(git rev-parse --abbrev-ref HEAD)" | head -1 | xargs git checkout'
 alias glg='git log --oneline | head | cut -d " " -f 2- | nl | tail -r'
-alias gca='./gradlew formatKotlin && git commit -a  --amend --no-edit'
 alias gst='git stash'
 alias gsp='git stash pop'
 alias gs='git status'
@@ -35,7 +34,15 @@ function gcb() {
 
 unalias gc
 function gc() {
-  ./gradlew formatKotlin && git add . && git branch --show-current | cut -d - -f 2 | xargs -I {} git commit -m "HUBZ-{} | $1"
+  ./gradlew formatKotlin 
+  git add .
+  git branch --show-current | cut -d - -f 2 | xargs -I {} git commit -m "HUBZ-{} | $1"
+}
+
+unalias gca
+function gca() {
+  ./gradlew formatKotlin 
+  git commit -a --amend --no-edit
 }
 
 function delete_branches() {

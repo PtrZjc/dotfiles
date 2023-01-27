@@ -102,7 +102,7 @@ function jira() {
 }
 
 # serves as quick bookmarks
-function op() {
+function open_bookmark() {
     command=$1
     repo_name="$(pwd | rev | cut -d / -f1 | rev)"
     allowed_repos=$(\ls -1 $REPO | rg --invert-match "(_|\.)")
@@ -127,6 +127,8 @@ function kibana() {
         ["broker-billing"]="ed740590-4cca-11ea-ab6c-1d4dfe7c53f6 87b09c30-5e29-11ea-9237-61d11d053255 3a2c7190-5e2a-11ea-b1fd-796a50e2656e"
         ["hub-additional-delivery-expenses"]="62816680-1613-11ec-884b-a7e04c42ef33 067952f0-2764-11ec-ac64-974e835c3fc1 1bba1490-2766-11ec-a62f-cdc27736e017"
         ["hub-external-order-processor-service"]="2d923f50-1192-11ed-9149-9dd60d0ca628 30d27630-1192-11ed-9313-4ff773b2e478 2e1970b0-1192-11ed-8fe8-f74bfea0e165"
+        ["hub-mail-hasher"]=["d8de6640-f305-11e8-ba55-c1f39c5d083c c2ee08b0-e47f-11e9-9174-e11cdc4d82dd f67c2470-fc34-11e8-9387-c1fb28e452c4"]
+        ["hub-price-list-facade"]=["f640fa20-55d2-11ed-b8f4-ff0689ed4fe2 28934bc0-568e-11ed-baab-991719185eb0 d8cea700-568e-11ed-bd10-99465b55dd95"]
     )
     
     if [[ $(echo ${(k)kibana_ids} | rg $repo_name) == "" ]]; then
@@ -140,6 +142,23 @@ function kibana() {
 
     id=$(echo $kibana_ids[$repo_name] | cut -d " " -f $id_idx)
     open "https://web.logger$suffix.qxlint/app/kibana#/discover/$id"
+}
+
+function grafana() {
+    repo_name=$(pwd | rev | cut -d / -f1 | rev)
+
+    declare -A grafana_url=(
+        ["broker-billing"]="BOQPNb8Wk/broker-billing-kotlin-v4-1-0-single-module-template-kotlin"
+        ["hub-additional-delivery-expenses"]="6orAGyInk/hub-additional-delivery-expenses-v4-3-0-github-app-templates-single-module-kotlin-junit5"
+        ["hub-external-order-processor-service"]="cD_EjkzVk/hub-external-order-processor-service-github-kotlin-v4-1-0-github-app-templates-single-module-kotlin-junit5"
+        ["hub-mail-hasher"]="jzYtJdYmk/hub-mail-hasher-kotlin-v4-1-0-single-module-template-kotlin"
+    )
+    
+    if [[ $(echo ${(k)grafana_url} | rg $repo_name) == "" ]]; then
+        echo "Kibana ids of $repo_name not yet defined" && return 2
+    fi
+
+    open "https://metrics.allegrogroup.com/d/$grafana_url[$repo_name]"
 }
 
 function clearmongo() {
@@ -157,6 +176,7 @@ function clearmongo() {
     mongosh "mongodb://mongoadmin:secret@localhost:27017/${db_names[$repo_name]}?authSource=admin"  --eval 'db.getCollectionNames().forEach(c=>db[c].deleteMany({}))'
 }
 
-alias apc="op apc"
+alias apc="open_bookmark apc"
 alias kbn="kibana"
+alias gfn="grafana"
 
