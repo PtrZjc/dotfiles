@@ -7,11 +7,13 @@ tap "eddieantonio/eddieantonio"
 tap "mongodb/brew"
 tap "idleberg/dbxcli"
 tap "sdkman/tap"
+tap "aws/tap"
 
 brew "zsh"
 brew "fzf"
 brew "z"
 brew "tldr"
+brew "howdoi"
 brew "docker"
 brew "mongosh"
 brew "awscli"
@@ -34,6 +36,7 @@ brew "qrcp" #send files through qr codes
 brew "btop" #process manager
 brew "shellcheck"
 brew "awscli"
+brew "aws-sam-cli"
 brew "miller" #text data processor
 brew "libpq"
 brew "qpdf"

@@ -17,7 +17,6 @@ alias icat='imgcat'
 alias ipaste='pngpaste'
 alias t='tree -C -L'
 alias cls='clear && printf "\e[3J"'
-# alias ocr='tesseract'
 alias ch='cls && cht.sh'
 
 alias -g H='| head'
@@ -26,7 +25,8 @@ alias -g JL='| jq -C | less'
 alias -g T='| tail'
 alias -g C='| cat'
 alias -g O='| xargs -I _ open _'
-alias -g DF='-u | diff-so-fancy'
+alias -g TOX='> xx && mv xx x'
+alias -g DF='-u | diff-so-fancy' # use as: diff file1 file2 DF
 alias ls='ls -lahgG'
 # alias l='ls -1G'
 alias l='tree -C -L 1'
@@ -34,7 +34,7 @@ alias l='tree -C -L 1'
 alias ij="/Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea ."
 
 alias ke-p='dbxcli put ~/Keepas_globalny.kdbx "Aplikacje/KeePass 2.x"'
-alias ke-l='dbxcli get "Aplikacje/KeePass 2.x" ~/Keepas_globalny.kdbx'
+alias ke-l='cp ~/Keepas_globalny.kdbx ~/Keepas_globalny_backup.kdbx && dbxcli get "Aplikacje/KeePass 2.x" ~/Keepas_globalny.kdbx'
 
 function wiremock() {
     cd $REPO/hub-mocks && sh launch-wiremock.sh
@@ -47,7 +47,7 @@ function line() {
 function goto() {
     DESTINATION=$(fd -t d | fzf)
     if [ "$DESTINATION" = "" ]; then
-        echo "Empty destination" || exit 2
+        echo "Empty destination" && exit 1
     else
         cd "./$DESTINATION"
     fi
@@ -180,3 +180,10 @@ alias apc="open_bookmark apc"
 alias kbn="kibana"
 alias gfn="grafana"
 
+## TEXT PROCESSING
+
+alias extract-ids='pbpaste | rg id | sd ".*(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w+{12}).*" "\$1," | pbcopy && pbpaste'
+alias wrap-with-uuid='pbpaste | sd "(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w+{12})" "UUID(\"\$1\")" | pbcopy && pbpaste'
+
+
+alias temp='cat ../../src/main/resources/application.yml |  sd "service-types" "serviceTypes" | sd "date-from" "dateFrom" | yj > x'

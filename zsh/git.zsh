@@ -7,7 +7,7 @@ alias gcl='git branch --sort=-committerdate | rg --invert-match "$(git rev-parse
 alias glg='git log --oneline | head | cut -d " " -f 2- | nl | tail -r'
 alias gst='git stash'
 alias gsp='git stash pop'
-alias gs='git status'
+  alias gs='git status'
 
 function bckp() {
   if [[ "$(git branch -l backup)" != "" ]]; then
@@ -34,15 +34,15 @@ function gcb() {
 
 unalias gc
 function gc() {
-  ./gradlew formatKotlin 
-  git add .
-  git branch --show-current | cut -d - -f 2 | xargs -I {} git commit -m "HUBZ-{} | $1"
+  ./gradlew lintKotlin \
+  && git branch --show-current | cut -d - -f 2 | xargs -I {} git commit -m "HUBZ-{} | $1" \
+  || ./gradlew formatKotlin
 }
 
 unalias gca
 function gca() {
-  ./gradlew formatKotlin 
-  git commit -a --amend --no-edit
+  ./gradlew formatKotlin \
+  && git commit -a --amend --no-edit
 }
 
 function delete_branches() {
