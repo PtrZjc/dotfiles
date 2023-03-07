@@ -2,6 +2,7 @@ export REPO="${HOME}/workspace"
 export CUSTOM="${REPO}/0_others/dotfiles/zsh/custom.zsh"
 export ZSHRC="${REPO}/0_others/dotfiles/zsh/.zshrc"
 export GIT="${REPO}/0_others/dotfiles/zsh/git.zsh"
+export VIMRC="${REPO}/0_others/dotfiles/vim/.vimrc"
 export BREWFILE="${REPO}/0_others/dotfiles/brew/Brewfile"
 
 alias rst="exec zsh"
@@ -15,9 +16,12 @@ alias a='alias'
 alias cof='declare -f'
 alias icat='imgcat'
 alias ipaste='pngpaste'
+alias todo='todo.sh'
 alias t='tree -C -L'
 alias cls='clear && printf "\e[3J"'
 alias ch='cls && cht.sh'
+alias vi='nvim'
+alias vim='nvim'
 
 alias -g H='| head'
 alias -g L='| less'
@@ -127,8 +131,9 @@ function kibana() {
         ["broker-billing"]="ed740590-4cca-11ea-ab6c-1d4dfe7c53f6 87b09c30-5e29-11ea-9237-61d11d053255 3a2c7190-5e2a-11ea-b1fd-796a50e2656e"
         ["hub-additional-delivery-expenses"]="62816680-1613-11ec-884b-a7e04c42ef33 067952f0-2764-11ec-ac64-974e835c3fc1 1bba1490-2766-11ec-a62f-cdc27736e017"
         ["hub-external-order-processor-service"]="2d923f50-1192-11ed-9149-9dd60d0ca628 30d27630-1192-11ed-9313-4ff773b2e478 2e1970b0-1192-11ed-8fe8-f74bfea0e165"
-        ["hub-mail-hasher"]=["d8de6640-f305-11e8-ba55-c1f39c5d083c c2ee08b0-e47f-11e9-9174-e11cdc4d82dd f67c2470-fc34-11e8-9387-c1fb28e452c4"]
-        ["hub-price-list-facade"]=["f640fa20-55d2-11ed-b8f4-ff0689ed4fe2 28934bc0-568e-11ed-baab-991719185eb0 d8cea700-568e-11ed-bd10-99465b55dd95"]
+        ["hub-mail-hasher"]="d8de6640-f305-11e8-ba55-c1f39c5d083c c2ee08b0-e47f-11e9-9174-e11cdc4d82dd f67c2470-fc34-11e8-9387-c1fb28e452c4"
+        ["hub-price-list-facade"]="f640fa20-55d2-11ed-b8f4-ff0689ed4fe2 28934bc0-568e-11ed-baab-991719185eb0 d8cea700-568e-11ed-bd10-99465b55dd95"
+        ["hub-delivery-seller-price-source"]="e23dd4e0-4eba-11ed-8c1c-7d0533e0c560 e23dd4e0-4eba-11ed-8c1c-7d0533e0c560 e23dd4e0-4eba-11ed-8c1c-7d0533e0c560"
     )
     
     if [[ $(echo ${(k)kibana_ids} | rg $repo_name) == "" ]]; then
@@ -183,7 +188,7 @@ alias gfn="grafana"
 ## TEXT PROCESSING
 
 alias extract-ids='pbpaste | rg id | sd ".*(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w+{12}).*" "\$1," | pbcopy && pbpaste'
-alias wrap-with-uuid='pbpaste | sd "(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w+{12})" "UUID(\"\$1\")" | pbcopy && pbpaste'
+alias wrap-with-uuid='pbpaste | sd ".*?(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}).*?" "UUID(\"\$1\"), " | pbcopy && pbpaste'
 
 
 alias temp='cat ../../src/main/resources/application.yml |  sd "service-types" "serviceTypes" | sd "date-from" "dateFrom" | yj > x'

@@ -1,4 +1,3 @@
-
 " gui
 
 colorscheme atom-dark-256
@@ -40,6 +39,7 @@ set showmatch
 
 " Use highlighting when doing a search.
 set hlsearch
+set ignorecase " ignore case in search
 
 " Set the commands to save in history default number is 20.
 set history=1000
@@ -54,31 +54,53 @@ set wildmode=list:longest
 " Wildmenu will ignore files with these extensions.
 set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
 
+" display width of tab character
+set tabstop=4
+" number of spaces inserted of deleted by >> and <<
+set shiftwidth=4
+" behavior of TAB key
+set softtabstop=4
+
 " PLUGINS ---------------------------------------------------------------- {{{
 
 call plug#begin('~/.vim/plugged')
 
-  Plug 'dense-analysis/ale'
+"  Plug 'dense-analysis/ale'
 
-  Plug 'preservim/nerdtree'
+"  Plug 'preservim/nerdtree'
 
-  Plug 'junegunn/fzf.vim'
+"  Plug 'junegunn/fzf.vim'
   " Enable fzf
-  set rtp+=/usr/local/opt/fzf
+"  set rtp+=/usr/local/opt/fzf
 
-  Plug 'tpope/vim-commentary'
+"  Plug 'tpope/vim-commentary'
+
+  Plug 'tpope/vim-repeat'
 
   Plug 'tpope/vim-surround'
 
-  Plug 'tpope/vim-sensible'
+"  Plug 'tpope/vim-sensible'
 
-  setlocal scrolloff=4
+"  Plug 'bfrg/vim-jq'
+
+"  setlocal scrolloff=4
 
 call plug#end()
 
 " }}}
 
 " MAPPINGS --------------------------------------------------------------- {{{
+	inoremap jk <ESC>
+	let mapleader = "'"
+
+"	noremap  <Up> ""
+"	noremap! <Up> <Esc>
+"	noremap  <Down> ""
+"	noremap! <Down> <Esc>
+"	noremap  <Left> ""
+"	noremap! <Left> <Esc>
+"	noremap  <Right> ""
+"	noremap! <Right> <Esc>
 
 " }}}
 
@@ -116,9 +138,3 @@ set statusline+=\ row:\ %l\ col:\ %c\ percent:\ %p%%
 " Show the status on the second to last line.
 set laststatus=2
 " }}}
-
-
-
-
-
-
