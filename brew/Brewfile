@@ -44,7 +44,7 @@ brew "qpdf"
 brew "dbxcli"
 brew "tesseract" #ocr reader
 brew "tesseract-lang" #language pack to ocr
-brew "imagemagick" #image processor
+brew "imagemagick" #image processor, invoked as 'magick'
 brew "diff-so-fancy"
 brew "sdkman-cli"
 brew "visidata"
