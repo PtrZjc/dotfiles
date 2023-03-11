@@ -7,7 +7,8 @@ alias gcl='git branch --sort=-committerdate | rg --invert-match "$(git rev-parse
 alias glg='git log --oneline | head | cut -d " " -f 2- | nl | tail -r'
 alias gst='git stash'
 alias gsp='git stash pop'
-  alias gs='git status'
+alias gs='git status'
+alias root='cd $(git rev-parse --show-toplevel)'
 
 function bckp() {
   if [[ "$(git branch -l backup)" != "" ]]; then

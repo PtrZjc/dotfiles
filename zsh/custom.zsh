@@ -128,12 +128,13 @@ function kibana() {
 
     #dev_id test_id prod_id
     declare -A kibana_ids=(
+	#dev test prod
         ["broker-billing"]="ed740590-4cca-11ea-ab6c-1d4dfe7c53f6 87b09c30-5e29-11ea-9237-61d11d053255 3a2c7190-5e2a-11ea-b1fd-796a50e2656e"
         ["hub-additional-delivery-expenses"]="62816680-1613-11ec-884b-a7e04c42ef33 067952f0-2764-11ec-ac64-974e835c3fc1 1bba1490-2766-11ec-a62f-cdc27736e017"
         ["hub-external-order-processor-service"]="2d923f50-1192-11ed-9149-9dd60d0ca628 30d27630-1192-11ed-9313-4ff773b2e478 2e1970b0-1192-11ed-8fe8-f74bfea0e165"
         ["hub-mail-hasher"]="d8de6640-f305-11e8-ba55-c1f39c5d083c c2ee08b0-e47f-11e9-9174-e11cdc4d82dd f67c2470-fc34-11e8-9387-c1fb28e452c4"
         ["hub-price-list-facade"]="f640fa20-55d2-11ed-b8f4-ff0689ed4fe2 28934bc0-568e-11ed-baab-991719185eb0 d8cea700-568e-11ed-bd10-99465b55dd95"
-        ["hub-delivery-seller-price-source"]="e23dd4e0-4eba-11ed-8c1c-7d0533e0c560 e23dd4e0-4eba-11ed-8c1c-7d0533e0c560 e23dd4e0-4eba-11ed-8c1c-7d0533e0c560"
+        ["hub-delivery-seller-price-source"]="f48bef60-4e38-11ed-94d2-95bfcf9fed37 e1e30ab0-4eba-11ed-ab09-03caaa840372 e23dd4e0-4eba-11ed-8c1c-7d0533e0c560"
     )
     
     if [[ $(echo ${(k)kibana_ids} | rg $repo_name) == "" ]]; then

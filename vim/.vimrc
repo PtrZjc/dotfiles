@@ -60,30 +60,46 @@ set tabstop=4
 set shiftwidth=4
 " behavior of TAB key
 set softtabstop=4
+" folds below unfolded by default
+set foldlevel=1
+" always leave 4 free lines on top and bottom
+setlocal scrolloff=4
+
+" BEHAVIOR ---------------------------------------------------------------- {{{
+
+  set noswapfile
+
+" }}}
 
 " PLUGINS ---------------------------------------------------------------- {{{
 
 call plug#begin('~/.vim/plugged')
 
-"  Plug 'dense-analysis/ale'
+  Plug 'dense-analysis/ale'
 
-"  Plug 'preservim/nerdtree'
+  Plug 'preservim/nerdtree'
 
-"  Plug 'junegunn/fzf.vim'
+  Plug 'junegunn/fzf.vim'
   " Enable fzf
-"  set rtp+=/usr/local/opt/fzf
+  set rtp+=/usr/local/opt/fzf
 
-"  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-commentary'
 
   Plug 'tpope/vim-repeat'
 
   Plug 'tpope/vim-surround'
 
-"  Plug 'tpope/vim-sensible'
+  Plug 'tpope/vim-sensible'
 
-"  Plug 'bfrg/vim-jq'
+  Plug 'bfrg/vim-jq'
 
-"  setlocal scrolloff=4
+  Plug '907th/vim-auto-save'
+  let g:auto_save=1  "enable AutoSave on Vim startup
+  let g:auto_save_silent=1
+  
+  Plug 'AndrewRadev/sideways.vim'
+
+  Plug 'christoomey/vim-system-copy'
 
 call plug#end()
 
@@ -111,13 +127,6 @@ augroup filetype_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
 augroup END
-
-" If the current file type is HTML, set indentation to 2 spaces.
-autocmd Filetype html setlocal tabstop=2 shiftwidth=2 expandtab
-
-" Autosave when text is changed
-autocmd TextChanged,TextChangedI <buffer> silent write
-set noswapfile
 
 " }}}
 
