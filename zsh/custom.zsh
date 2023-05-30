@@ -22,6 +22,8 @@ alias cls='clear && printf "\e[3J"'
 alias ch='cls && cht.sh'
 alias vi='nvim'
 alias vim='nvim'
+alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
+alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
 
 alias -g H='| head'
 alias -g L='| less'
@@ -175,6 +177,7 @@ function clearmongo() {
         ["hub-delivery-seller-price-source"]="hdsps-local"
         ["hub-external-order-processor-service"]="heops-local"
         ["hub-price-list-facade"]="hub-price-list-facade"
+        ["hub-additional-delivery-expenses"]="hades-local"
     )
     if [[ $(echo ${(k)db_names} | rg $repo_name) == "" ]]; then
         echo "Database of $repo_name is not supported" && return 2

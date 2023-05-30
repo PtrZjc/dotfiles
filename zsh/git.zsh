@@ -35,15 +35,19 @@ function gcb() {
 
 unalias gc
 function gc() {
-  ./gradlew lintKotlin \
-  && git branch --show-current | cut -d - -f 2 | xargs -I {} git commit -m "HUBZ-{} | $1" \
-  || ./gradlew formatKotlin
+  if gradlew tasks --all | rg lintKotlin; then
+    ./gradlew lintKotlin &&
+      git branch --show-current | cut -d - -f 2 | xargs -I {} git commit -m "HUBZ-{} | $1" ||
+      ./gradlew formatKotlin
+  else
+    git branch --show-current | cut -d - -f 2 | xargs -I {} git commit -m "HUBZ-{} | $1"
+  fi
 }
 
 unalias gca
 function gca() {
-  ./gradlew formatKotlin \
-  && git commit -a --amend --no-edit
+  ./gradlew formatKotlin &&
+    git commit -a --amend --no-edit
 }
 
 function delete_branches() {

@@ -20,34 +20,47 @@ brew "mongosh"
 brew "awscli"
 brew "sd"
 brew "neovim"
-brew "httpie"
-brew "jq"
-brew "yq"
-brew "yj"
-brew "gron" #json to discrete form
+
 brew "pngpaste" #save images from clipboard
 brew "pyenv"
 brew "ripgrep"
 brew "tree"
 brew "translate-shell"
-brew "eddieantonio/eddieantonio/imgcat"
-brew "thezoraiz/ascii-image-converter/ascii-image-converter"
+
 brew "qrencode"
-brew "qrcp" #send files through qr codes
+
 brew "btop" #process manager
 brew "shellcheck"
 brew "awscli"
 brew "aws-sam-cli"
-brew "miller" #text data processor
+
 brew "libpq"
-brew "qpdf"
 brew "dbxcli"
-brew "tesseract" #ocr reader
-brew "tesseract-lang" #language pack to ocr
-brew "imagemagick" #image processor, invoked as 'magick'
+
 brew "diff-so-fancy"
 brew "sdkman-cli"
+brew "rnr" #mass rename files
+
+#data
+brew "jq"
+brew "yq"
+brew "yj"
+brew "gron" #json to discrete form
 brew "visidata"
+brew "gnupot" #plots in terminal
+brew "miller" #text data processor
+
+#media
+brew "eddieantonio/eddieantonio/imgcat"
+brew "thezoraiz/ascii-image-converter/ascii-image-converter"
+brew "imagemagick" #image processor, invoked as 'magick'
+
+#utils
+brew "utimer"
+brew "qpdf"
+brew "qrcp" #send files through qr codes
+brew "tesseract" #ocr reader
+brew "tesseract-lang" #language pack to ocr
 
 cask "iterm2"
 cask "clipy"
@@ -56,4 +69,3 @@ cask "keepassxc"
 cask "visual-studio-code"
 cask "font-hack"
 cask "lunar"
-
