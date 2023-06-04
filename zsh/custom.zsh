@@ -4,7 +4,7 @@ export ZSHRC="${REPO}/0_others/dotfiles/zsh/.zshrc"
 export GIT="${REPO}/0_others/dotfiles/zsh/git.zsh"
 export VIMRC="${REPO}/0_others/dotfiles/vim/.vimrc"
 export BREWFILE="${REPO}/0_others/dotfiles/brew/Brewfile"
-
+export TEMP_FILE="${HOME}/temp_file"
 alias rst="exec zsh"
 
 alias ocustom='code $CUSTOM'
@@ -39,8 +39,25 @@ alias l='tree -C -L 1'
 
 alias ij="/Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea ."
 
-alias ke-p='dbxcli put ~/Keepas_globalny.kdbx "Aplikacje/KeePass 2.x"'
+# alias ke-p='dbxcli put ~/Keepas_globalny.kdbx "Aplikacje/KeePass.kdbx"'
 alias ke-l='cp ~/Keepas_globalny.kdbx ~/Keepas_globalny_backup.kdbx && dbxcli get "Aplikacje/KeePass 2.x" ~/Keepas_globalny.kdbx'
+
+function ke-p(){
+    DB_NAME="KeePass"
+    LOCAL_FILE="${HOME}/keepass/$DB_NAME.kdbx"
+    REMOTE_FILE="Aplikacje/KeePass/$DB_NAME.kdbx"
+    BACKUP_DIR_REMOTE="${HOME}/keepass/backup/remote"
+    BACKUP_DIR_LOCAL="${HOME}/keepass/backup/local"
+    LOCAL_FILE_DATE=`stat -f "%Sm" -t "%Y%m%d_%H%M%S" "$LOCAL_FILE"`
+    echo "Making backup of remote database before override"
+    dbxcli get "$REMOTE_FILE" "$TEMP_FILE"
+    REMOTE_FILE_DATE=`stat -f "%Sm" -t "%Y%m%d_%H%M%S" "$TEMP_FILE"`
+    REMOTE_BACKUP="$BACKUP_DIR_REMOTE/$DB_NAME"_"$REMOTE_FILE_DATE.kdbx"
+    mv "$TEMP_FILE" "$REMOTE_BACKUP"
+    echo "Remote backup made to $REMOTE_BACKUP"
+    echo "Uploading local database"
+    dbxcli put "$LOCAL_FILE" $REMOTE_FILE
+}
 
 function wiremock() {
     cd $REPO/hub-mocks && sh launch-wiremock.sh
@@ -193,6 +210,3 @@ alias gfn="grafana"
 
 alias extract-ids='pbpaste | rg id | sd ".*(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w+{12}).*" "\$1," | pbcopy && pbpaste'
 alias wrap-with-uuid='pbpaste | sd ".*?(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}).*?" "UUID(\"\$1\"), " | pbcopy && pbpaste'
-
-
-alias temp='cat ../../src/main/resources/application.yml |  sd "service-types" "serviceTypes" | sd "date-from" "dateFrom" | yj > x'
