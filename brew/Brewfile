@@ -33,7 +33,7 @@ brew "btop" #process manager
 brew "shellcheck"
 brew "awscli"
 brew "aws-sam-cli"
-
+brew "thefuck"
 brew "libpq"
 brew "dbxcli"
 
