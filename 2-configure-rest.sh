@@ -13,9 +13,11 @@ brew bundle
 
 echo 'configuring vim'
 
-ln -s "${DOTFILES_DIR}/vim/.vimrc" "$HOME/.vimrc"
+mkdir -p "${HOME}/.vim/autoload" "${HOME}/.vim/backup" "${HOME}/.vim/colors" "${HOME}/.vim/plugged" "${HOME}/.config/nvim" 
 
-mkdir -p "${HOME}/.vim/autoload" "${HOME}/.vim/backup" "${HOME}/.vim/colors" "${HOME}/.vim/plugged"
+ln -s "${DOTFILES_DIR}/vim/.vimrc" "$HOME/.vimrc"
+ln -s "${DOTFILES_DIR}/vim/init.vim" "$HOME/.config/nvim/init.vim" #for neovim
+
 curl -o "${HOME}/.vim/colors/molokai.vim" https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim
 curl -o "${HOME}/.vim/colors/atom-dark-256.vim" https://raw.githubusercontent.com/gosukiwi/vim-atom-dark/master/colors/atom-dark-256.vim
 curl -o "${HOME}/.vim/autoload/plug.vim" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
