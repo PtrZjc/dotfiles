@@ -153,6 +153,9 @@ zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 ### Fix slowness end
 
+# other configuration
+export PATH="$HOME/.local/bin:$PATH"
+
 # thefuck required
 eval $(thefuck --alias)
 

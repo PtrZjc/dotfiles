@@ -20,6 +20,7 @@ brew "mongosh"
 brew "awscli"
 brew "sd"
 brew "neovim"
+brew "fd"
 
 brew "pngpaste" #save images from clipboard
 brew "pyenv"
