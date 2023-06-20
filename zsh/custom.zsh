@@ -189,7 +189,7 @@ function grafana() {
 function clearmongo() {
     repo_name=$(pwd | rev | cut -d / -f1 | rev)
     declare -A db_names=(
-        ["broker-billing"]="broker_billing_local"
+        ["broker-billing"]="bb_local"
         ["hub-additional-delivery-expenses"]="hades-local"
         ["hub-delivery-seller-price-source"]="hdsps-local"
         ["hub-external-order-processor-service"]="heops-local"
