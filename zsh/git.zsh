@@ -35,11 +35,10 @@ function gcb() {
 
 unalias gc
 function gc() {
-  if gradlew tasks --all | rg lintKotlin; then
-    ./gradlew lintKotlin &&
+  if ./gradlew tasks --all | rg formatKotlin; then
+    ./gradlew formatKotlin &&
       git branch --show-current | cut -d - -f 2 | xargs -I {} git commit -m "HUBZ-{} | $1" ||
-      ./gradlew formatKotlin
-  else
+      else
     git branch --show-current | cut -d - -f 2 | xargs -I {} git commit -m "HUBZ-{} | $1"
   fi
 }

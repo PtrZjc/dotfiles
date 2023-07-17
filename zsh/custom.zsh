@@ -78,7 +78,7 @@ function goto() {
 
 function ocr() {
     ipaste - >~/ocr_temp.jpg
-    tesseract ~/ocr_temp.jpg stdout | pbcopy
+    tesseract -l pol ~/ocr_temp.jpg stdout | pbcopy
     rm ~/ocr_temp.jpg
     pbpaste
 }

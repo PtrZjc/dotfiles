@@ -101,6 +101,8 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'christoomey/vim-system-copy'
 
+  Plug 'terrastruct/d2-vim'
+
 call plug#end()
 
 " }}}

@@ -1,5 +1,4 @@
-tap "homebrew/bundle"
-tap "homebrew/cask"
+
 tap "homebrew/core"
 tap "homebrew/cask-fonts"
 tap "thezoraiz/ascii-image-converter"
@@ -32,6 +31,7 @@ brew "qrencode"
 
 brew "btop" #process manager
 brew "shellcheck"
+brew "gh"
 brew "awscli"
 brew "aws-sam-cli"
 brew "thefuck"
@@ -48,8 +48,9 @@ brew "yq"
 brew "yj"
 brew "gron" #json to discrete form
 brew "visidata"
-brew "gnupot" #plots in terminal
+brew "gnuplot" #plots in terminal
 brew "miller" #text data processor
+brew "d2" #diagram scripting language
 
 #media
 brew "eddieantonio/eddieantonio/imgcat"
@@ -57,6 +58,7 @@ brew "thezoraiz/ascii-image-converter/ascii-image-converter"
 brew "imagemagick" #image processor, invoked as 'magick'
 
 #utils
+brew "countdown"
 brew "utimer"
 brew "qpdf"
 brew "qrcp" #send files through qr codes

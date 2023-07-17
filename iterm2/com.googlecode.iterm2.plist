@@ -1638,7 +1638,7 @@
 	<key>SeparateWindowTitlePerTab</key>
 	<true/>
 	<key>ShowFullScreenTabBar</key>
-	<true/>
+	<false/>
 	<key>ShowPaneTitles</key>
 	<false/>
 	<key>SmartPlacement</key>
