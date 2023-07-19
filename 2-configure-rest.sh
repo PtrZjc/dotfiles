@@ -34,6 +34,7 @@ echo 'configuring zsh'
 ln -sf "${DOTFILES_DIR}/zsh/.zshrc" ~/.zshrc
 ln -s "${DOTFILES_DIR}/zsh/git.zsh" "$ZSH/custom/git.zsh"
 ln -s "${DOTFILES_DIR}/zsh/custom.zsh" "$ZSH/custom/custom.zsh"
+ln -s "${DOTFILES_DIR}/zsh/db-credentials.zsh" "$ZSH/custom/db-credentials.zsh"
 
 # z plugin 
 curl https://raw.githubusercontent.com/agkozak/zsh-z/master/zsh-z.plugin.zsh --output "$ZSH/custom/plugins/zsh-z.plugin.zsh"

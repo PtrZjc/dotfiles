@@ -1,16 +1,13 @@
 export REPO="${HOME}/workspace"
-export CUSTOM="${REPO}/0_others/dotfiles/zsh/custom.zsh"
-export ZSHRC="${REPO}/0_others/dotfiles/zsh/.zshrc"
-export GIT="${REPO}/0_others/dotfiles/zsh/git.zsh"
-export VIMRC="${REPO}/0_others/dotfiles/vim/.vimrc"
-export BREWFILE="${REPO}/0_others/dotfiles/brew/Brewfile"
+export DOTFILES="${REPO}/0_others/dotfiles"
+export CUSTOM="${DOTFILES}/zsh/custom.zsh"
+export ZSHRC="${DOTFILES}/zsh/.zshrc"
+export GIT="${DOTFILES}/zsh/git.zsh"
+export VIMRC="${DOTFILES}/vim/.vimrc"
+export BREWFILE="${DOTFILES}/brew/Brewfile"
 export TEMP_FILE="${HOME}/temp_file"
+
 alias rst="exec zsh"
-
-alias ocustom='code $CUSTOM'
-alias obrew='code $BREWFILE'
-alias ogit='code $GIT'
-
 alias co=tldr
 alias a='alias'
 alias cof='declare -f'
@@ -91,7 +88,7 @@ function killport() {
     if [[ ! ("$1" =~ ^[0-9]+$) ]]; then
         echo "impoproper port" && return 2
     fi
-    lsof -i tcp:"$1" | sd '^\w+\s+(\d+).*' '$1' | rg '\d+' | xargs kill
+	lsof -i tcp:"$1" | gawk 'NR>1' | xargs kill -9
 }
 
 #from awesome-fzf
@@ -200,6 +197,41 @@ function clearmongo() {
         echo "Database of $repo_name is not supported" && return 2
     fi
     mongosh "mongodb://mongoadmin:secret@localhost:27017/${db_names[$repo_name]}?authSource=admin"  --eval 'db.getCollectionNames().forEach(c=>db[c].deleteMany({}))'
+}
+
+function db4u_uri(){
+    service=${(U)1}
+    env=${(U)2}
+    password_var_env="DB4U_PASSWORD_${service}_${env}"
+    
+    if [[ -z ${(P)password_var_env} ]]; then
+    echo "Environment variable '$password_var_env' is not set. Exiting."
+    return 1
+    fi  
+    password=${(P)password_var_env}
+    
+    db=${(L)service}'_'${(L)env:0:1}
+    serv_e=${(L)service}'-'${(L)env:0:1}
+
+    hosts=$serv_e-mongod-rs0-service.${(L)env}.distributed.alledc.net
+    replica_set=$serv_e-rs0
+    
+    echo "mongodb+srv://$DB4U_USERNAME:$password@$hosts/?replicaSet=$replica_set&ssl=false&retryWrites=true&readPreference=primary&srvServiceName=mongodb&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-1"
+}
+
+function db4u_test_to_dev(){
+    service=$1
+    if [[ ${(L)service} == "hplf" ]]; then
+        collection="price-lists";
+    elif [[ ${(L)service} == "hdsps" ]]; then
+        collection="pricing-entries";
+    else
+        echo "service $service unsupported. Only hplf & hdsps are supported. Exiting." && return 1
+    fi
+    echo "Dumping $collection from $service test database"
+    mongodump --uri=$(db4u_uri $service TEST) --collection=$collection --db=${(L)service}_t --out=/tmp/dump
+    echo "Restoring $collection to $service dev database"
+    mongorestore --uri=$(db4u_uri $service DEV) --drop --collection=$collection --db=${(L)service}_d "/tmp/dump/"$service"_t/"$collection".bson"
 }
 
 alias apc="open_bookmark apc"
