@@ -37,7 +37,24 @@ alias l='tree -C -L 1'
 alias ij="/Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea ."
 
 # alias ke-p='dbxcli put ~/Keepas_globalny.kdbx "Aplikacje/KeePass.kdbx"'
-alias ke-l='cp ~/Keepas_globalny.kdbx ~/Keepas_globalny_backup.kdbx && dbxcli get "Aplikacje/KeePass 2.x" ~/Keepas_globalny.kdbx'
+function ke-l(){
+    DB_NAME="KeePass"
+    LOCAL_FILE="${HOME}/keepass/$DB_NAME.kdbx"
+    REMOTE_FILE="Aplikacje/KeePass/$DB_NAME.kdbx"
+    BACKUP_DIR_REMOTE="${HOME}/keepass/backup/remote"
+    BACKUP_DIR_LOCAL="${HOME}/keepass/backup/local"
+    mkdir -p $BACKUP_DIR_REMOTE $BACKUP_DIR_LOCAL
+    LOCAL_FILE_DATE=`stat -f "%Sm" -t "%Y%m%d_%H%M%S" "$LOCAL_FILE"`
+    
+    # Step 1: Make backup of local database before override
+    LOCAL_BACKUP="$BACKUP_DIR_LOCAL/$DB_NAME"_"$LOCAL_FILE_DATE.kdbx"
+    cp "$LOCAL_FILE" "$LOCAL_BACKUP"
+    echo "Local backup made to $LOCAL_BACKUP"
+
+    # Step 2: Download the remote file, overriding the local database
+    echo "Downloading and overriding local database"
+    dbxcli get "$REMOTE_FILE" "$LOCAL_FILE"
+}
 
 function ke-p(){
     DB_NAME="KeePass"
@@ -45,7 +62,10 @@ function ke-p(){
     REMOTE_FILE="Aplikacje/KeePass/$DB_NAME.kdbx"
     BACKUP_DIR_REMOTE="${HOME}/keepass/backup/remote"
     BACKUP_DIR_LOCAL="${HOME}/keepass/backup/local"
+    mkdir -p $BACKUP_DIR_REMOTE $BACKUP_DIR_LOCAL
     LOCAL_FILE_DATE=`stat -f "%Sm" -t "%Y%m%d_%H%M%S" "$LOCAL_FILE"`
+
+    # Step 1: Make backup of remote database before override
     echo "Making backup of remote database before override"
     dbxcli get "$REMOTE_FILE" "$TEMP_FILE"
     REMOTE_FILE_DATE=`stat -f "%Sm" -t "%Y%m%d_%H%M%S" "$TEMP_FILE"`
@@ -53,6 +73,8 @@ function ke-p(){
     mv "$TEMP_FILE" "$REMOTE_BACKUP"
     echo "Remote backup made to $REMOTE_BACKUP"
     echo "Uploading local database"
+
+    # Step 2: Upload the local file, overriding the remote database
     dbxcli put "$LOCAL_FILE" $REMOTE_FILE
 }
 
@@ -151,6 +173,7 @@ function kibana() {
         ["hub-mail-hasher"]="d8de6640-f305-11e8-ba55-c1f39c5d083c c2ee08b0-e47f-11e9-9174-e11cdc4d82dd f67c2470-fc34-11e8-9387-c1fb28e452c4"
         ["hub-price-list-facade"]="f640fa20-55d2-11ed-b8f4-ff0689ed4fe2 28934bc0-568e-11ed-baab-991719185eb0 d8cea700-568e-11ed-bd10-99465b55dd95"
         ["hub-delivery-seller-price-source"]="f48bef60-4e38-11ed-94d2-95bfcf9fed37 e1e30ab0-4eba-11ed-ab09-03caaa840372 e23dd4e0-4eba-11ed-8c1c-7d0533e0c560"
+        ["cbs-api"]="ed0d5ba0-c296-11ea-a243-15c0bb563f4e TBD TBD"
     )
     
     if [[ $(echo ${(k)kibana_ids} | rg $repo_name) == "" ]]; then
@@ -204,7 +227,11 @@ function db4u_uri(){
     env=${(U)2}
     password_var_env="DB4U_PASSWORD_${service}_${env}"
     
-    if [[ -z ${(P)password_var_env} ]]; then
+
+    if [[ -z $service || -z $env ]]; then
+    echo "Either service ($service) or environment ($env) params not given"
+    return 1
+    elif [[ -z ${(P)password_var_env} ]]; then
     echo "Environment variable '$password_var_env' is not set. Exiting."
     return 1
     fi  
@@ -234,6 +261,26 @@ function db4u_test_to_dev(){
     mongorestore --uri=$(db4u_uri $service DEV) --drop --collection=$collection --db=${(L)service}_d "/tmp/dump/"$service"_t/"$collection".bson"
 }
 
+
+function db4u_backup(){
+    service=${(U)1}
+    env=${(U)2}
+
+    if [[ ${(L)service} == "hplf" ]]; then
+        collection="price-lists";
+    elif [[ ${(L)service} == "hdsps" ]]; then
+        collection="pricing-entries";
+    else
+        echo "service $service unsupported. Only hplf & hdsps are supported. Exiting." && return 1
+    fi
+
+    db=${(L)service}'_'${(L)env:0:1}
+
+    mongodump --uri=$(db4u_uri $service $env) --collection=$collection --db=$db --out=/tmp/dump && \
+    mongorestore --uri=$(db4u_uri $service $env) --drop --collection=$collection"_backup" --db=$db "/tmp/dump/"$service"_t/"$collection".bson" && \
+    echo "Successfully backed up collection $collection from $service $env database as "$collection"_backup"
+}
+
 alias apc="open_bookmark apc"
 alias kbn="kibana"
 alias gfn="grafana"
@@ -242,3 +289,5 @@ alias gfn="grafana"
 
 alias extract-ids='pbpaste | rg id | sd ".*(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w+{12}).*" "\$1," | pbcopy && pbpaste'
 alias wrap-with-uuid='pbpaste | sd ".*?(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}).*" "UUID(\"\$1\"), " | pbcopy && pbpaste'
+
+export TSTRUCT_TOKEN="tstruct_eyJ2ZXJzaW9uIjoxLCJkYXRhIjp7InVzZXJJRCI6MTc0NDM0NDI4MSwidXNlckVtYWlsIjoicGlvdHIuemFqYWNAYWxsZWdyby5jb20iLCJ0ZWFtSUQiOjExMjAxNzUzNDUsInRlYW1OYW1lIjoicGlvdHIuemFqYWNAYWxsZWdyby5jb20ncyB0ZWFtIiwicmVuZXdhbERhdGUiOiIyMDIzLTA4LTA4VDE0OjAwOjM0Ljg3MzMwMzgwMVoiLCJjcmVhdGVkQXQiOiIyMDIzLTA4LTAxVDE0OjAwOjM0Ljg3MzMwNTkzNloifSwic2lnbmF0dXJlIjoieUpJYnRESTU4TVc2dUpzSEw0ZWd4c0FPaEhKZlRtbHQvejNJZE1FOWlCSDkxV1RSQVJLeGwxR3lkRS9DTm44WENRUVh0SDNPK0tFdmdLaE43UHhOQ2c9PSJ9"
