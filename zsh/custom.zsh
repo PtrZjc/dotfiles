@@ -110,7 +110,7 @@ function killport() {
     if [[ ! ("$1" =~ ^[0-9]+$) ]]; then
         echo "impoproper port" && return 2
     fi
-	lsof -i tcp:"$1" | gawk 'NR>1' | xargs kill -9
+	lsof -i tcp:"$1" | gawk 'NR>1 {print $2}' | xargs kill -9
 }
 
 #from awesome-fzf
@@ -206,7 +206,7 @@ function grafana() {
     open "https://metrics.allegrogroup.com/d/$grafana_url[$repo_name]"
 }
 
-function clearmongo() {
+function localmongo_uri(){
     repo_name=$(pwd | rev | cut -d / -f1 | rev)
     declare -A db_names=(
         ["broker-billing"]="bb_local"
@@ -219,7 +219,11 @@ function clearmongo() {
     if [[ $(echo ${(k)db_names} | rg $repo_name) == "" ]]; then
         echo "Database of $repo_name is not supported" && return 2
     fi
-    mongosh "mongodb://mongoadmin:secret@localhost:27017/${db_names[$repo_name]}?authSource=admin"  --eval 'db.getCollectionNames().forEach(c=>db[c].deleteMany({}))'
+    echo "mongodb://mongoadmin:secret@localhost:27017/${db_names[$repo_name]}?authSource=admin"
+}
+
+function clearmongo() {
+    mongosh "$(localmongo_uri)"  --eval 'db.getCollectionNames().forEach(c=>db[c].deleteMany({}))'
 }
 
 function db4u_uri(){
@@ -227,7 +231,6 @@ function db4u_uri(){
     env=${(U)2}
     password_var_env="DB4U_PASSWORD_${service}_${env}"
     
-
     if [[ -z $service || -z $env ]]; then
     echo "Either service ($service) or environment ($env) params not given"
     return 1

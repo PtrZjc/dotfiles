@@ -35,17 +35,18 @@ function gcb() {
 
 unalias gc
 function gc() {
-  if ./gradlew tasks --all | rg formatKotlin; then
-    ./gradlew formatKotlin &&
-      git branch --show-current | cut -d - -f 2 | xargs -I {} git commit -m "HUBZ-{} | $1" ||
-      else
-    git branch --show-current | cut -d - -f 2 | xargs -I {} git commit -m "HUBZ-{} | $1"
+  jira_number=$(git branch --show-current | cut -d - -f 2)
+  if [[ ! $jira_number =~ ^[0-9]+$ ]]; then 
+    git commit -m "$1"
+  elif ./gradlew tasks --all | rg formatKotlin; then
+    ./gradlew formatKotlin && git commit -m "HUBZ-$jira_number | $1"
+  else
+    git commit -m "HUBZ-$jira_number | $1"
   fi
 }
 
 unalias gca
 function gca() {
-  ./gradlew formatKotlin &&
     git commit -a --amend --no-edit
 }
 
