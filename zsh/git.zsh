@@ -9,6 +9,7 @@ alias gst='git stash'
 alias gsp='git stash pop'
 alias gs='git status'
 alias root='cd $(git rev-parse --show-toplevel)'
+alias gbl='git for-each-ref --sort=-committerdate --format "%(refname:short) %(committerdate:relative)" refs/heads/ | tail -r'
 
 function bckp() {
   if [[ "$(git branch -l backup)" != "" ]]; then
@@ -36,7 +37,7 @@ function gcb() {
 unalias gc
 function gc() {
   jira_number=$(git branch --show-current | cut -d - -f 2)
-  if [[ ! $jira_number =~ ^[0-9]+$ ]]; then 
+  if [[ ! $jira_number =~ ^[0-9]+$ ]]; then
     git commit -m "$1"
   elif ./gradlew tasks --all | rg formatKotlin; then
     ./gradlew formatKotlin && git commit -m "HUBZ-$jira_number | $1"

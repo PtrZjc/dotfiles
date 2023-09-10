@@ -34,7 +34,7 @@ alias ls='ls -lahgG'
 # alias l='ls -1G'
 alias l='tree -C -L 1'
 
-alias ij="/Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea ."
+alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
 
 # alias ke-p='dbxcli put ~/Keepas_globalny.kdbx "Aplikacje/KeePass.kdbx"'
 function ke-l(){
@@ -249,21 +249,18 @@ function db4u_uri(){
     echo "mongodb+srv://$DB4U_USERNAME:$password@$hosts/?replicaSet=$replica_set&ssl=false&retryWrites=true&readPreference=primary&srvServiceName=mongodb&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-1"
 }
 
-function db4u_test_to_dev(){
-    service=$1
-    if [[ ${(L)service} == "hplf" ]]; then
-        collection="price-lists";
-    elif [[ ${(L)service} == "hdsps" ]]; then
-        collection="pricing-entries";
-    else
-        echo "service $service unsupported. Only hplf & hdsps are supported. Exiting." && return 1
-    fi
-    echo "Dumping $collection from $service test database"
-    mongodump --uri=$(db4u_uri $service TEST) --collection=$collection --db=${(L)service}_t --out=/tmp/dump
-    echo "Restoring $collection to $service dev database"
-    mongorestore --uri=$(db4u_uri $service DEV) --drop --collection=$collection --db=${(L)service}_d "/tmp/dump/"$service"_t/"$collection".bson"
-}
+function db4u_test_to_dev() {
+    service="hplf"
+    collections=("price-lists" "pricing-entries")
 
+    for collection in "${collections[@]}"; do
+        echo "Dumping $collection from $service test database"
+        mongodump --uri=$(db4u_uri $service TEST) --collection=$collection --db=${service}_t --out=/tmp/dump
+
+        echo "Restoring $collection to $service dev database"
+        mongorestore --uri=$(db4u_uri $service DEV) --drop --collection=$collection --db=${service}_d "/tmp/dump/${service}_t/$collection.bson"
+    done
+}
 
 function db4u_backup(){
     service=${(U)1}

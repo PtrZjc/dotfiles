@@ -27,6 +27,7 @@ brew "pyenv"
 brew "ripgrep"
 brew "tree"
 brew "translate-shell"
+brew "tmux"
 
 brew "qrencode"
 
