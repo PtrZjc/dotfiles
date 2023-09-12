@@ -19,6 +19,7 @@ alias cls='clear && printf "\e[3J"'
 alias ch='cls && cht.sh'
 alias vi='nvim'
 alias vim='nvim'
+alias code='code .'
 alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
 alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
 

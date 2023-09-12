@@ -8,26 +8,33 @@ echo 'installing brew packages'
 brew bundle
 
 #####################
-# VIM CONFIGURATION #
+# FONT CONFIGURATION #
 #####################
 
-echo 'configuring vim'
+curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip --output /tmp/font.zip
+curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip --output /tmp/font.zip
+unzip /tmp/font.zip -d /tmp/font
+cp tmp/font/MesloLGSNerdFont-*.ttf "${HOME}Library/Fonts"
 
-mkdir -p "${HOME}/.vim/autoload" "${HOME}/.vim/backup" "${HOME}/.vim/colors" "${HOME}/.vim/plugged" "${HOME}/.config/nvim" 
+######################
+# NVIM CONFIGURATION #
+######################
 
-ln -s "${DOTFILES_DIR}/vim/.vimrc" "$HOME/.vimrc"
-ln -s "${DOTFILES_DIR}/vim/init.vim" "$HOME/.config/nvim/init.vim" #for neovim
+echo 'configuring nvim'
 
-curl -o "${HOME}/.vim/colors/molokai.vim" https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim
-curl -o "${HOME}/.vim/colors/atom-dark-256.vim" https://raw.githubusercontent.com/gosukiwi/vim-atom-dark/master/colors/atom-dark-256.vim
-curl -o "${HOME}/.vim/autoload/plug.vim" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+git clone https://github.com/NvChad/NvChad "${HOME}/.config/nvim" --depth 1
+mkdir -p "${HOME}/.config/nvim/lua/custom/configs"
 
-# TODO -> https://github.com/pqrs-org/Karabiner-Elements 
-# map vim leader key to mapped F3 to CapsLock
+ln -sf "${DOTFILES_DIR}/nvim/chadrc.lua" "$HOME/.config/nvim/lua/custom/chadrc.lua"
+ln -s "${DOTFILES_DIR}/nvim/plugins.lua" "$HOME/.config/nvim/lua/custom/plugins.lua"
+ln -s "${DOTFILES_DIR}/nvim/init.lua" "$HOME/.config/nvim/lua/custom/init.lua"
+ln -s "${DOTFILES_DIR}/nvim/configs/lspconfig.lua" "$HOME/.config/nvim/lua/custom/configs/lspconfig.lua"
+ln -s "${DOTFILES_DIR}/nvim/configs/null-ls.lua" "$HOME/.config/nvim/lua/custom/configs/null-ls.lua"
 
 #####################
 # ZSH CONFIGURATION #
 #####################
+
 echo 'configuring zsh'
 
 # symlinks to dotfiles
@@ -56,8 +63,5 @@ FZF_HISTORY_FOLDER="$ZSH/custom/plugins/zsh-fzf-history-search"
 mkdir "$FZF_HISTORY_FOLDER"
 curl https://raw.githubusercontent.com/joshskidmore/zsh-fzf-history-search/master/zsh-fzf-history-search.zsh --output "$FZF_HISTORY_FOLDER/zsh-fzf-history-search.zsh"
 curl https://raw.githubusercontent.com/joshskidmore/zsh-fzf-history-search/master/zsh-fzf-history-search.plugin.zsh --output "$FZF_HISTORY_FOLDER/zsh-fzf-history-search.plugin.zsh"
-
-# configure offline cht.sh client (from https://github.com/chubin/cheat.sh#installation)
-curl -s https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh && sudo chmod +x /usr/local/bin/cht.sh
 
 echo "do not forget to deregister finder from opt+cmd+space! (show iterm2 hotkey)"
