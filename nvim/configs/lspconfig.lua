@@ -5,7 +5,6 @@ local capabilities = configs.capabilities
 local lspconfig = require "lspconfig"
 local servers = { 
   "jqls",
-  "lua_ls",
   "bashls",
   "jsonls",
   "yamlls",

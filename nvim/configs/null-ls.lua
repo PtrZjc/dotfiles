@@ -16,6 +16,7 @@ local sources = {
    b.formatting.ktlint,
    b.formatting.prettier,
    b.formatting.beautysh,
+   b.formatting.stylua,
    b.formatting.autopep8,
    b.diagnostics.shellcheck,
 }

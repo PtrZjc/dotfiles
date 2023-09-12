@@ -27,8 +27,9 @@ mkdir -p "${HOME}/.config/nvim/lua/custom/configs"
 
 ln -sf "${DOTFILES_DIR}/nvim/chadrc.lua" "$HOME/.config/nvim/lua/custom/chadrc.lua"
 ln -s "${DOTFILES_DIR}/nvim/plugins.lua" "$HOME/.config/nvim/lua/custom/plugins.lua"
-ln -s "${DOTFILES_DIR}/nvim/init.lua" "$HOME/.config/nvim/lua/custom/init.lua"
 ln -s "${DOTFILES_DIR}/nvim/configs/lspconfig.lua" "$HOME/.config/nvim/lua/custom/configs/lspconfig.lua"
+ln -s "${DOTFILES_DIR}/nvim/init.lua" "$HOME/.config/nvim/lua/custom/init.lua"
+ln -s "${DOTFILES_DIR}/nvim/mappings.lua" "$HOME/.config/nvim/lua/custom/mappings.lua"
 ln -s "${DOTFILES_DIR}/nvim/configs/null-ls.lua" "$HOME/.config/nvim/lua/custom/configs/null-ls.lua"
 
 #####################
@@ -42,6 +43,16 @@ ln -sf "${DOTFILES_DIR}/zsh/.zshrc" ~/.zshrc
 ln -s "${DOTFILES_DIR}/zsh/git.zsh" "$ZSH/custom/git.zsh"
 ln -s "${DOTFILES_DIR}/zsh/custom.zsh" "$ZSH/custom/custom.zsh"
 ln -s "${DOTFILES_DIR}/zsh/db-credentials.zsh" "$ZSH/custom/db-credentials.zsh"
+
+######################
+# TMUX CONFIGURATION #
+######################
+
+mkdir -p "${HOME}/.config/tmux/plugins"
+git clone https://github.com/tmux-plugins/tpm "${HOME}/.config/tmux/plugins/tpm"
+ln -s "${DOTFILES_DIR}/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf"
+tmux new-session -d && tmux "$HOME/.config/tmux/tmux.conf"
+sh "$HOME/.config/tmux/plugins/tpm/bin/install_plugins"
 
 # z plugin 
 curl https://raw.githubusercontent.com/agkozak/zsh-z/master/zsh-z.plugin.zsh --output "$ZSH/custom/plugins/zsh-z.plugin.zsh"
