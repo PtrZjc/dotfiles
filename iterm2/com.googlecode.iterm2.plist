@@ -26,6 +26,65 @@
 	<true/>
 	<key>FocusOnRightOrMiddleClick</key>
 	<true/>
+	<key>GlobalKeyMap</key>
+	<dict>
+		<key>0xf700-0x300000</key>
+		<dict>
+			<key>Action</key>
+			<integer>7</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
+		<key>0xf701-0x300000</key>
+		<dict>
+			<key>Action</key>
+			<integer>6</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
+		<key>0xf729-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>5</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
+		<key>0xf72b-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>4</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
+		<key>0xf72c-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>9</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
+		<key>0xf72c-0x20000</key>
+		<dict>
+			<key>Action</key>
+			<integer>9</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
+		<key>0xf72d-0x100000</key>
+		<dict>
+			<key>Action</key>
+			<integer>8</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
+		<key>0xf72d-0x20000</key>
+		<dict>
+			<key>Action</key>
+			<integer>8</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
+	</dict>
 	<key>HapticFeedbackForEsc</key>
 	<false/>
 	<key>HideFromDockAndAppSwitcher</key>
@@ -244,7 +303,7 @@
 			<key>Columns</key>
 			<integer>100</integer>
 			<key>Command</key>
-			<string></string>
+			<string>tmux a</string>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Blue Component</key>
@@ -296,6 +355,10 @@
 			<integer>0</integer>
 			<key>Idle Code</key>
 			<integer>0</integer>
+			<key>Initial Text</key>
+			<string>
+
+tmux new -s default || tmux a</string>
 			<key>Initial Use Transparency</key>
 			<true/>
 			<key>Jobs to Ignore</key>
@@ -735,6 +798,8 @@
 					<string></string>
 				</dict>
 			</dict>
+			<key>Left Option Key Changeable</key>
+			<true/>
 			<key>Mouse Reporting</key>
 			<true/>
 			<key>Name</key>
@@ -748,11 +813,11 @@
 			<key>Normal Font</key>
 			<string>MesloLGSNFM-Regular 22</string>
 			<key>Option Key Sends</key>
-			<integer>0</integer>
+			<integer>2</integer>
 			<key>Prompt Before Closing 2</key>
 			<false/>
 			<key>Right Option Key Sends</key>
-			<integer>0</integer>
+			<integer>2</integer>
 			<key>Rows</key>
 			<integer>40</integer>
 			<key>Screen</key>
@@ -1594,6 +1659,8 @@
 			<string>/Users/piotr.zajac</string>
 		</dict>
 	</array>
+	<key>OptionClickMovesCursor</key>
+	<false/>
 	<key>PassOnControlClick</key>
 	<true/>
 	<key>PerPaneBackgroundImage</key>
@@ -1652,11 +1719,13 @@
 	<key>StatusBarPosition</key>
 	<integer>0</integer>
 	<key>SwitchPaneModifier</key>
-	<integer>6</integer>
+	<integer>9</integer>
+	<key>SwitchTabModifier</key>
+	<integer>9</integer>
 	<key>SwitchWindowModifier</key>
 	<integer>9</integer>
 	<key>TabStyleWithAutomaticOption</key>
-	<integer>6</integer>
+	<integer>5</integer>
 	<key>ToolbeltTools</key>
 	<array>
 		<string>Profiles</string>
