@@ -1,8 +1,3 @@
--- custom/configs/null-ls.lua
-
-
--- https://github.com/benjamalegni/custom-nvchad/blob/master/plugins/lspconfig.lua
-
 local present, null_ls = pcall(require, "null-ls")
 
 if not present then

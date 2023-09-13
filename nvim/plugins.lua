@@ -30,6 +30,7 @@ local plugins = {
 				"ktlint",
 				"prettier",
 				"beautysh",
+        "bash-language-server",
 				"autopep8",
 				"shellcheck",
 				"stylua",
