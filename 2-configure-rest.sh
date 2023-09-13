@@ -14,7 +14,7 @@ brew bundle
 curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip --output /tmp/font.zip
 curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip --output /tmp/font.zip
 unzip /tmp/font.zip -d /tmp/font
-cp tmp/font/MesloLGSNerdFont-*.ttf "${HOME}Library/Fonts"
+mv /tmp/font/MesloLGSNerdFont-*.ttf "${HOME}/Library/Fonts"
 
 ######################
 # NVIM CONFIGURATION #
@@ -53,6 +53,10 @@ git clone https://github.com/tmux-plugins/tpm "${HOME}/.config/tmux/plugins/tpm"
 ln -s "${DOTFILES_DIR}/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf"
 tmux new-session -d && tmux "$HOME/.config/tmux/tmux.conf"
 sh "$HOME/.config/tmux/plugins/tpm/bin/install_plugins"
+
+# wezterm
+mkdir -p "${HOME}/.config/wezterm"
+ln -s "${DOTFILES_DIR}/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"
 
 # z plugin 
 curl https://raw.githubusercontent.com/agkozak/zsh-z/master/zsh-z.plugin.zsh --output "$ZSH/custom/plugins/zsh-z.plugin.zsh"
