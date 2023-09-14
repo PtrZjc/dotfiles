@@ -50,5 +50,20 @@ local plugins = {
 			require("custom.configs.lspconfig")
 		end,
 	},
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		opts = {
+			-- https://github.com/zbirenbaum/copilot.lua#setup-and-configuration
+			suggestion = {
+			  auto_trigger = false,
+			},
+			keymap = {
+				accept = "<M-\\>",
+			  },
+		  },
+	},
+  
 }
+
 return plugins
