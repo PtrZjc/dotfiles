@@ -66,8 +66,9 @@ brew "qpdf"
 brew "qrcp" #send files through qr codes
 brew "tesseract" #ocr reader
 brew "tesseract-lang" #language pack to ocr
+brew "tmux-mem-cpu-load"
 
-cask "iterm2"
+cask "wezterm"
 cask "clipy"
 cask "rectangle"
 cask "keepassxc"

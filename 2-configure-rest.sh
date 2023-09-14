@@ -12,7 +12,8 @@ brew bundle
 #####################
 
 curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip --output /tmp/font.zip
-curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip --output /tmp/font.zip
+curl -L https://github.com/ryanoasis/nerd
+-fonts/releases/download/v3.0.2/Meslo.zip --output /tmp/font.zip
 unzip /tmp/font.zip -d /tmp/font
 mv /tmp/font/MesloLGSNerdFont-*.ttf "${HOME}/Library/Fonts"
 

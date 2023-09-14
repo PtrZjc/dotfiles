@@ -34,6 +34,8 @@ config.keys = {
   {key="RightArrow", mods="SHIFT", action=act{SendString="\x1bf"}},
   {key="n", mods="CMD", action=act.DisableDefaultAssignment}, -- disable new window hotkey
   {key="t", mods="CMD", action=act.DisableDefaultAssignment}, -- disable new pane hotkey
+  {key="CapsLock", mods="NONE", action=act{SendString="\x1b"}, -- CapsLock as escape
+  },
 }
 
 return config
