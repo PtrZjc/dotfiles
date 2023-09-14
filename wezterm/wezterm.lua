@@ -2,9 +2,17 @@ local wezterm = require 'wezterm'
 local act = wezterm.action
 
 local config = {}
+local open_command
 
 if wezterm.config_builder then
   config = wezterm.config_builder()
+end
+
+-- Determine the open command based on the OS
+if wezterm.target_triple:find("darwin") then
+  open_command = "open"
+else
+  open_command = "xdg-open"
 end
 
 config.default_prog = { '/usr/local/bin/tmux', 'a' }
@@ -37,5 +45,20 @@ config.keys = {
   {key="CapsLock", mods="NONE", action=act{SendString="\x1b"}, -- CapsLock as escape
   },
 }
+
+-- custom hyperlinks
+
+config.hyperlink_rules = wezterm.default_hyperlink_rules()
+
+table.insert(config.hyperlink_rules, {
+  regex = [[HUBZ-(\d+)]],
+  format = 'https://jira.allegrogroup.com/browse/HUBZ-$1',
+})
+
+table.insert(config.hyperlink_rules, {
+  regex = [=[["' ](\w[-\w]+\/[-\w\.]+)["' ]]=],
+  format = 'https://www.github.com/$1',
+  highlight = 1
+})
 
 return config
