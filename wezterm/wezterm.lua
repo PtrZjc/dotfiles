@@ -15,8 +15,6 @@ else
   open_command = "xdg-open"
 end
 
-config.default_prog = { '/usr/local/bin/tmux', 'a' }
-
 -- Theme config
 config.color_scheme = 'Argonaut'
 config.font = wezterm.font 'MesloLGS Nerd Font'
@@ -36,10 +34,14 @@ config.mouse_bindings = {
 
 -- Keybindings config
 config.keys = {
-  {key="LeftArrow", mods="OPT", action=act{SendString="\x1bb"}}, -- alt b -> back word, etc
+  {key="LeftArrow", mods="CMD", action=act{SendString="\x01"}}, -- ctrl+a -> beginning of line
+  {key="RightArrow", mods="CMD", action=act{SendString="\x05"}}, -- ctrl+e -> end of line
+  {key="LeftArrow", mods="OPT", action=act{SendString="\x1bb"}}, -- alt+b -> back word, etc
   {key="RightArrow", mods="OPT", action=act{SendString="\x1bf"}},
   {key="LeftArrow", mods="SHIFT", action=act{SendString="\x1bb"}},
   {key="RightArrow", mods="SHIFT", action=act{SendString="\x1bf"}},
+  {key="Backspace", mods="CMD", action=act{SendString="\x15"}}, -- ctrl+u -> delete line
+  {key="Delete", mods="OPT", action=act{SendString="\x1bd"}}, -- alt+d -> delete word before cursor
   {key="n", mods="CMD", action=act.DisableDefaultAssignment}, -- disable new window hotkey
   {key="t", mods="CMD", action=act.DisableDefaultAssignment}, -- disable new pane hotkey
   {key="CapsLock", mods="NONE", action=act{SendString="\x1b"}, -- CapsLock as escape
