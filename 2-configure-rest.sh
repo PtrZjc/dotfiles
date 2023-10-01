@@ -1,19 +1,22 @@
 #!/bin/sh
 DOTFILES_DIR=$( cd -- $( dirname -- ${BASH_SOURCE[0]} ) &> /dev/null && pwd )
 
+# install homebrew
+echo "Installing Homebrew"
+curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+
 # make link to brewfile required by `brew bundle``
 export HOMEBREW_BUNDLE_FILE="${DOTFILES_DIR}/brew/Brewfile"
 
 echo 'installing brew packages'
 brew bundle
 
-#####################
+######################
 # FONT CONFIGURATION #
-#####################
+######################
 
 curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip --output /tmp/font.zip
-curl -L https://github.com/ryanoasis/nerd
--fonts/releases/download/v3.0.2/Meslo.zip --output /tmp/font.zip
+curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip --output /tmp/font.zip
 unzip /tmp/font.zip -d /tmp/font
 mv /tmp/font/MesloLGSNerdFont-*.ttf "${HOME}/Library/Fonts"
 
@@ -79,5 +82,3 @@ FZF_HISTORY_FOLDER="$ZSH/custom/plugins/zsh-fzf-history-search"
 mkdir "$FZF_HISTORY_FOLDER"
 curl https://raw.githubusercontent.com/joshskidmore/zsh-fzf-history-search/master/zsh-fzf-history-search.zsh --output "$FZF_HISTORY_FOLDER/zsh-fzf-history-search.zsh"
 curl https://raw.githubusercontent.com/joshskidmore/zsh-fzf-history-search/master/zsh-fzf-history-search.plugin.zsh --output "$FZF_HISTORY_FOLDER/zsh-fzf-history-search.plugin.zsh"
-
-echo "do not forget to deregister finder from opt+cmd+space! (show iterm2 hotkey)"
