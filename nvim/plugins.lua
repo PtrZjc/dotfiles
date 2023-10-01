@@ -4,7 +4,7 @@ local plugins = {
 	{ "tpope/vim-surround", lazy = false },
 	{ "tpope/vim-sensible", lazy = false },
 	{ "pocco81/auto-save.nvim", lazy = false },
-	{ "terrastruct/d2-vim" },
+	{ "terrastruct/d2-vim", ft = "d2" },
 	{
 		"nvim-treesitter/nvim-treesitter",
 		opts = {

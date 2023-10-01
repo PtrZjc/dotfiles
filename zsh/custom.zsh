@@ -288,7 +288,46 @@ alias gfn="grafana"
 
 ## TEXT PROCESSING
 
+# below functions are meant to be used with stdin input 
+function ucase() {
+  while read -r line; do
+    print -r -- ${(U)line}
+  done
+}
+
+function split() {
+  # Read stdin into a variable
+  input_string=$(cat)
+
+  # Calculate the length of the string
+  length=${#input_string}
+
+  # Number of files to split into
+  num_files=$1
+
+  # Calculate the length of each segment
+  segment_length=$((length / num_files))
+
+  # Initialize variables
+  start=0
+  end=$segment_length
+
+  # Loop to create files
+  for (( i=1; i<=num_files; i++ )); do
+    # Extract the substring
+    segment=${input_string:start:end}
+
+    # Write to a file
+    echo -n "$segment" > "split_$i.txt"
+
+    # Update start and end for the next iteration
+    start=$((start + segment_length))
+    end=$((end + segment_length))
+  done
+}
+
+
 alias extract-ids='pbpaste | rg id | sd ".*(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w+{12}).*" "\$1," | pbcopy && pbpaste'
 alias wrap-with-uuid='pbpaste | sd ".*?(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}).*" "UUID(\"\$1\"), " | pbcopy && pbpaste'
 
-export TSTRUCT_TOKEN="tstruct_eyJ2ZXJzaW9uIjoxLCJkYXRhIjp7InVzZXJJRCI6MTc0NDM0NDI4MSwidXNlckVtYWlsIjoicGlvdHIuemFqYWNAYWxsZWdyby5jb20iLCJ0ZWFtSUQiOjExMjAxNzUzNDUsInRlYW1OYW1lIjoicGlvdHIuemFqYWNAYWxsZWdyby5jb20ncyB0ZWFtIiwicmVuZXdhbERhdGUiOiIyMDIzLTA4LTA4VDE0OjAwOjM0Ljg3MzMwMzgwMVoiLCJjcmVhdGVkQXQiOiIyMDIzLTA4LTAxVDE0OjAwOjM0Ljg3MzMwNTkzNloifSwic2lnbmF0dXJlIjoieUpJYnRESTU4TVc2dUpzSEw0ZWd4c0FPaEhKZlRtbHQvejNJZE1FOWlCSDkxV1RSQVJLeGwxR3lkRS9DTm44WENRUVh0SDNPK0tFdmdLaE43UHhOQ2c9PSJ9"
+export TSTRUCT_TOKEN="tstruct_eyJ2ZXJzaW9uIjoxLCJkYXRhIjp7InVzZXJJRCI6NzQxMjk2MTksInVzZXJFbWFpbCI6Im5vcG9nNzY3MThAYWx2aXNhbmkuY29tIiwidGVhbUlEIjoyMjYzNzM5NjAsInRlYW1OYW1lIjoibm9wb2c3NjcxOEBhbHZpc2FuaS5jb20ncyB0ZWFtIiwicmVuZXdhbERhdGUiOiIyMDIzLTEwLTAzVDE2OjM2OjA3LjAwOTY2NTgzNFoiLCJjcmVhdGVkQXQiOiIyMDIzLTA5LTI2VDE2OjM2OjA3LjAwOTY2ODQ3NFoifSwic2lnbmF0dXJlIjoieVhJRnJoN1hId3NlUjhTL2VMM05SWDkxL2I1L0xpdjFQL1NsS2V1dVBEVWhvTEwwWE9Ud2pWZWVIYTR6TElaQlkzMmhrNlZLbnZqVWZab0poajNLRFE9PSJ9"
