@@ -20,6 +20,8 @@ alias ch='cls && cht.sh'
 alias vi='nvim'
 alias vim='nvim'
 alias code='code .'
+alias wat='which '
+alias python='python3'
 alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
 alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
 
@@ -95,6 +97,21 @@ function goto() {
         cd "./$DESTINATION"
     fi
 }
+
+estimate_tokens() {
+    if [[ -p /dev/stdin ]]; then
+        # Read from stdin
+        input=$(cat)
+    else
+        echo "No std-in available" && exit 1
+    fi
+
+    local word_count=$(wc -w <<< "$input")
+    local char_count=$(grep -o . <<< "$input" | wc -l)
+
+    echo "Estimated tokens: between $word_count and $char_count"
+}
+
 
 function ocr() {
     ipaste - >~/ocr_temp.jpg
@@ -250,16 +267,26 @@ function db4u_uri(){
     echo "mongodb+srv://$DB4U_USERNAME:$password@$hosts/?replicaSet=$replica_set&ssl=false&retryWrites=true&readPreference=primary&srvServiceName=mongodb&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-1"
 }
 
-function db4u_test_to_dev() {
+function db4u_refresh_pricelists() {
+    target=${(L)1}
+    if [[ $target == "prod" ]]; then
+        echo "prod is not supported as target environment. Exiting." && return 1
+    elif [[ $target == "test" ]]; then
+        source="prod"
+    elif [[ $target == "dev" ]]; then
+        source="test"
+    else
+        echo "Invalid target environment. Exiting." && return 1
+    fi
+
     service="hplf"
     collections=("price-lists" "pricing-entries")
-
     for collection in "${collections[@]}"; do
-        echo "Dumping $collection from $service test database"
-        mongodump --uri=$(db4u_uri $service TEST) --collection=$collection --db=${service}_t --out=/tmp/dump
+        echo "Dumping $collection from $service $source database"
+        mongodump --uri=$(db4u_uri $service ${(U)source}) --collection=$collection --db=${service}_${source:0:1} --out=/tmp/dump
 
-        echo "Restoring $collection to $service dev database"
-        mongorestore --uri=$(db4u_uri $service DEV) --drop --collection=$collection --db=${service}_d "/tmp/dump/${service}_t/$collection.bson"
+        echo "Restoring $collection to $service $target database"
+        mongorestore --uri=$(db4u_uri $service ${(U)target}) --drop --collection=$collection --db=${service}_${target:0:1} "/tmp/dump/${service}_${source:0:1}/$collection.bson"
     done
 }
 
