@@ -293,20 +293,16 @@ function db4u_refresh_pricelists() {
 function db4u_backup(){
     service=${(U)1}
     env=${(U)2}
+    collections=("price-lists" "pricing-entries")
 
-    if [[ ${(L)service} == "hplf" ]]; then
-        collection="price-lists";
-    elif [[ ${(L)service} == "hdsps" ]]; then
-        collection="pricing-entries";
-    else
-        echo "service $service unsupported. Only hplf & hdsps are supported. Exiting." && return 1
-    fi
+    env_letter=${(L)env:0:1}
+    db=${(L)service}'_'$env_letter
 
-    db=${(L)service}'_'${(L)env:0:1}
-
-    mongodump --uri=$(db4u_uri $service $env) --collection=$collection --db=$db --out=/tmp/dump && \
-    mongorestore --uri=$(db4u_uri $service $env) --drop --collection=$collection"_backup" --db=$db "/tmp/dump/"$service"_t/"$collection".bson" && \
-    echo "Successfully backed up collection $collection from $service $env database as "$collection"_backup"
+    for collection in "${collections[@]}"; do
+        mongodump --uri=$(db4u_uri $service $env) --collection=$collection --db=$db --out=/tmp/dump && \
+        mongorestore --uri=$(db4u_uri $service $env) --drop --collection=$collection"_backup" --db=$db "/tmp/dump/"${(L)service}"_"$env_letter"/"$collection".bson" && \
+        echo "Successfully backed up collection $collection from $service $env database as "$collection"_backup"
+    done
 }
 
 alias apc="open_bookmark apc"
