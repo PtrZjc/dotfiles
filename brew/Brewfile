@@ -8,6 +8,7 @@ tap "idleberg/dbxcli"
 tap "sdkman/tap"
 tap "saulpw/vd"
 tap "quarkusio/tap"
+tap "harelba/q"
 
 brew "zsh"
 brew "fzf"
@@ -21,7 +22,7 @@ brew "sd"
 brew "neovim"
 brew "fd"
 brew "quarkus"
-
+brew "q"
 brew "pngpaste" #save images from clipboard
 brew "pyenv"
 brew "ripgrep"
