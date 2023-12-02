@@ -1,11 +1,11 @@
 export REPO="${HOME}/workspace"
-export DOTFILES="${REPO}/0_others/dotfiles"
+export DOTFILES="${REPO}/priv/dotfiles"
 export CUSTOM="${DOTFILES}/zsh/custom.zsh"
 export ZSHRC="${DOTFILES}/zsh/.zshrc"
 export GIT="${DOTFILES}/zsh/git.zsh"
 export VIMRC="${DOTFILES}/vim/.vimrc"
 export BREWFILE="${DOTFILES}/brew/Brewfile"
-export TEMP_FILE="${HOME}/temp_file"
+export TEMP_FILE="/tmp/temp_file"
 
 alias rst="exec zsh"
 alias co=tldr
@@ -24,6 +24,8 @@ alias wat='which '
 alias python='python3'
 alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
 alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
+alias tmux='tmux new -s 0 || tmux attach -t 0'
+alias pip='pip3'
 
 alias -g H='| head'
 alias -g L='| less'
@@ -42,41 +44,44 @@ alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/nu
 # alias ke-p='dbxcli put ~/Keepas_globalny.kdbx "Aplikacje/KeePass.kdbx"'
 function ke-l(){
     DB_NAME="KeePass"
+    DIR="${HOME}/keepass"
     LOCAL_FILE="${HOME}/keepass/$DB_NAME.kdbx"
     REMOTE_FILE="Aplikacje/KeePass/$DB_NAME.kdbx"
-    BACKUP_DIR_REMOTE="${HOME}/keepass/backup/remote"
-    BACKUP_DIR_LOCAL="${HOME}/keepass/backup/local"
     mkdir -p $BACKUP_DIR_REMOTE $BACKUP_DIR_LOCAL
     LOCAL_FILE_DATE=`stat -f "%Sm" -t "%Y%m%d_%H%M%S" "$LOCAL_FILE"`
-    
-    # Step 1: Make backup of local database before override
-    LOCAL_BACKUP="$BACKUP_DIR_LOCAL/$DB_NAME"_"$LOCAL_FILE_DATE.kdbx"
-    cp "$LOCAL_FILE" "$LOCAL_BACKUP"
-    echo "Local backup made to $LOCAL_BACKUP"
 
-    # Step 2: Download the remote file, overriding the local database
+    LOCAL_BACKUP="$DIR/$DB_NAME"_local_"$LOCAL_FILE_DATE.kdbx"
+    cp "$LOCAL_FILE" "$LOCAL_BACKUP"
+
     echo "Downloading and overriding local database"
     dbxcli get "$REMOTE_FILE" "$LOCAL_FILE"
+
+    if cmp -s "$LOCAL_FILE" "$LOCAL_BACKUP"; then
+        rm "$LOCAL_BACKUP"
+    else
+        echo "Difference with remote - Local backup kept in $LOCAL_BACKUP"
+    fi
 }
 
 function ke-p(){
     DB_NAME="KeePass"
+    DIR="${HOME}/keepass"
     LOCAL_FILE="${HOME}/keepass/$DB_NAME.kdbx"
     REMOTE_FILE="Aplikacje/KeePass/$DB_NAME.kdbx"
-    BACKUP_DIR_REMOTE="${HOME}/keepass/backup/remote"
-    BACKUP_DIR_LOCAL="${HOME}/keepass/backup/local"
-    mkdir -p $BACKUP_DIR_REMOTE $BACKUP_DIR_LOCAL
-    LOCAL_FILE_DATE=`stat -f "%Sm" -t "%Y%m%d_%H%M%S" "$LOCAL_FILE"`
 
     # Step 1: Make backup of remote database before override
     echo "Making backup of remote database before override"
     dbxcli get "$REMOTE_FILE" "$TEMP_FILE"
     REMOTE_FILE_DATE=`stat -f "%Sm" -t "%Y%m%d_%H%M%S" "$TEMP_FILE"`
-    REMOTE_BACKUP="$BACKUP_DIR_REMOTE/$DB_NAME"_"$REMOTE_FILE_DATE.kdbx"
+    REMOTE_BACKUP="$DIR/$DB_NAME"_remote_"$REMOTE_FILE_DATE.kdbx"
     mv "$TEMP_FILE" "$REMOTE_BACKUP"
-    echo "Remote backup made to $REMOTE_BACKUP"
-    echo "Uploading local database"
 
+    if cmp -s "$LOCAL_FILE" "$REMOTE_BACKUP"; then
+        rm "$REMOTE_BACKUP"
+    else
+        echo "Difference with remote - Remote backup kept in $REMOTE_BACKUP"
+    fi
+    echo "Uploading local database"
     # Step 2: Upload the local file, overriding the remote database
     dbxcli put "$LOCAL_FILE" $REMOTE_FILE
 }

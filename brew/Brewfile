@@ -1,27 +1,12 @@
 
-tap "homebrew/core"
-tap "homebrew/cask-fonts"
-tap "thezoraiz/ascii-image-converter"
-tap "eddieantonio/eddieantonio"
-tap "mongodb/brew"
-tap "idleberg/dbxcli"
-tap "sdkman/tap"
-tap "saulpw/vd"
-tap "quarkusio/tap"
-tap "harelba/q"
-
 brew "zsh"
 brew "fzf"
 brew "z"
 brew "tldr"
 brew "howdoi"
-brew "docker"
-brew "mongosh"
-brew "mongodb-database-tools"
 brew "sd"
 brew "neovim"
 brew "fd"
-brew "quarkus"
 brew "q"
 brew "pngpaste" #save images from clipboard
 brew "pyenv"
@@ -37,11 +22,9 @@ brew "shellcheck"
 brew "gh"
 brew "awscli"
 brew "aws-sam-cli"
-brew "thefuck"
 brew "libpq"
 brew "dbxcli"
 
-brew "diff-so-fancy"
 brew "sdkman-cli"
 brew "rnr" #mass rename files
 
@@ -71,8 +54,8 @@ brew "tmux-mem-cpu-load"
 
 cask "wezterm"
 cask "clipy"
-cask "rectangle"
+
 cask "keepassxc"
 cask "visual-studio-code"
-cask "font-hack"
+
 cask "lunar"

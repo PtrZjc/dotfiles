@@ -156,12 +156,6 @@ zstyle :bracketed-paste-magic paste-finish pastefinish
 # other configuration
 export PATH="$HOME/.local/bin:$PATH"
 
-# thefuck required
-eval $(thefuck --alias)
-autoload bashcompinit && bashcompinit
-autoload -Uz compinit && compinit
-complete -C '/usr/local/bin/aws_completer' aws
-
 #Sdkman config
 export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
 [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
