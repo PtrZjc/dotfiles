@@ -1,6 +1,6 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
-
+local mux = wezterm.mux
 local config = {}
 local open_command
 
@@ -14,6 +14,11 @@ if wezterm.target_triple:find("darwin") then
 else
 	open_command = "xdg-open"
 end
+
+wezterm.on('gui-startup', function(cmd)
+  local tab, pane, window = mux.spawn_window(cmd or {})
+  pane:send_text 'tmux new -s 0 || tmux attach -t 0\n'
+end)
 
 -- Theme config
 config.color_scheme = "Argonaut"
@@ -33,6 +38,11 @@ config.mouse_bindings = {
 }
 
 -- Keybindings config
+-- opt + del -> delete word before cursor
+-- cmd + del -> delete word after cursor
+-- cmd + opt + del -> delete line
+-- ctrl + opt + del -> delete line before the cursor
+-- ctrl + cmd + del -> delete line after the cursor
 config.keys = {
 	{ key = "LeftArrow", mods = "CMD", action = act({ SendString = "\x01" }) }, -- ctrl+a -> beginning of line
 	{ key = "RightArrow", mods = "CMD", action = act({ SendString = "\x05" }) }, -- ctrl+e -> end of line
@@ -40,9 +50,9 @@ config.keys = {
 	{ key = "RightArrow", mods = "OPT", action = act({ SendString = "\x1bf" }) },
 	{ key = "LeftArrow", mods = "SHIFT", action = act({ SendString = "\x1bb" }) },
 	{ key = "RightArrow", mods = "SHIFT", action = act({ SendString = "\x1bf" }) },
-	{ key = "Backspace", mods = "CMD", action = act({ SendString = "\x15" }) }, -- ctrl+u -> delete line
-	{ key = "Delete", mods = "OPT", action = act({ SendString = "\x1bd" }) }, -- alt+d -> delete word before cursor
-	{ key = "k", mods = "CMD|OPT", action = wezterm.action({ SendString = "\x0f" }) }, -- override opt+cmd+k as ctrl+o -> kill the line (C-k)
+	{ key = "Backspace", mods = "CMD|OPT", action = act({ SendString = "\x15" }) }, -- ctrl+u -> delete line
+	{ key = "Backspace", mods = "CMD", action = act({ SendString = "\x1bd" }) }, -- alt+d -> delete word before cursor
+	{ key = "u", mods = "CMD", action = wezterm.action({ SendString = "\x1f" }) },-- Ctrl+_ -> undo	
 	{ key = "n", mods = "CMD", action = act.DisableDefaultAssignment }, -- disable new window hotkey
 	{ key = "t", mods = "CMD", action = act.DisableDefaultAssignment }, -- disable new pane hotkey
 	{
@@ -50,7 +60,28 @@ config.keys = {
 		mods = "NONE",
 		action = act({ SendString = "\x1b" }), -- CapsLock as escape
 	},
-}
+	{ 
+		key = "Delete", 
+		mods = "CTRL|OPT", 
+		action = wezterm.action({ SendString = "\x15" })  -- This sends Ctrl+U
+	},
+	{ 
+		key = "Delete", 
+		mods = "CTRL|CMD", 
+		action = wezterm.action({ SendString = "\x0b" })  -- This sends Ctrl+K
+	},
+	{
+		key = "LeftArrow",
+		mods = "CTRL",
+		action = wezterm.action{SendString = "\x1b[1;5D"}
+	  },
+	  -- Ctrl + Right Arrow
+	  {
+		key = "RightArrow",
+		mods = "CTRL",
+		action = wezterm.action{SendString = "\x1b[1;5C"}
+	  },
+	}
 
 -- custom hyperlinks
 

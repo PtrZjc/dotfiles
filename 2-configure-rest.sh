@@ -46,7 +46,7 @@ echo 'configuring zsh'
 ln -sf "${DOTFILES_DIR}/zsh/.zshrc" ~/.zshrc
 ln -s "${DOTFILES_DIR}/zsh/git.zsh" "$ZSH/custom/git.zsh"
 ln -s "${DOTFILES_DIR}/zsh/custom.zsh" "$ZSH/custom/custom.zsh"
-ln -s "${DOTFILES_DIR}/zsh/db-credentials.zsh" "$ZSH/custom/db-credentials.zsh"
+ln -s "${DOTFILES_DIR}/zsh/secrets.zsh" "$ZSH/custom/secrets.zsh"
 
 ######################
 # TMUX CONFIGURATION #

@@ -156,6 +156,9 @@ zstyle :bracketed-paste-magic paste-finish pastefinish
 # other configuration
 export PATH="$HOME/.local/bin:$PATH"
 
+# below keybinding originally pastes "ls\n"
+bindkey "^[l" down-case-word
+
 #Sdkman config
 export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
 [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
