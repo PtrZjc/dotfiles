@@ -6,6 +6,7 @@ export GIT="${DOTFILES}/zsh/git.zsh"
 export VIMRC="${DOTFILES}/vim/.vimrc"
 export BREWFILE="${DOTFILES}/brew/Brewfile"
 export TEMP_FILE="/tmp/temp_file"
+export PYTHON_SRC="${REPO}/priv/python-scripts"
 
 alias rst="exec zsh"
 alias co=tldr
@@ -24,7 +25,6 @@ alias wat='which '
 alias python='python3'
 alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
 alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
-alias tmux='tmux new -s 0 || tmux attach -t 0'
 alias pip='pip3'
 
 alias -g H='| head'
@@ -33,15 +33,12 @@ alias -g JL='| jq -C | less'
 alias -g T='| tail'
 alias -g C='| cat'
 alias -g O='| xargs -I _ open _'
-alias -g TOX='> xx && mv xx x'
 alias -g DF='-u | diff-so-fancy' # use as: diff file1 file2 DF
 alias ls='ls -lahgG'
-# alias l='ls -1G'
 alias l='tree -C -L 1'
 
 alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
 
-# alias ke-p='dbxcli put ~/Keepas_globalny.kdbx "Aplikacje/KeePass.kdbx"'
 function ke-l(){
     DB_NAME="KeePass"
     DIR="${HOME}/keepass"
@@ -86,6 +83,23 @@ function ke-p(){
     dbxcli put "$LOCAL_FILE" $REMOTE_FILE
 }
 
+function obs-p() {
+    if [[ -z $(pwd | rg 'obsidian/goddy') ]]; then
+        echo "Not in obsidian folder" && return 2
+    fi
+    DROPBOX_DEST=$(pwd | sd '.*(/obsidian.*)' '$1')
+    python "${PYTHON_SRC}/dropbox/upload_folder.py" "$DROPBOX_DEST" $(pwd) -y
+}
+
+function obs-l() {
+    if [[ -z $(pwd | rg 'obsidian/goddy') ]]; then
+        echo "Not in obsidian folder" && return 2
+    fi
+    DROPBOX_SOURCE=$(pwd | sd '.*(/obsidian.*)' '$1')
+    echo "downloading from $DROPBOX_SOURCE"
+    python "${PYTHON_SRC}/dropbox/download_folder.py" "$DROPBOX_SOURCE"
+}
+
 function wiremock() {
     cd $REPO/hub-mocks && sh launch-wiremock.sh
 }
@@ -101,20 +115,6 @@ function goto() {
     else
         cd "./$DESTINATION"
     fi
-}
-
-estimate_tokens() {
-    if [[ -p /dev/stdin ]]; then
-        # Read from stdin
-        input=$(cat)
-    else
-        echo "No std-in available" && exit 1
-    fi
-
-    local word_count=$(wc -w <<< "$input")
-    local char_count=$(grep -o . <<< "$input" | wc -l)
-
-    echo "Estimated tokens: between $word_count and $char_count"
 }
 
 
@@ -323,6 +323,8 @@ function ucase() {
   done
 }
 
+
+# Function used to divide stdin into multiple files 
 function split() {
   # Read stdin into a variable
   input_string=$(cat)
