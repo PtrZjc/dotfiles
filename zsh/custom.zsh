@@ -36,7 +36,7 @@ alias -g O='| xargs -I _ open _'
 alias -g DF='-u | diff-so-fancy' # use as: diff file1 file2 DF
 alias ls='ls -lahgG'
 alias l='tree -C -L 1'
-
+alias qr='qrencode -t ansiutf8 '
 alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
 
 function ke-l(){
@@ -356,8 +356,45 @@ function split() {
   done
 }
 
+# Custom certs - Sportradar
+export CURL_CA_BUNDLE=$HOME/Zscaler_CA.pem
 
 alias extract-ids='pbpaste | rg id | sd ".*(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w+{12}).*" "\$1," | pbcopy && pbpaste'
 alias wrap-with-uuid='pbpaste | sd ".*?(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}).*" "UUID(\"\$1\"), " | pbcopy && pbpaste'
 
 export TSTRUCT_TOKEN="tstruct_eyJ2ZXJzaW9uIjoxLCJkYXRhIjp7InVzZXJJRCI6NzQxMjk2MTksInVzZXJFbWFpbCI6Im5vcG9nNzY3MThAYWx2aXNhbmkuY29tIiwidGVhbUlEIjoyMjYzNzM5NjAsInRlYW1OYW1lIjoibm9wb2c3NjcxOEBhbHZpc2FuaS5jb20ncyB0ZWFtIiwicmVuZXdhbERhdGUiOiIyMDIzLTEwLTAzVDE2OjM2OjA3LjAwOTY2NTgzNFoiLCJjcmVhdGVkQXQiOiIyMDIzLTA5LTI2VDE2OjM2OjA3LjAwOTY2ODQ3NFoifSwic2lnbmF0dXJlIjoieVhJRnJoN1hId3NlUjhTL2VMM05SWDkxL2I1L0xpdjFQL1NsS2V1dVBEVWhvTEwwWE9Ud2pWZWVIYTR6TElaQlkzMmhrNlZLbnZqVWZab0poajNLRFE9PSJ9"
+
+
+set_aws_profile() {
+    local current_profile=$AWS_PROFILE
+    local choice
+
+    echo "Select the AWS profile:"
+    echo "1) ld-igp-k8s"
+    echo "2) ld-nonprod-k8s"
+    echo "3) priv"
+    read choice
+
+    case $choice in
+        1)
+            [[ $current_profile == "ld-igp-k8s" ]] && return
+            export AWS_PROFILE="ld-igp-k8s"
+            aws sso login --no-browser
+            aws eks update-kubeconfig --region eu-central-1 --name nonprod-euc1-igp-srld-io
+            ;;
+        2)
+            [[ $current_profile == "ld-nonprod-k8s" ]] && return
+            export AWS_PROFILE="ld-nonprod-k8s"
+            aws sso login --no-browser
+            aws eks update-kubeconfig --region eu-central-1 --name nonprod-euc1-srlivedata-io
+            ;;
+        3)
+            [[ $current_profile == "priv" ]] && return
+            export AWS_PROFILE="priv"
+            ;;
+        *)
+            echo "Invalid selection."
+            ;;
+    esac
+}
+

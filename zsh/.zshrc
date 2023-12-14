@@ -85,6 +85,7 @@ plugins=(
 	zsh-autosuggestions
 	zsh-syntax-highlighting
 	fzf-tab
+  docker
 )
 
 source $ZSH/oh-my-zsh.sh
