@@ -36,7 +36,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -86,7 +86,10 @@ plugins=(
 	zsh-syntax-highlighting
 	fzf-tab
   docker
+  kubectl
+  aws
 )
+
 
 source $ZSH/oh-my-zsh.sh
 
@@ -127,18 +130,13 @@ zstyle ':completion:*' menu select
 # zle -N self-insert url-quote-magic
 
 # to make psql work with libpq
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+# export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
 # pressing del does not close shell with empty prompt
 setopt IGNORE_EOF
 
 #bash completion
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
-
-# cht.sh autocompletion (https://github.com/chubin/cheat.sh#zsh-tab-completion)
-# curl https://cheat.sh/:zsh > ~/.zsh.d/_cht
-fpath=(~/.zsh.d/ $fpath)
-
 
 ### Fix slowness of pastes with zsh-syntax-highlighting.zsh
 # solution per https://gist.github.com/magicdude4eva/2d4748f8ef3e6bf7b1591964c201c1ab

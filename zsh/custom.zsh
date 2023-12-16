@@ -1,3 +1,6 @@
+# todo
+# kubectl completion zsh > ~/.oh-my-zsh/custom/kubectl_autocompletion.zsh
+
 export REPO="${HOME}/workspace"
 export DOTFILES="${REPO}/priv/dotfiles"
 export CUSTOM="${DOTFILES}/zsh/custom.zsh"
@@ -7,6 +10,7 @@ export VIMRC="${DOTFILES}/vim/.vimrc"
 export BREWFILE="${DOTFILES}/brew/Brewfile"
 export TEMP_FILE="/tmp/temp_file"
 export PYTHON_SRC="${REPO}/priv/python-scripts"
+export EDITOR="nvim"
 
 alias rst="exec zsh"
 alias co=tldr
@@ -17,11 +21,10 @@ alias ipaste='pngpaste'
 alias todo='todo.sh'
 alias t='tree -C -L'
 alias cls='clear && printf "\e[3J"'
-alias ch='cls && cht.sh'
 alias vi='nvim'
 alias vim='nvim'
 alias code='code .'
-alias wat='which '
+alias wat='which'
 alias python='python3'
 alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
 alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
@@ -324,7 +327,7 @@ function ucase() {
 }
 
 
-# Function used to divide stdin into multiple files 
+# Function used to divide stdin into multiple files. Takes 1 argument as number of files to split into.
 function split() {
   # Read stdin into a variable
   input_string=$(cat)
@@ -378,15 +381,15 @@ set_aws_profile() {
     case $choice in
         1)
             [[ $current_profile == "ld-igp-k8s" ]] && return
-            export AWS_PROFILE="ld-igp-k8s"
             aws sso login --no-browser
             aws eks update-kubeconfig --region eu-central-1 --name nonprod-euc1-igp-srld-io
+            export AWS_PROFILE="ld-igp-k8s"
             ;;
         2)
             [[ $current_profile == "ld-nonprod-k8s" ]] && return
-            export AWS_PROFILE="ld-nonprod-k8s"
             aws sso login --no-browser
             aws eks update-kubeconfig --region eu-central-1 --name nonprod-euc1-srlivedata-io
+            export AWS_PROFILE="ld-nonprod-k8s"
             ;;
         3)
             [[ $current_profile == "priv" ]] && return
