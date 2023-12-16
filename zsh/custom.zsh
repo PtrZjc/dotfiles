@@ -1,5 +1,6 @@
 export REPO="${HOME}/workspace"
-export DOTFILES="${REPO}/priv/dotfiles"
+export OBSIDIAN="${REPO}/private/obsidian"
+export DOTFILES="${REPO}/private/dotfiles"
 export CUSTOM="${DOTFILES}/zsh/custom.zsh"
 export ZSHRC="${DOTFILES}/zsh/.zshrc"
 export GIT="${DOTFILES}/zsh/git.zsh"
@@ -25,6 +26,7 @@ alias python='python3'
 alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
 alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
 alias pip='pip3'
+alias obs_sync='cd ${OBSIDIAN}; git add .; git pull && git commit -m "Sync obsidian from $(hostname)"; git push && cd -'
 
 alias -g H='| head'
 alias -g L='| less'
