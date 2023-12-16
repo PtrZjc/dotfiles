@@ -44,9 +44,10 @@ echo 'configuring zsh'
 
 # symlinks to dotfiles
 ln -sf "${DOTFILES_DIR}/zsh/.zshrc" ~/.zshrc
-ln -s "${DOTFILES_DIR}/zsh/git.zsh" "$ZSH/custom/git.zsh"
-ln -s "${DOTFILES_DIR}/zsh/custom.zsh" "$ZSH/custom/custom.zsh"
-ln -s "${DOTFILES_DIR}/zsh/secrets.zsh" "$ZSH/custom/secrets.zsh"
+
+find  "${DOTFILES_DIR}/zsh" \
+    -name '*.zsh' \
+    -exec sh -c 'ln -s $1 "$ZSH/custom/$(basename $1)"' _ {} \;
 
 ######################
 # TMUX CONFIGURATION #
