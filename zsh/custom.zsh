@@ -26,7 +26,7 @@ alias python='python3'
 alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
 alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
 alias pip='pip3'
-alias obs_sync='cd ${OBSIDIAN}; git add .; git pull && git commit -m "Sync obsidian from $(hostname)"; git push && cd -'
+alias obs_sync='cd ${OBSIDIAN}; git add .; git commit -m "Sync obsidian from $(hostname)"; git pull; git push && cd -'
 
 alias -g H='| head'
 alias -g L='| less'
