@@ -1,61 +1,63 @@
 
-brew "zsh"
-brew "fzf"
-brew "z"
-brew "tldr"
-brew "howdoi"
-brew "sd"
-brew "neovim"
-brew "fd"
-brew "q"
-brew "pngpaste" #save images from clipboard
-brew "pyenv"
-brew "ripgrep"
-brew "tree"
-brew "translate-shell"
-brew "tmux"
+# Shell Enhancements and Utilities
+brew "zsh" # Shell
+brew "fzf" # Fuzzy Finder
+brew "z" # Directory Jumper
+brew "tldr" # Simplified and community-driven man pages
+brew "sd" # Intuitive find & replace CLI
+brew "neovim" # Text Editor
+brew "fd" # File Search
+brew "tree" # Directory Tree Visualizer
+brew "translate-shell" # Command-line translator
+brew "tmux" # Terminal Multiplexer
+brew "ripgrep" # Advanced text search tool
 
-brew "qrencode"
+# Development Tools
+brew "shellcheck" # Shell Script Analysis Tool
+brew "gh" # GitHub CLI
+brew "awscli" # AWS CLI
+brew "aws-sam-cli" # AWS Serverless Application Model CLI
+brew "libpq" # PostgreSQL Library
+brew "sdkman-cli" # SDK Management
+brew "pyenv" # Python Version Management
 
-brew "btop" #process manager
-brew "shellcheck"
-brew "gh"
-brew "awscli"
-brew "aws-sam-cli"
-brew "libpq"
-brew "dbxcli"
+# Data Processing
+brew "jq" # JSON Processor
+brew "yq" # YAML Processor
+brew "yj" # YAML and JSON Converter
+brew "gron" # Make JSON Greppable
+brew "visidata" # Data Explorer
+brew "gnuplot" # Plotting Utility
+brew "miller" # Text Data Processing Tool
+brew "harelba/q/q" # SQL-like queries on CSVs
 
-brew "sdkman-cli"
-brew "rnr" #mass rename files
+# Image Processing
+brew "tesseract" # OCR Reader
+brew "tesseract-lang" # OCR Language Packs
+brew "pngpaste" # Clipboard Image Saving
+brew "eddieantonio/eddieantonio/imgcat" # Inline Image Display
+brew "thezoraiz/ascii-image-converter/ascii-image-converter" # ASCII Image Conversion
+brew "imagemagick" # Image Processing Tool
 
-#data
-brew "jq"
-brew "yq"
-brew "yj"
-brew "gron" #json to discrete form
-brew "visidata"
-brew "gnuplot" #plots in terminal
-brew "miller" #text data processor
-brew "d2" #diagram scripting language
+# File Managament
+brew "dbxcli" # Dropbox CLI
+brew "qrcp" # File Transfer via QR Codes
+brew "qpdf" # PDF Processing Tool
+brew "rnr" # File Renaming Tool
 
-#media
-brew "eddieantonio/eddieantonio/imgcat"
-brew "thezoraiz/ascii-image-converter/ascii-image-converter"
-brew "imagemagick" #image processor, invoked as 'magick'
+# System and Performance Monitoring
+brew "btop" # System Monitoring
+brew "tmux-mem-cpu-load" # CPU and Memory Load in tmux
 
-#utils
-brew "countdown"
-brew "utimer"
-brew "qpdf"
-brew "qrcp" #send files through qr codes
-brew "tesseract" #ocr reader
-brew "tesseract-lang" #language pack to ocr
-brew "tmux-mem-cpu-load"
+# Miscellaneous Utilities
+brew "qrencode" # QR Code Generation
+brew "d2" # Diagram Scripting Language
+brew "countdown" # Countdown Timer
+brew "utimer" # Command-line Timer
 
+# Casks
 cask "wezterm"
 cask "clipy"
-
 cask "keepassxc"
 cask "visual-studio-code"
-
 cask "lunar"

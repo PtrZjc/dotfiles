@@ -30,7 +30,7 @@ local plugins = {
 				"ktlint",
 				"prettier",
 				"beautysh",
-        "bash-language-server",
+        		"bash-language-server",
 				"autopep8",
 				"shellcheck",
 				"stylua",
@@ -49,21 +49,7 @@ local plugins = {
 			require("plugins.configs.lspconfig")
 			require("custom.configs.lspconfig")
 		end,
-	},
-	{
-		"zbirenbaum/copilot.lua",
-		cmd = "Copilot",
-		opts = {
-			-- https://github.com/zbirenbaum/copilot.lua#setup-and-configuration
-			suggestion = {
-			  auto_trigger = false,
-			},
-			keymap = {
-				accept = "<M-\\>",
-			  },
-		  },
-	},
-  
+	}, 
 }
 
 return plugins

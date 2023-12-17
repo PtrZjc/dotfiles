@@ -85,6 +85,8 @@ plugins=(
 	zsh-autosuggestions
 	zsh-syntax-highlighting
 	fzf-tab
+  fd
+  taskwarrior
   docker
   kubectl
   aws
