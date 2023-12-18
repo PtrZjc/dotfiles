@@ -13,15 +13,15 @@ set_aws_profile() {
     case $choice in
         1)
             [[ $current_profile == "ld-igp-k8s" ]] && return
-            aws sso login --no-browser
-            aws eks update-kubeconfig --region eu-central-1 --name nonprod-euc1-igp-srld-io
+            aws sso login --no-browser --profile ld-igp-k8s
             export AWS_PROFILE="ld-igp-k8s"
+            aws eks update-kubeconfig --region eu-central-1 --name nonprod-euc1-igp-srld-io
             ;;
         2)
             [[ $current_profile == "ld-nonprod-k8s" ]] && return
-            aws sso login --no-browser
-            aws eks update-kubeconfig --region eu-central-1 --name nonprod-euc1-srlivedata-io
+            aws sso login --no-browser --profile ld-nonprod-k8s
             export AWS_PROFILE="ld-nonprod-k8s"
+            aws eks update-kubeconfig --region eu-central-1 --name nonprod-euc1-srlivedata-io
             ;;
         3)
             [[ $current_profile == "priv" ]] && return
