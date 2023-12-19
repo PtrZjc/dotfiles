@@ -3,7 +3,11 @@ function line() {
 }
 
 function unescape() {
-    pbpaste | sd '\\n' '' | sd '\\"' '"' | jq
+    pbpaste | \
+    sd '\\\\\\\"' 'ALREADY_ESCAPED' | \
+    sd '\\n' '' | \
+    sd '\\"' '"' | \
+    sd 'ALREADY_ESCAPED' '\\\"' 
 }
 
 # this function is meant to be used with stdin input 
@@ -36,7 +40,7 @@ function split() {
     # Extract the substring
     segment=${input_string:start:end}
 
-    # Write to a file
+    # Write to a fileune1
     echo -n "$segment" > "split_$i.txt"
 
     # Update start and end for the next iteration

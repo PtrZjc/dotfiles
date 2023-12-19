@@ -23,7 +23,7 @@ brew "pyenv" # Python Version Management
 
 # Data Processing
 brew "jq" # JSON Processor
-brew "yq" # YAML Processor
+brew "python-yq" # YAML Processor (also supports XML as xq)
 brew "yj" # YAML and JSON Converter
 brew "gron" # Make JSON Greppable
 brew "visidata" # Data Explorer

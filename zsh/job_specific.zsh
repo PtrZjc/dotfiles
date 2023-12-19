@@ -32,4 +32,3 @@ set_aws_profile() {
             ;;
     esac
 }
-
