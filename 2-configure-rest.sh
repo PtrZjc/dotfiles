@@ -49,16 +49,6 @@ find  "${DOTFILES_DIR}/zsh" \
     -name '*.zsh' \
     -exec sh -c 'ln -s $1 "$ZSH/custom/$(basename $1)"' _ {} \;
 
-######################
-# TMUX CONFIGURATION #
-######################
-
-mkdir -p "${HOME}/.config/tmux/plugins"
-git clone https://github.com/tmux-plugins/tpm "${HOME}/.config/tmux/plugins/tpm"
-ln -s "${DOTFILES_DIR}/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf"
-tmux new-session -d && tmux "$HOME/.config/tmux/tmux.conf"
-sh "$HOME/.config/tmux/plugins/tpm/bin/install_plugins"
-
 # wezterm
 mkdir -p "${HOME}/.config/wezterm"
 ln -s "${DOTFILES_DIR}/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"

@@ -8,7 +8,6 @@ local servers = {
   "bashls",
   "jsonls",
   "yamlls",
-  "kotlin_language_server",
 }
 
 for _, lsp in ipairs(servers) do

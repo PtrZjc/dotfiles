@@ -9,7 +9,6 @@ brew "neovim" # Text Editor
 brew "fd" # File Search
 brew "tree" # Directory Tree Visualizer
 brew "translate-shell" # Command-line translator
-brew "tmux" # Terminal Multiplexer
 brew "ripgrep" # Advanced text search tool
 
 # Development Tools
@@ -47,7 +46,6 @@ brew "rnr" # File Renaming Tool
 
 # System and Performance Monitoring
 brew "btop" # System Monitoring
-brew "tmux-mem-cpu-load" # CPU and Memory Load in tmux
 
 # Miscellaneous Utilities
 brew "qrencode" # QR Code Generation

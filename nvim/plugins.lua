@@ -1,5 +1,4 @@
 local plugins = {
-	{ "christoomey/vim-tmux-navigator", lazy = false },
 	{ "tpope/vim-repeat", lazy = false },
 	{ "tpope/vim-surround", lazy = false },
 	{ "tpope/vim-sensible", lazy = false },
@@ -27,11 +26,8 @@ local plugins = {
 		"williamboman/mason.nvim",
 		opts = {
 			ensure_installed = {
-				"ktlint",
 				"prettier",
-				"beautysh",
         		"bash-language-server",
-				"autopep8",
 				"shellcheck",
 				"stylua",
 			},
