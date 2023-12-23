@@ -49,6 +49,9 @@ find  "${DOTFILES_DIR}/zsh" \
     -name '*.zsh' \
     -exec sh -c 'ln -s $1 "$ZSH/custom/$(basename $1)"' _ {} \;
 
+# git
+ln -sf "${DOTFILES_DIR}/other/.gitconfig" "$HOME/.gitconfig"
+
 # wezterm
 mkdir -p "${HOME}/.config/wezterm"
 ln -s "${DOTFILES_DIR}/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"

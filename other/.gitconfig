@@ -1,0 +1,35 @@
+[includeIf "hasconfig:remote.*.url:git@github.com*/**"]
+  path = .config/.gitconfig-private
+#   remote.origin.url=git@github.com:PtrZjc/obsidian.git
+[includeIf "hasconfig:remote.*.url:git@gitlab.sportradar.ag*/**"]
+# remote.origin.url=git@gitlab.sportradar.ag:ldt/igp/ingress/ingress-events.git
+  path = .config/.gitconfig-sportradar
+
+[push]
+  autoSetupRemote = true
+
+# below is diff-so-fancy copied config
+[core]
+    pager = diff-so-fancy | less --tabs=4 -RF
+
+[interactive]
+    diffFilter = diff-so-fancy --patch
+
+[color]
+    ui = true
+
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
+
+[color "diff"]
+    meta = 11
+    frag = magenta bold
+    func = 146 bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+
