@@ -21,7 +21,6 @@ alias cls='clear && printf "\e[3J"'
 alias vi='nvim'
 alias vim='nvim'
 alias code='code .'
-alias wat='which'
 alias python='python3'
 alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
 alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
@@ -38,6 +37,7 @@ alias -g T='>/tmp/x && cat /tmp/x'
 alias -g C='| cat'
 alias -g O='| xargs -I _ open _'
 alias -g DF='-u | diff-so-fancy' # use as: diff file1 file2 DF
+
 alias ls='ls -lahgG'
 alias l='tree -C -L 1'
 alias qr='qrencode -t ansiutf8 '
@@ -45,6 +45,21 @@ alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/nu
 
 function initialize_zsh_symlinks() {
     fd . -I "$DOTFILES/zsh" -x sh -c '[ ! -L "$ZSH/custom/{/.}.zsh" ] && ln -s {} "$ZSH/custom/{/.}.zsh"'
+}
+
+function wat() {
+    which $1 | pygmentize -P style=one-dark
+}
+
+function color() {
+    lang=$1
+    stdin=$(cat)
+    # check if stdin is empty
+    if [[ -z "$lang" ]]; then
+        echo $stdin | pygmentize -P style=one-dark;
+    else
+        echo $stdin | pygmentize -P style=one-dark -l $lang
+    fi
 }
 
 function ke-l() {

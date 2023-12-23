@@ -64,8 +64,8 @@ config.keys = {
     {key = "LeftArrow", mods = "SHIFT", action = act({SendString = "\x1bb"})}, -- alt+b -> back word, etc
     {key = "RightArrow", mods = "SHIFT", action = act({SendString = "\x1bf"})}, -- alt+f -> forward word, etc
     {key = "Backspace", mods = "CMD", action = act({SendString = "\x1bd"})}, -- alt+d -> delete word before cursor
-    {key = 'w', mods = 'CMD', action = act.CloseCurrentPane {confirm = true}},
-    {key = 'w', mods = 'CTRL', action = act.CloseCurrentPane {confirm = true}},
+    {key = 'w', mods = 'CMD', action = act.CloseCurrentPane {confirm = false}},
+    {key = 'w', mods = 'CTRL', action = act.CloseCurrentPane {confirm = false}},
     {key = 'UpArrow', mods = 'SHIFT', action = act.Nop},
     {key = 'DownArrow', mods = 'SHIFT', action = act.Nop}
 }

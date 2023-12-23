@@ -30,6 +30,7 @@ local plugins = {
         		"bash-language-server",
 				"shellcheck",
 				"stylua",
+				"jq-lsp"
 			},
 		},
 	},

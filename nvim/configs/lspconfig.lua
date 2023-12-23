@@ -4,10 +4,10 @@ local capabilities = configs.capabilities
 
 local lspconfig = require "lspconfig"
 local servers = { 
-  "jqls",
   "bashls",
   "jsonls",
   "yamlls",
+  "jqls",
 }
 
 for _, lsp in ipairs(servers) do
