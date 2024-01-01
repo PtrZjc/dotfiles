@@ -34,7 +34,6 @@ brew "harelba/q/q" # SQL-like queries on CSVs
 brew "tesseract" # OCR Reader
 brew "tesseract-lang" # OCR Language Packs
 brew "pngpaste" # Clipboard Image Saving
-brew "eddieantonio/eddieantonio/imgcat" # Inline Image Display
 brew "thezoraiz/ascii-image-converter/ascii-image-converter" # ASCII Image Conversion
 brew "imagemagick" # Image Processing Tool
 
@@ -55,6 +54,7 @@ brew "utimer" # Command-line Timer
 
 # Casks
 cask "wezterm"
+cask "rectangle"
 cask "clipy"
 cask "keepassxc"
 cask "visual-studio-code"

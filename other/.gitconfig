@@ -1,8 +1,8 @@
+[includeIf "gitdir:~/private/"]
+  path = .config/.gitconfig-private
 [includeIf "hasconfig:remote.*.url:git@github.com*/**"]
   path = .config/.gitconfig-private
-#   remote.origin.url=git@github.com:PtrZjc/obsidian.git
 [includeIf "hasconfig:remote.*.url:git@gitlab.sportradar.ag*/**"]
-# remote.origin.url=git@gitlab.sportradar.ag:ldt/igp/ingress/ingress-events.git
   path = .config/.gitconfig-sportradar
 
 [push]

@@ -90,6 +90,7 @@ plugins=(
   docker
   kubectl
   aws
+  ripgrep
 )
 
 

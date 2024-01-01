@@ -8,12 +8,13 @@ export VIMRC="${DOTFILES}/vim/.vimrc"
 export BREWFILE="${DOTFILES}/brew/Brewfile"
 export PYTHON_SRC="${REPO}/priv/python-scripts"
 export EDITOR="nvim"
+export TEMP_FILE="/tmp/x"
 
 alias rst="exec zsh"
 alias co=tldr
 alias a='alias'
 alias cof='declare -f'
-alias icat='imgcat'
+alias icat='wezterm imgcat'
 alias ipaste='pngpaste'
 alias todo='todo.sh'
 alias t='tree -C -L'
