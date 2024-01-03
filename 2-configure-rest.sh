@@ -1,40 +1,24 @@
 #!/bin/sh
 DOTFILES_DIR=$( cd -- $( dirname -- ${BASH_SOURCE[0]} ) &> /dev/null && pwd )
 
-# install homebrew
-echo "Installing Homebrew"
-curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
-
-# make link to brewfile required by `brew bundle``
-export HOMEBREW_BUNDLE_FILE="${DOTFILES_DIR}/brew/Brewfile"
-
-echo 'installing brew packages'
-brew bundle
-
 ######################
 # FONT CONFIGURATION #
 ######################
 
-curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip --output /tmp/font.zip
-curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip --output /tmp/font.zip
-unzip /tmp/font.zip -d /tmp/font
-mv /tmp/font/MesloLGSNerdFont-*.ttf "${HOME}/Library/Fonts"
+mkdir -p ~/.local/share/fonts
 
-######################
-# NVIM CONFIGURATION #
-######################
+# Download JetBrains Mono font
+curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip --output /tmp/JetBrainsMono.zip
+unzip /tmp/JetBrainsMono.zip -d /tmp/font
+mv /tmp/font/*JetBrainsMono*.ttf ~/.local/share/fonts/
 
-echo 'configuring nvim'
+# Download Meslo font
+curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip --output /tmp/Meslo.zip
+unzip /tmp/Meslo.zip -d /tmp/font
+mv /tmp/font/*Meslo*.ttf ~/.local/share/fonts/
 
-git clone https://github.com/NvChad/NvChad "${HOME}/.config/nvim" --depth 1
-mkdir -p "${HOME}/.config/nvim/lua/custom/configs"
-
-ln -sf "${DOTFILES_DIR}/nvim/chadrc.lua" "$HOME/.config/nvim/lua/custom/chadrc.lua"
-ln -s "${DOTFILES_DIR}/nvim/plugins.lua" "$HOME/.config/nvim/lua/custom/plugins.lua"
-ln -s "${DOTFILES_DIR}/nvim/configs/lspconfig.lua" "$HOME/.config/nvim/lua/custom/configs/lspconfig.lua"
-ln -s "${DOTFILES_DIR}/nvim/init.lua" "$HOME/.config/nvim/lua/custom/init.lua"
-ln -s "${DOTFILES_DIR}/nvim/mappings.lua" "$HOME/.config/nvim/lua/custom/mappings.lua"
-ln -s "${DOTFILES_DIR}/nvim/configs/null-ls.lua" "$HOME/.config/nvim/lua/custom/configs/null-ls.lua"
+# Refresh the font cache
+fc-cache -fv
 
 #####################
 # ZSH CONFIGURATION #

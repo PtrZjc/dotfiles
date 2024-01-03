@@ -86,7 +86,6 @@ plugins=(
 	zsh-syntax-highlighting
 	fzf-tab
   fd
-  taskwarrior
   docker
   kubectl
   aws
@@ -160,10 +159,6 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # below keybinding originally pastes "ls\n"
 bindkey "^[l" down-case-word
-
-#Sdkman config
-export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
-[[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
