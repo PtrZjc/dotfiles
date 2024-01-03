@@ -24,11 +24,17 @@ function gcr() { #checkout to remote based on input
     git branch -r --sort=-committerdate | rg "$1" | sd 'origin/' '' | head -1 | xargs git checkout
 }
 
-function ogh() {
-    git remote -v | head -1 | sd '.*:(.*)\.git.*' '$1' | xargs -I {} open "https://github.com/{}/pulls"
+function og() {
+    origin=$(git remote -v | head -1)
+    if [[ $origin == "fatal" ]]; then
+        echo "No origin found"
+        return
+    fi
+    host=$(echo $origin | sd '.*@(.*):.*' '$1')
+    repository=$(echo $origin | sd '.*:(.*)\.git.*' '$1')
+    open "https://$host/$repository"
 }
-
-## Extensions related with allegro repos
+alias ogh=og
 
 unalias gcb
 function gcb() {
