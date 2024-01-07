@@ -52,10 +52,8 @@ config.keys = {
     getActivatePaneDirectionConfig('Left'),
     getActivatePaneDirectionConfig('Up'),
     getActivatePaneDirectionConfig('Down'),
-    getActivatePaneDirectionConfig('Right'),
-    getAdjustPaneSizeConfig('Left'),
-    getAdjustPaneSizeConfig('Up'),
-    getAdjustPaneSizeConfig('Down'),
+    getActivatePaneDirectionConfig('Right'), getAdjustPaneSizeConfig('Left'),
+    getAdjustPaneSizeConfig('Up'), getAdjustPaneSizeConfig('Down'),
     getAdjustPaneSizeConfig('Right'),
     {key = "LeftArrow", mods = "CMD", action = act({SendString = "\x01"})}, -- ctrl+a -> beginning of line
     {key = "RightArrow", mods = "CMD", action = act({SendString = "\x05"})}, -- ctrl+e -> end of line
@@ -67,7 +65,8 @@ config.keys = {
     {key = 'w', mods = 'CMD', action = act.CloseCurrentPane {confirm = false}},
     {key = 'w', mods = 'CTRL', action = act.CloseCurrentPane {confirm = false}},
     {key = 'UpArrow', mods = 'SHIFT', action = act.Nop},
-    {key = 'DownArrow', mods = 'SHIFT', action = act.Nop}
+    {key = 'DownArrow', mods = 'SHIFT', action = act.Nop},
+    {key = 'z', mods = 'CTRL', action = wezterm.action.TogglePaneZoomState}
 }
 
 config.mouse_bindings = {
