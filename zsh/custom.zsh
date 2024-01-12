@@ -1,5 +1,4 @@
 export REPO="${HOME}/workspace"
-export OBSIDIAN="${REPO}/private/obsidian"
 export DOTFILES="${REPO}/private/dotfiles"
 export CUSTOM="${DOTFILES}/zsh/custom.zsh"
 export ZSHRC="${DOTFILES}/zsh/.zshrc"
@@ -26,7 +25,6 @@ alias python='python3'
 alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
 alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
 alias pip='pip3'
-alias obs_sync='cd ${OBSIDIAN}; git add .; git commit -m "Sync obsidian from $(hostname)"; git pull; git push && cd -'
 alias cop='gh copilot suggest'
 alias cope='gh copilot explain'
 
@@ -36,7 +34,6 @@ alias -g JL='| jq -C | less'
 alias -g T='>/tmp/x && cat /tmp/x'
 alias -g C='| cat'
 alias -g O='| xargs -I _ open _'
-alias -g DF='-u | diff-so-fancy' # use as: diff file1 file2 DF
 
 alias ls='lsd'
 alias l='ls -l'
@@ -65,50 +62,6 @@ function color() {
     else
         echo $stdin | pygmentize -P style=one-dark -l $lang
     fi
-}
-
-function ke-l() {
-    DB_NAME="KeePass"
-    DIR="${HOME}/keepass"
-    LOCAL_FILE="${HOME}/keepass/$DB_NAME.kdbx"
-    REMOTE_FILE="Aplikacje/KeePass/$DB_NAME.kdbx"
-    mkdir -p $BACKUP_DIR_REMOTE $BACKUP_DIR_LOCAL
-    LOCAL_FILE_DATE=$(stat -f "%Sm" -t "%Y%m%d_%H%M%S" "$LOCAL_FILE")
-
-    LOCAL_BACKUP="$DIR/$DB_NAME"_local_"$LOCAL_FILE_DATE.kdbx"
-    cp "$LOCAL_FILE" "$LOCAL_BACKUP"
-
-    echo "Downloading and overriding local database"
-    dbxcli get "$REMOTE_FILE" "$LOCAL_FILE"
-
-    if cmp -s "$LOCAL_FILE" "$LOCAL_BACKUP"; then
-        rm "$LOCAL_BACKUP"
-    else
-        echo "Difference with remote - Local backup kept in $LOCAL_BACKUP"
-    fi
-}
-
-function ke-p() {
-    DB_NAME="KeePass"
-    DIR="${HOME}/keepass"
-    LOCAL_FILE="${HOME}/keepass/$DB_NAME.kdbx"
-    REMOTE_FILE="Aplikacje/KeePass/$DB_NAME.kdbx"
-
-    # Step 1: Make backup of remote database before override
-    echo "Making backup of remote database before override"
-    dbxcli get "$REMOTE_FILE" "$TEMP_FILE"
-    REMOTE_FILE_DATE=$(stat -f "%Sm" -t "%Y%m%d_%H%M%S" "$TEMP_FILE")
-    REMOTE_BACKUP="$DIR/$DB_NAME"_remote_"$REMOTE_FILE_DATE.kdbx"
-    mv "$TEMP_FILE" "$REMOTE_BACKUP"
-
-    if cmp -s "$LOCAL_FILE" "$REMOTE_BACKUP"; then
-        rm "$REMOTE_BACKUP"
-    else
-        echo "Difference with remote - Remote backup kept in $REMOTE_BACKUP"
-    fi
-    echo "Uploading local database"
-    # Step 2: Upload the local file, overriding the remote database
-    dbxcli put "$LOCAL_FILE" $REMOTE_FILE
 }
 
 function goto() {
