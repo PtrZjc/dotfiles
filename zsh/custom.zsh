@@ -12,12 +12,12 @@ export TEMP_FILE="/tmp/x"
 
 alias rst="exec zsh"
 alias co=tldr
+alias cat=bat
 alias a='alias'
 alias cof='declare -f'
 alias icat='wezterm imgcat'
 alias ipaste='pngpaste'
 alias todo='todo.sh'
-alias t='tree -C -L'
 alias cls='clear && printf "\e[3J"'
 alias vi='nvim'
 alias vim='nvim'
@@ -27,8 +27,7 @@ alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
 alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
 alias pip='pip3'
 alias obs_sync='cd ${OBSIDIAN}; git add .; git commit -m "Sync obsidian from $(hostname)"; git pull; git push && cd -'
-alias cop='gh copilot'
-alias cops='gh copilot suggest'
+alias cop='gh copilot suggest'
 alias cope='gh copilot explain'
 
 alias -g H='| head'
@@ -39,8 +38,13 @@ alias -g C='| cat'
 alias -g O='| xargs -I _ open _'
 alias -g DF='-u | diff-so-fancy' # use as: diff file1 file2 DF
 
-alias ls='ls -lahgG'
-alias l='tree -C -L 1'
+alias ls='lsd'
+alias l='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
+alias lt='ls --tree'
+alias tree='lt'
+
 alias qr='qrencode -t ansiutf8 '
 alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
 
