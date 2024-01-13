@@ -29,11 +29,8 @@ alias cop='gh copilot suggest'
 alias cope='gh copilot explain'
 
 alias -g H='| head'
-alias -g L='| less'
-alias -g JL='| jq -C | less'
 alias -g T='>/tmp/x && cat /tmp/x'
-alias -g C='| cat'
-alias -g O='| xargs -I _ open _'
+alias -g F=' $(fd --type=file | fzf)'
 
 alias ls='lsd'
 alias l='ls -l'
@@ -89,5 +86,5 @@ function killport() {
 
 #from awesome-fzf
 function feval() {
-    echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
+    echo | fzf -q "$*" --preview-window=up:99% --no-mouse --preview="eval {q}"
 }
