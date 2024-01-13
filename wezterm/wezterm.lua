@@ -71,6 +71,7 @@ config.keys = {
 }
 
 config.mouse_bindings = {
+    disable_default_key_bindings = true,
     {
         event = {Up = {streak = 1, button = "Left"}},
         mods = "NONE",
@@ -87,7 +88,11 @@ config.mouse_bindings = {
         event = {Up = {streak = 1, button = 'Left'}},
         mods = 'CTRL',
         action = act.OpenLinkAtMouseCursor
-    }
+    },   {
+        event = { Down = { streak = 3, button = 'Left' } },
+        action = wezterm.action.SelectTextAtMouseCursor 'SemanticZone',
+        mods = 'NONE',
+      },
 
 }
 

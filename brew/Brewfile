@@ -7,9 +7,10 @@ brew "tldr" # Simplified and community-driven man pages
 brew "sd" # Intuitive find & replace CLI
 brew "neovim" # Text Editor
 brew "fd" # File Search
-brew "tree" # Directory Tree Visualizer
 brew "translate-shell" # Command-line translator
 brew "ripgrep" # Advanced text search tool
+brew "lsd" # Modern ls replacement
+brew "git-delta" # Modern file and git diff
 
 # Development Tools
 brew "shellcheck" # Shell Script Analysis Tool
@@ -24,6 +25,7 @@ brew "pyenv" # Python Version Management
 brew "jq" # JSON Processor
 brew "python-yq" # YAML Processor (also supports XML as xq)
 brew "yj" # YAML and JSON Converter
+brew "jc" # unix tool output to json converter
 brew "gron" # Make JSON Greppable
 brew "visidata" # Data Explorer
 brew "gnuplot" # Plotting Utility
