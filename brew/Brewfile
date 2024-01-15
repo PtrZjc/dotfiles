@@ -1,16 +1,18 @@
-
-# Shell Enhancements and Utilities
 brew "zsh" # Shell
+
+# Shell Enhancements
 brew "fzf" # Fuzzy Finder
 brew "z" # Directory Jumper
 brew "tldr" # Simplified and community-driven man pages
-brew "sd" # Intuitive find & replace CLI
-brew "neovim" # Text Editor
-brew "fd" # File Search
-brew "translate-shell" # Command-line translator
-brew "ripgrep" # Advanced text search tool
+brew "sd" # Modern sed replacement
+brew "fd" # Modern find replacement
+brew "ripgrep" # Modern grep replacement
 brew "lsd" # Modern ls replacement
-brew "git-delta" # Modern file and git diff
+brew "git-delta" # Modern file and git diff 
+
+# Utilities
+brew "neovim" # Text Editor
+brew "translate-shell" # Command-line translator
 
 # Development Tools
 brew "shellcheck" # Shell Script Analysis Tool
@@ -20,6 +22,7 @@ brew "aws-sam-cli" # AWS Serverless Application Model CLI
 brew "libpq" # PostgreSQL Library
 brew "sdkman-cli" # SDK Management
 brew "pyenv" # Python Version Management
+brew "deviceinsight/packages/kafkactl" # CLI for interaction with Apache Kafka
 
 # Data Processing
 brew "jq" # JSON Processor
