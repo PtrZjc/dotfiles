@@ -20,8 +20,32 @@ config.hide_tab_bar_if_only_one_tab = true
 config.adjust_window_size_when_changing_font_size = false
 config.audible_bell = "Disabled"
 
--- Keybindings config
+-- Mouse config
+config.mouse_bindings = {
+    {
+        event = {Up = {streak = 1, button = "Left"}},
+        mods = "NONE",
+        action = act.Nop
+    }, {
+        event = {Down = {streak = 1, button = {WheelUp = 1}}},
+        mods = 'CTRL',
+        action = act.IncreaseFontSize
+    }, {
+        event = {Down = {streak = 1, button = {WheelDown = 1}}},
+        mods = 'CTRL',
+        action = act.DecreaseFontSize
+    }, {
+        event = {Up = {streak = 1, button = 'Left'}},
+        mods = 'CTRL',
+        action = act.OpenLinkAtMouseCursor
+    }, {
+        event = {Down = {streak = 3, button = 'Left'}},
+        action = wezterm.action.SelectTextAtMouseCursor 'SemanticZone',
+        mods = 'NONE'
+    }
+}
 
+-- Keybindings config
 local function getSplitPaneConfig(direction)
     return {
         key = direction .. 'Arrow',
@@ -67,33 +91,7 @@ config.keys = {
     {key = 'w', mods = 'CTRL', action = act.CloseCurrentPane {confirm = false}},
     {key = 'UpArrow', mods = 'SHIFT', action = act.Nop},
     {key = 'DownArrow', mods = 'SHIFT', action = act.Nop},
-    {key = 'z', mods = 'CTRL', action = wezterm.action.TogglePaneZoomState}
-}
-
-config.mouse_bindings = {
-    disable_default_key_bindings = true,
-    {
-        event = {Up = {streak = 1, button = "Left"}},
-        mods = "NONE",
-        action = act.Nop
-    }, {
-        event = {Down = {streak = 1, button = {WheelUp = 1}}},
-        mods = 'CTRL',
-        action = act.IncreaseFontSize
-    }, {
-        event = {Down = {streak = 1, button = {WheelDown = 1}}},
-        mods = 'CTRL',
-        action = act.DecreaseFontSize
-    }, {
-        event = {Up = {streak = 1, button = 'Left'}},
-        mods = 'CTRL',
-        action = act.OpenLinkAtMouseCursor
-    },   {
-        event = { Down = { streak = 3, button = 'Left' } },
-        action = wezterm.action.SelectTextAtMouseCursor 'SemanticZone',
-        mods = 'NONE',
-      },
-
+    {key = 'z', mods = 'CMD', action = wezterm.action.TogglePaneZoomState}
 }
 
 -- custom hyperlinks

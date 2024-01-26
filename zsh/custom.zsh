@@ -7,7 +7,8 @@ export VIMRC="${DOTFILES}/vim/.vimrc"
 export BREWFILE="${DOTFILES}/brew/Brewfile"
 export PYTHON_SRC="${REPO}/priv/python-scripts"
 export EDITOR="nvim"
-export TEMP_FILE="/tmp/x"
+export TMP="/tmp/tmp"
+export TMP2="/tmp/tmp2"
 
 alias rst="exec zsh"
 alias co=tldr
@@ -29,7 +30,8 @@ alias cop='gh copilot suggest'
 alias cope='gh copilot explain'
 
 alias -g H='| head'
-alias -g T='>/tmp/x && cat /tmp/x'
+alias -g T='>$TMP && cat $TMP'
+alias -g T2='>$TMP2 && cat $TMP2'
 alias -g F=' $(fd --type=file | fzf)'
 
 alias ls='lsd'
@@ -71,10 +73,12 @@ function goto() {
 }
 
 function ocr() {
+    cd /tmp/
     local lang=${1:-eng}
     ipaste - >/tmp/ocr.jpg || return 1
     tesseract -l "$lang" /tmp/ocr.jpg stdout | pbcopy
     pbpaste
+    cd - > /dev/null
 }
 
 function killport() {
