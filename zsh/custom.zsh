@@ -5,7 +5,7 @@ export ZSHRC="${DOTFILES}/zsh/.zshrc"
 export GIT="${DOTFILES}/zsh/git.zsh"
 export VIMRC="${DOTFILES}/vim/.vimrc"
 export BREWFILE="${DOTFILES}/brew/Brewfile"
-export PYTHON_SRC="${REPO}/priv/python-scripts"
+export SCRIPTS="${REPO}/private/my-scripts"
 export EDITOR="nvim"
 export TMP="/tmp/tmp"
 export TMP2="/tmp/tmp2"
@@ -34,12 +34,11 @@ alias -g T='>$TMP && cat $TMP'
 alias -g T2='>$TMP2 && cat $TMP2'
 alias -g F=' $(fd --type=file | fzf)'
 
-alias ls='lsd'
-alias l='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
-alias lt='ls --tree'
-alias tree='lt'
+alias ls='lsd -l'
+alias l='lsd --tree --depth=1'
+alias la='lsd -a'
+alias lla='lsd -la'
+alias tree='lsd --tree'
 
 alias qr='qrencode -t ansiutf8 '
 alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"

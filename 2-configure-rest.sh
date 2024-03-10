@@ -52,6 +52,9 @@ find  "${DOTFILES_DIR}/zsh" \
 # git
 ln -sf "${DOTFILES_DIR}/other/.gitconfig" "$HOME/.gitconfig"
 
+# poverlevel10k theme 
+ln -sf "${DOTFILES_DIR}/other/.p10k.zsh" "$HOME/.p10k.zsh"
+
 # wezterm
 mkdir -p "${HOME}/.config/wezterm"
 ln -s "${DOTFILES_DIR}/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"

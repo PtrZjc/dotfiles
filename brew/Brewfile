@@ -23,6 +23,7 @@ brew "libpq" # PostgreSQL Library
 brew "sdkman-cli" # SDK Management
 brew "pyenv" # Python Version Management
 brew "deviceinsight/packages/kafkactl" # CLI for interaction with Apache Kafka
+brew "nvm" # Multiple node version manager, read prereq https://formulae.brew.sh/formula/nvm
 
 # Data Processing
 brew "jq" # JSON Processor
