@@ -1,5 +1,5 @@
 alias grst='git reset HEAD~1 && ga .'
-alias gmm='git merge master'
+alias gmm='git merge master || git merge main'
 alias gst='git stash'
 alias gsl='git stash list'
 alias gsp='git stash pop'
@@ -11,6 +11,7 @@ alias gs='git status'
 alias root='cd $(git rev-parse --show-toplevel)'
 alias gbl='git for-each-ref --sort=-committerdate --format "%(refname:short) %(committerdate:relative)" refs/heads/ | tail -r'
 alias gd='git diff && git diff --staged'
+alias glog='git log --all --oneline --decorate --graph'
 
 function bckp() {
     if [[ "$(git branch -l backup)" != "" ]]; then

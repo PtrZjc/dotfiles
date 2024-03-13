@@ -87,6 +87,15 @@ function killport() {
     lsof -i tcp:"$1" | gawk 'NR>1 {print $2}' | xargs kill -9
 }
 
+function rob() {
+  local count=$1
+  local command=${@:2}
+
+  for i in $(seq 1 $count); do
+    eval $command
+  done
+}
+
 #from awesome-fzf
 function feval() {
     echo | fzf -q "$*" --preview-window=up:99% --no-mouse --preview="eval {q}"
