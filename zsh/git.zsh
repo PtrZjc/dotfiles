@@ -1,5 +1,6 @@
 alias grst='git reset HEAD~1 && ga .'
 alias gmm='git merge master || git merge main'
+alias grm='git rebase master || git rebase main'
 alias gst='git stash'
 alias gsl='git stash list'
 alias gsp='git stash pop'
