@@ -44,6 +44,7 @@ brew "thezoraiz/ascii-image-converter/ascii-image-converter" # ASCII Image Conve
 brew "imagemagick" # Image Processing Tool
 
 # File Managament
+brew "lf" # TUI File Manager
 brew "dbxcli" # Dropbox CLI
 brew "qrcp" # File Transfer via QR Codes
 brew "qpdf" # PDF Processing Tool
