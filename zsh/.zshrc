@@ -162,7 +162,7 @@ export PATH="$HOME/.local/bin:$PATH"
 bindkey "^[l" down-case-word
 
 #Sdkman config
-if type sdk > /dev/null 2>&1 && [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
+if [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
     export SDKMAN_DIR="$(brew --prefix sdkman-cli)/libexec"
     [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
 fi
