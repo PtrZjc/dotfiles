@@ -7,7 +7,6 @@ export GIT="${DOTFILES}/zsh/git.zsh"
 export VIMRC="${DOTFILES}/vim/.vimrc"
 export BREWFILE="${DOTFILES}/brew/Brewfile"
 export PYTHON_SRC="${REPO}/priv/python-scripts"
-export EDITOR="nvim"
 export TEMP_FILE="/tmp/x"
 
 alias rst="exec zsh"
@@ -19,8 +18,6 @@ alias ipaste='pngpaste'
 alias todo='todo.sh'
 alias t='tree -C -L'
 alias cls='clear && printf "\e[3J"'
-alias vi='nvim'
-alias vim='nvim'
 alias code='code .'
 alias python='python3'
 alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
@@ -31,6 +28,9 @@ alias cop='gh copilot'
 alias cops='gh copilot suggest'
 alias cope='gh copilot explain'
 
+alias pbpaste="powershell.exe Get-Clipboard"
+alias pbcopy="clip.exe"
+
 alias -g H='| head'
 alias -g L='| less'
 alias -g JL='| jq -C | less'
@@ -39,8 +39,8 @@ alias -g C='| cat'
 alias -g O='| xargs -I _ open _'
 alias -g DF='-u | diff-so-fancy' # use as: diff file1 file2 DF
 
-alias ls='ls -lahgG'
-alias l='tree -C -L 1'
+alias ls='lsd -l'
+alias l='lsd -1'
 alias qr='qrencode -t ansiutf8 '
 alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
 

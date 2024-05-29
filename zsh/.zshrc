@@ -156,6 +156,7 @@ zstyle :bracketed-paste-magic paste-finish pastefinish
 
 # other configuration
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$PATH:/snap/bin"
 
 # below keybinding originally pastes "ls\n"
 bindkey "^[l" down-case-word
