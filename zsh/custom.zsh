@@ -8,7 +8,7 @@ export BREWFILE="${DOTFILES}/brew/Brewfile"
 export PYTHON_SRC="${REPO}/priv/python-scripts"
 export TEMP_FILE="/tmp/x"
 export SCRIPTS="${REPO}/private/my-scripts"
-export EDITOR="nvim"
+export EDITOR="vim"
 export TMP="/tmp/tmp"
 export TMP2="/tmp/tmp2"
 
