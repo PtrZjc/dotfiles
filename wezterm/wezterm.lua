@@ -18,9 +18,34 @@ config.font = wezterm.font("MesloLGS Nerd Font")
 config.font_size = 24
 config.hide_tab_bar_if_only_one_tab = true
 config.adjust_window_size_when_changing_font_size = false
+config.audible_bell = "Disabled"
+
+-- Mouse config
+config.mouse_bindings = {
+    {
+        event = {Up = {streak = 1, button = "Left"}},
+        mods = "NONE",
+        action = act.Nop
+    }, {
+        event = {Down = {streak = 1, button = {WheelUp = 1}}},
+        mods = 'CTRL',
+        action = act.IncreaseFontSize
+    }, {
+        event = {Down = {streak = 1, button = {WheelDown = 1}}},
+        mods = 'CTRL',
+        action = act.DecreaseFontSize
+    }, {
+        event = {Up = {streak = 1, button = 'Left'}},
+        mods = 'CTRL',
+        action = act.OpenLinkAtMouseCursor
+    }, {
+        event = {Down = {streak = 3, button = 'Left'}},
+        action = wezterm.action.SelectTextAtMouseCursor 'SemanticZone',
+        mods = 'NONE'
+    }
+}
 
 -- Keybindings config
-
 local function getSplitPaneConfig(direction)
     return {
         key = direction .. 'Arrow',
@@ -52,10 +77,8 @@ config.keys = {
     getActivatePaneDirectionConfig('Left'),
     getActivatePaneDirectionConfig('Up'),
     getActivatePaneDirectionConfig('Down'),
-    getActivatePaneDirectionConfig('Right'),
-    getAdjustPaneSizeConfig('Left'),
-    getAdjustPaneSizeConfig('Up'),
-    getAdjustPaneSizeConfig('Down'),
+    getActivatePaneDirectionConfig('Right'), getAdjustPaneSizeConfig('Left'),
+    getAdjustPaneSizeConfig('Up'), getAdjustPaneSizeConfig('Down'),
     getAdjustPaneSizeConfig('Right'),
     {key = "LeftArrow", mods = "CMD", action = act({SendString = "\x01"})}, -- ctrl+a -> beginning of line
     {key = "RightArrow", mods = "CMD", action = act({SendString = "\x05"})}, -- ctrl+e -> end of line
@@ -67,28 +90,8 @@ config.keys = {
     {key = 'w', mods = 'CMD', action = act.CloseCurrentPane {confirm = false}},
     {key = 'w', mods = 'CTRL', action = act.CloseCurrentPane {confirm = false}},
     {key = 'UpArrow', mods = 'SHIFT', action = act.Nop},
-    {key = 'DownArrow', mods = 'SHIFT', action = act.Nop}
-}
-
-config.mouse_bindings = {
-    {
-        event = {Up = {streak = 1, button = "Left"}},
-        mods = "NONE",
-        action = act.Nop
-    }, {
-        event = {Down = {streak = 1, button = {WheelUp = 1}}},
-        mods = 'CTRL',
-        action = act.IncreaseFontSize
-    }, {
-        event = {Down = {streak = 1, button = {WheelDown = 1}}},
-        mods = 'CTRL',
-        action = act.DecreaseFontSize
-    }, {
-        event = {Up = {streak = 1, button = 'Left'}},
-        mods = 'CTRL',
-        action = act.OpenLinkAtMouseCursor
-    }
-
+    {key = 'DownArrow', mods = 'SHIFT', action = act.Nop},
+    {key = 'z', mods = 'CMD', action = wezterm.action.TogglePaneZoomState}
 }
 
 -- custom hyperlinks

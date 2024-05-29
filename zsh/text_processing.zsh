@@ -17,7 +17,10 @@ function ucase() {
   done
 }
 
-# Function used to divide stdin into multiple files. Takes 1 argument as number of files to split into.
+function extract_date(){
+  pbpaste | awk -F '\t' '{split($4, a, " "); printf "%02d:%02d\n", a[1], a[2]}'
+}
+
 function split() {
   # Read stdin into a variable
   input_string=$(cat)
@@ -39,9 +42,10 @@ function split() {
   for (( i=1; i<=num_files; i++ )); do
     # Extract the substring
     segment=${input_string:start:end}
-
+    echo $start $end
+# echo $start $end
     # Write to a fileune1
-    echo -n "$segment" > "split_$i.txt"
+    echo "$segment"
 
     # Update start and end for the next iteration
     start=$((start + segment_length))
