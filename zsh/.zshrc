@@ -162,10 +162,10 @@ export PATH="$PATH:/snap/bin"
 bindkey "^[l" down-case-word
 
 #Sdkman config
-if [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
-    export SDKMAN_DIR="$(brew --prefix sdkman-cli)/libexec"
-    [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
-fi
+# if [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
+#     export SDKMAN_DIR="$(brew --prefix sdkman-cli)/libexec"
+#     [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
+# fi
 
 # NVM config
 # export NVM_DIR="$HOME/.nvm"

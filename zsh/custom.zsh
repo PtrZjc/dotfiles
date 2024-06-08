@@ -14,7 +14,7 @@ export TMP2="/tmp/tmp2"
 
 alias rst="exec zsh"
 alias co=tldr
-alias cat=bat
+alias cat=batcat
 alias a='alias'
 alias cof='declare -f'
 alias icat='wezterm imgcat'
@@ -28,9 +28,10 @@ alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
 alias pip='pip3'
 alias cop='gh copilot suggest'
 alias cope='gh copilot explain'
-
+alias vim='nvim'
 alias pbpaste="powershell.exe Get-Clipboard"
 alias pbcopy="clip.exe"
+alias magick="${HOME}/apps/magick"
 
 alias -g H='| head'
 alias -g T='>$TMP && cat $TMP'

@@ -1,8 +1,8 @@
 brew "zsh" # Shell
 
 # Shell Enhancements
-brew "fzf" # Fuzzy Finder
-brew "z" # Directory Jumper
+# brew "fzf" # Fuzzy Finder
+# brew "z" # Directory Jumper
 brew "tldr" # Simplified and community-driven man pages
 brew "sd" # Modern sed replacement
 brew "fd" # Modern find replacement
@@ -12,7 +12,9 @@ brew "git-delta" # Modern file and git diff
 
 # Utilities
 brew "neovim" # Text Editor
+sudo apt install -y neovim
 brew "translate-shell" # Command-line translator
+sudo apt install -y translate-shell
 
 # Development Tools
 brew "shellcheck" # Shell Script Analysis Tool
@@ -38,6 +40,7 @@ brew "harelba/q/q" # SQL-like queries on CSVs
 
 # Image Processing
 brew "tesseract" # OCR Reader
+sudo apt install -y tesseract-ocr
 brew "tesseract-lang" # OCR Language Packs
 brew "pngpaste" # Clipboard Image Saving
 brew "thezoraiz/ascii-image-converter/ascii-image-converter" # ASCII Image Conversion
@@ -49,6 +52,11 @@ brew "dbxcli" # Dropbox CLI
 brew "qrcp" # File Transfer via QR Codes
 brew "qpdf" # PDF Processing Tool
 brew "rnr" # File Renaming Tool
+sudo apt install -y qrencode
+sudo apt install -y qpdf
+sudo apt install -y bat
+
+
 
 # System and Performance Monitoring
 brew "btop" # System Monitoring
@@ -61,8 +69,10 @@ brew "utimer" # Command-line Timer
 
 # Casks
 cask "wezterm"
-cask "rectangle"
+cask "rectangle"b
 cask "clipy"
 cask "keepassxc"
 cask "visual-studio-code"
 cask "lunar"
+
+
