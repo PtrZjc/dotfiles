@@ -53,5 +53,20 @@ function split() {
   done
 }
 
+function tostring_to_json(){
+  local input
+  while read -r line; do
+    input+="$line"
+  done
+
+  # remove enclosing class name and change [] to {}
+  # wrap all segments with " "
+  echo $input \
+  | sd "\w+\[(.*)\]" '{ $1 }' \
+  | sd '([^\[\] ,={}]+)' '"$1"' \
+  | sd "=" ": "
+
+}
+
 alias extract-ids='pbpaste | rg id | sd ".*(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w+{12}).*" "\$1," | pbcopy && pbpaste'
 alias wrap-with-uuid='pbpaste | sd ".*?(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}).*" "UUID(\"\$1\"), " | pbcopy && pbpaste'

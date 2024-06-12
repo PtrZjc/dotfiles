@@ -38,3 +38,8 @@ set_aws_profile() {
             ;;
     esac
 }
+
+function at_report() {
+    url="https://ldt.pages.sportradar.ag/-/igp/tests/acceptance/-/jobs/$1/artifacts/build/reports/jgiven/test/html/index.html"
+    open -n -a "Google Chrome" --args $url
+}

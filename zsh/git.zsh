@@ -2,6 +2,7 @@ alias grst='git reset HEAD~1 && ga .'
 alias gmm='git merge master || git merge main'
 alias grm='git rebase master || git rebase main'
 alias gst='git stash'
+alias gl='git pull --rebase'
 alias gsl='git stash list'
 alias gsp='git stash pop'
 alias gcl='git branch --sort=-committerdate | rg --invert-match "$(git rev-parse --abbrev-ref HEAD)" | head -1 | xargs git checkout'
@@ -13,6 +14,7 @@ alias root='cd $(git rev-parse --show-toplevel)'
 alias gbl='git for-each-ref --sort=-committerdate --format "%(refname:short) %(committerdate:relative)" refs/heads/ | tail -r'
 alias gd='git diff && git diff --staged'
 alias glog='git log --all --oneline --decorate --graph'
+alias gcaa='ga; gca'
 
 function bckp() {
     if [[ "$(git branch -l backup)" != "" ]]; then
@@ -27,7 +29,7 @@ function gcr() { #checkout to remote based on input
 }
 
 function og() {
-    origin=$(git remote -v | head -1)
+    origin=$(git remote -v | rg origin | head -1)
     if [[ $origin == "fatal" ]]; then
         echo "No origin found"
         return

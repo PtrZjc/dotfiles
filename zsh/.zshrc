@@ -86,11 +86,11 @@ plugins=(
 	zsh-syntax-highlighting
 	fzf-tab
   fd
-  taskwarrior
   docker
   kubectl
   aws
   ripgrep
+  github
 )
 
 
@@ -167,7 +167,7 @@ if [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
     [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
 fi
 
-# NVM config
+# # NVM config
 # export NVM_DIR="$HOME/.nvm"
 # [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
 # [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
