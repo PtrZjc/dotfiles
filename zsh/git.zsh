@@ -12,6 +12,7 @@ alias gsp='git stash pop'
 alias gs='git status'
 alias root='cd $(git rev-parse --show-toplevel)'
 alias gbl='git for-each-ref --sort=-committerdate --format "%(refname:short) %(committerdate:relative)" refs/heads/ | tail -r'
+alias gblr='git for-each-ref --sort=-committerdate --format "%(refname:short) %(committerdate:relative)" refs/remotes/ | tail -r | sd origin/ ""'
 alias gd='git diff && git diff --staged'
 alias glog='git log --all --oneline --decorate --graph'
 alias gcaa='ga; gca'
@@ -36,13 +37,25 @@ function og() {
     fi
     host=$(echo $origin | sd '.*@(.*):.*' '$1')
     repository=$(echo $origin | sd '.*:(.*)\.git.*' '$1')
-    open "https://$host/$repository"
+
+    if [[ $host == *"gitlab"* ]]; then
+        starting_page="/-/merge_requests"
+    else
+        starting_page=""
+    fi
+
+    open "https://$host/${repository}${starting_page}"
 }
+
 alias ogh=og
 
 unalias gcb
 function gcb() {
-    git checkout -b LDSI-"$1"
+    if [[ $1 =~ ^[0-9] ]]; then
+        git checkout -b LDSI-"$1"
+    else
+        git checkout -b "$1"
+    fi
 }
 
 unalias gc

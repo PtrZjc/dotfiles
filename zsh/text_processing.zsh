@@ -59,13 +59,12 @@ function tostring_to_json(){
     input+="$line"
   done
 
-  # remove enclosing class name and change [] to {}
+  # remove enclosing class name and change [] to {}. Note some toStrings may have {} or () - tbd
   # wrap all segments with " "
   echo $input \
   | sd "\w+\[(.*)\]" '{ $1 }' \
-  | sd '([^\[\] ,={}]+)' '"$1"' \
+  | sd '([^\[\],={}\s]+)' '"$1"' \
   | sd "=" ": "
-
 }
 
 alias extract-ids='pbpaste | rg id | sd ".*(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w+{12}).*" "\$1," | pbcopy && pbpaste'
