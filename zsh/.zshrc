@@ -84,12 +84,11 @@ plugins=(
 	zsh-fzf-history-search
 	zsh-autosuggestions
 	zsh-syntax-highlighting
-	fzf-tab
-  fd
+  fzf
+  fzf-tab
   docker
   kubectl
   aws
-  ripgrep
   github
 )
 

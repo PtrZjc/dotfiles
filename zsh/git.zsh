@@ -16,6 +16,7 @@ alias gblr='git for-each-ref --sort=-committerdate --format "%(refname:short) %(
 alias gd='git diff && git diff --staged'
 alias glog='git log --all --oneline --decorate --graph'
 alias gcaa='ga; gca'
+alias gck='git checkout'
 
 function bckp() {
     if [[ "$(git branch -l backup)" != "" ]]; then
