@@ -74,6 +74,9 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM
 # fzf-tab
 git clone https://github.com/Aloxaf/fzf-tab "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab"
 
+# zsh-histdb
+git clone https://github.com/larkery/zsh-histdb "${HOME}/.oh-my-zsh/custom/plugins/zsh-histdb"
+
 # zsh/fzf History Search plugin https://github.com/joshskidmore/zsh-fzf-history-search
 FZF_HISTORY_FOLDER="$ZSH/custom/plugins/zsh-fzf-history-search"
 mkdir "$FZF_HISTORY_FOLDER"
