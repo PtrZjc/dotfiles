@@ -32,6 +32,8 @@ set_aws_profile() {
         4)
             [[ $current_profile == "priv" ]] && return
             export AWS_PROFILE="priv"
+            echo "using k8s context docker-desktop"
+            kubectl config use-context docker-desktop
             ;;
         *)
             echo "Invalid selection."

@@ -53,6 +53,7 @@ function split() {
   done
 }
 
+alias deduplicate=
 function tostring_to_json(){
   local input
   while read -r line; do

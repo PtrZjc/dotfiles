@@ -33,6 +33,7 @@ alias -g H='| head'
 alias -g T='>$TMP && cat $TMP'
 alias -g T2='>$TMP2 && cat $TMP2'
 alias -g F=' $(fd --type=file | fzf)'
+alias -g Trim='| cut -c 1-$COLUMNS' # $COLUMNS -> screen width
 
 alias ls='lsd -l'
 alias l='lsd --tree --depth=1'
@@ -42,6 +43,14 @@ alias tree='lsd --tree'
 
 alias qr='qrencode -t ansiutf8 '
 alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
+
+function eng() {
+    trans :en "$*"
+}
+
+function pol() {
+    trans :pl "$*"
+}
 
 function initialize_zsh_symlinks() {
     fd . -I "$DOTFILES/zsh" -x sh -c '[ ! -L "$ZSH/custom/{/.}.zsh" ] && ln -s {} "$ZSH/custom/{/.}.zsh"'

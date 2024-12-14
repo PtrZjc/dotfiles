@@ -58,6 +58,8 @@ brew "qrencode" # QR Code Generation
 brew "d2" # Diagram Scripting Language
 brew "countdown" # Countdown Timer
 brew "utimer" # Command-line Timer
+brew "pandoc" # document converter (e.g. docx to pdf)
+brew "basictex" # provides pdflatex engine to above
 
 # Casks
 cask "wezterm"
