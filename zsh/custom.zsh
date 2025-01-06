@@ -34,12 +34,21 @@ alias -g T='>$TMP && cat $TMP'
 alias -g T2='>$TMP2 && cat $TMP2'
 alias -g F=' $(fd --type=file | fzf)'
 alias -g Trim='| cut -c 1-$COLUMNS' # $COLUMNS -> screen width
+alias -g J='| bat -l json'
 
 alias ls='lsd -l'
-alias l='lsd --tree --depth=1'
 alias la='lsd -a'
 alias lla='lsd -la'
 alias tree='lsd --tree'
+
+unalias l
+function l() {
+    if [ $# -eq 0 ]; then
+        lsd --tree --depth=1
+    else
+        lsd --tree --depth=$1
+    fi
+}
 
 alias qr='qrencode -t ansiutf8 '
 alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
