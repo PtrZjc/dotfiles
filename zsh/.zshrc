@@ -174,6 +174,9 @@ fi
 # fix SSL: CERTIFICATE_VERIFY_FAILED in python:
 export REQUESTS_CA_BUNDLE=/opt/homebrew/lib/python3.12/site-packages/certifi/cacert.pem
 
+# use bat as a colorizing pager for man
+export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 eval "$(gh copilot alias -- zsh)"

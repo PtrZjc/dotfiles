@@ -6,6 +6,9 @@ local plugins = {
 	{ "terrastruct/d2-vim", ft = "d2" },
 	{
 		"nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    cmd = { "TSInstall", "TSUninstall", "TSUpdate", "TSUpdateSync" },
+	version = "*", -- latest stable version
 		opts = {
 			ensure_installed = {
 				"bash",
@@ -19,6 +22,8 @@ local plugins = {
 				"vim",
 				"yaml",
 				"kotlin",
+        "vimdoc",
+        "query"
 			},
 		},
 	},
@@ -27,7 +32,7 @@ local plugins = {
 		opts = {
 			ensure_installed = {
 				"prettier",
-        		"bash-language-server",
+     		"bash-language-server",
 				"shellcheck",
 				"stylua",
 				"jq-lsp"

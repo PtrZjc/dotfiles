@@ -44,7 +44,7 @@ alias tree='lsd --tree'
 alias qr='qrencode -t ansiutf8 '
 alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
 
-function eng() {
+function en() {
     trans :en "$*"
 }
 
