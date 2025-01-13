@@ -1,18 +1,33 @@
 export CURL_CA_BUNDLE="$HOME/Zscaler_CA.pem"
 
 function set_aws_profile() {
-    local current_profile=$AWS_PROFILE
+    # takes 1 argument -s or --set-only when only AWS_PROFILE should be changed
+
+    local set_only=false
     local choice
 
-    # Function to handle SSO login and kubeconfig update
+    # Check for -s or --set-only flag
+    if [[ "$1" == "-s" ]] || [[ "$1" == "--set-only" ]]; then
+        set_only=true
+    fi
+
+    # Function to handle profile switch
     local function handle_profile_switch() {
         local profile=$1
         local cluster=$2
         local region=${3:-eu-central-1}
+
+        if $set_only; then
+            export AWS_PROFILE="$profile"
+            echo "AWS_PROFILE set to $profile"
+            return
+        fi
+
+        # Original SSO login logic
         local cache_file
         local valid_token_exists=false
 
-        cache_file=$(fd -e json . "$HOME/.aws/cli/cache/" --changed-within 3h)        
+        cache_file=$(fd -e json . "$HOME/.aws/cli/cache/" --changed-within 3h)
 
         if [[ -n "$cache_file" ]]; then
             valid_token_exists=true
@@ -32,13 +47,12 @@ function set_aws_profile() {
         fi
 
         export AWS_PROFILE="$profile"
-        
-        # Update kubeconfig only if cluster name is provided
+
         if [[ -n "$cluster" ]]; then
             aws eks update-kubeconfig --region "$region" --name "$cluster"
         fi
     }
- 
+
     echo "Select the AWS profile:"
     echo "1) LIVEDATA_IGP_NONPROD"
     echo "2) LIVEDATA_IGP_PROD"
@@ -54,7 +68,6 @@ function set_aws_profile() {
         (*) echo "Invalid selection." ;;
     esac
 }
-
 function at_report() {
     url="https://ldt.pages.sportradar.ag/-/igp/tests/acceptance/-/jobs/$1/artifacts/build/reports/jgiven/test/html/index.html"
     open -n -a "Google Chrome" --args $url
