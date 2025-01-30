@@ -81,8 +81,12 @@ function color() {
 }
 
 function goto() {
-    DESTINATION=$(fd -t d | fzf)
-    if [ "$DESTINATION" = "" ]; then
+    DEPTH=$1
+    if [[ -z "$DEPTH" ]]; then
+        DEPTH=99
+    fi
+    DESTINATION=$(fd -t d --max-depth "$DEPTH"| fzf)
+    if [ "$DESTINATION" = g"" ]; then
         echo "Empty destination" && return 1
     else
         cd "./$DESTINATION"
