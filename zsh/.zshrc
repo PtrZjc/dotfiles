@@ -180,6 +180,11 @@ export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p
 # Make man pages search case insensitive
 export LESS="-i -R"
 
+# Load AWS profile from saved file if it exists
+if [[ -f "$HOME/.aws/aws_profile" ]]; then
+    export AWS_PROFILE=$(cat "$HOME/.aws/aws_profile")
+fi
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 eval "$(gh copilot alias -- zsh)"

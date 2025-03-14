@@ -24,12 +24,14 @@ brew "sdkman-cli" # SDK Management
 brew "pyenv" # Python Version Management
 brew "deviceinsight/packages/kafkactl" # CLI for interaction with Apache Kafka
 brew "nvm" # Multiple node version manager, read prereq https://formulae.brew.sh/formula/nvm
+brew "lusingander/tap/ddv" # TUI for DynamoDb
 
 # Data Processing
 brew "jq" # JSON Processor
 brew "python-yq" # YAML Processor (also supports XML as xq)
 brew "yj" # YAML and JSON Converter
 brew "jc" # unix tool output to json converter
+brew "jnv" # Interactive JSON filter using jq
 brew "gron" # Make JSON Greppable
 brew "visidata" # Data Explorer
 brew "gnuplot" # Plotting Utility

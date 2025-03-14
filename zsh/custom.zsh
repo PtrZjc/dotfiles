@@ -40,6 +40,8 @@ alias ls='lsd -l'
 alias la='lsd -a'
 alias lla='lsd -la'
 alias tree='lsd --tree'
+alias wake-time='pmset -g log | grep -E "Wake.*lid|lid.*Wake"'
+alias sleep-time='pmset -g log | rg "(Clamshell|Software) Sleep"'
 
 unalias l
 function l() {

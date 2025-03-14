@@ -67,6 +67,8 @@ function set_aws_profile() {
         (4) export AWS_PROFILE="priv" ;;
         (*) echo "Invalid selection." ;;
     esac
+
+    echo $AWS_PROFILE > "$HOME/.aws/aws_profile"
 }
 function at_report() {
     url="https://ldt.pages.sportradar.ag/-/igp/tests/acceptance/-/jobs/$1/artifacts/build/reports/jgiven/test/html/index.html"
