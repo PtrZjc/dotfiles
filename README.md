@@ -3,6 +3,10 @@
 This repository is my collection of configuration files for various tools. 
 I also include here my set of aliases and Bash scripts which enhance my productivity.
 
+## TODO
+
+- [ ] Migrate to [dotbot](https://github.com/anishathalye/dotbot)
+
 ## What Are Dotfiles?
 
 Dotfiles are plain text configuration files on Unix-based systems for setting up a user's environment. These files traditionally begin with a dot (`.`), hence the name. They control the behavior of various programs, including but not limited to, the shell, text editors like Vim, and Git version control.
@@ -24,6 +28,8 @@ For quick but detailed overview of dotfiles ideology, watch [~/.dotfiles in 100 
 ### Further Reading
 
 For more tutorials and large link collection, visit [dotfiles.github.io](https://dotfiles.github.io/).
+
+[Managing Your Dotfiles](https://anishathalye.com/managing-your-dotfiles/)
 
 ## Initialization (Mac-specific)
 
