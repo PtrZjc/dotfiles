@@ -180,6 +180,9 @@ export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p
 # Make man pages search case insensitive
 export LESS="-i -R"
 
+# Configure colima
+export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
+
 # Load AWS profile from saved file if it exists
 if [[ -f "$HOME/.aws/aws_profile" ]]; then
     export AWS_PROFILE=$(cat "$HOME/.aws/aws_profile")

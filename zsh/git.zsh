@@ -12,13 +12,14 @@ alias gsp='git stash pop'
 alias gs='git status'
 alias root='cd $(git rev-parse --show-toplevel)'
 alias gbl='git for-each-ref --sort=-committerdate --format "%(refname:short) %(committerdate:relative)" refs/heads/ | tail -r'
-alias gblr='git for-each-ref --sort=-committerdate --format "%(refname:short) %(committerdate:relative)" refs/remotes/ | tail -r | sd origin/ ""'
+alias gblr='git for-each-ref --sort=-committerdate --format "%(authorname): %(refname:short) %(committerdate:relative)" refs/heads/ refs/remotes/ | tail -r' 
 alias gd='git diff && git diff --staged'
 alias glog='git log --all --oneline --decorate --graph'
 alias gcaa='ga; gca'
 alias gck='git checkout'
+alias gt='git for-each-ref --sort=creatordate --format "%(creatordate:iso) %(refname:short)" refs/tags/ | tail -r | head' # shows most recent tags
 
-function bckp() {
+function bckp() {11§
     if [[ "$(git branch -l backup)" != "" ]]; then
         git branch -D backup
     fi

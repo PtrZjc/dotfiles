@@ -76,7 +76,7 @@ function color() {
     stdin=$(cat)
     # check if stdin is empty
     if [[ -z "$lang" ]]; then
-        echo $stdin | pygmentize -P style=one-dark;
+        echo $stdin | pygmentize -P style=one-dark
     else
         echo $stdin | pygmentize -P style=one-dark -l $lang
     fi
@@ -87,7 +87,7 @@ function goto() {
     if [[ -z "$DEPTH" ]]; then
         DEPTH=99
     fi
-    DESTINATION=$(fd -t d --max-depth "$DEPTH"| fzf)
+    DESTINATION=$(fd -t d --max-depth "$DEPTH" | fzf)
     if [ "$DESTINATION" = g"" ]; then
         echo "Empty destination" && return 1
     else
@@ -101,7 +101,7 @@ function ocr() {
     ipaste - >/tmp/ocr.jpg || return 1
     tesseract -l "$lang" /tmp/ocr.jpg stdout | pbcopy
     pbpaste
-    cd - > /dev/null
+    cd - >/dev/null
 }
 
 function killport() {
@@ -112,12 +112,32 @@ function killport() {
 }
 
 function rob() {
-  local count=$1
-  local command=${@:2}
+    local count=$1
+    local command=${@:2}
 
-  for i in $(seq 1 $count); do
-    eval $command
-  done
+    for i in $(seq 1 $count); do
+        eval $command
+    done
+}
+
+function fd_files() {
+    local extensions=""
+
+    if [ $# -eq 0 ]; then
+        echo "Error: Please provide at least one file extension"
+        return 1
+    fi
+
+    for ext in "$@"; do
+        extensions+=" -e $ext"
+    done
+
+    local find_part="fd --no-ignore-vcs $extensions"
+    local exec_part="-x sh -c 'echo \"<!-- FILE: {} -->\n\\\`\\\`\\\`\"; cat {}; echo \"\\\`\\\`\\\`\n\"'"
+
+    echo "Found files:"
+    eval "$find_part"
+    eval "$find_part $exec_part | pbcopy"
 }
 
 #from awesome-fzf
