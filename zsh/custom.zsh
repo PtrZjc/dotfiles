@@ -132,7 +132,27 @@ function fd_files() {
         extensions+=" -e $ext"
     done
 
-    local find_part="fd --no-ignore-vcs $extensions"
+    local find_part="fd $extensions"
+    local exec_part="-x sh -c 'echo \"<!-- FILE: {} -->\n\\\`\\\`\\\`\"; cat {}; echo \"\\\`\\\`\\\`\n\"'"
+
+    echo "Found files:"
+    eval "$find_part"
+    eval "$find_part $exec_part | pbcopy"
+}
+
+function fd_files_h() {
+    local extensions=""
+
+    if [ $# -eq 0 ]; then
+        echo "Error: Please provide at least one file extension"
+        return 1
+    fi
+
+    for ext in "$@"; do
+        extensions+=" -e $ext"
+    done
+
+    local find_part="fd --no-ignore-vcs --hidden $extensions"
     local exec_part="-x sh -c 'echo \"<!-- FILE: {} -->\n\\\`\\\`\\\`\"; cat {}; echo \"\\\`\\\`\\\`\n\"'"
 
     echo "Found files:"

@@ -48,9 +48,23 @@ function set_aws_profile() {
 
         export AWS_PROFILE="$profile"
 
+        unset AWS_ACCESS_KEY_ID
+        unset AWS_SECRET_ACCESS_KEY
+        unset AWS_DEFAULT_REGION
+
         if [[ -n "$cluster" ]]; then
             aws eks update-kubeconfig --region "$region" --name "$cluster"
         fi
+    }
+
+    # Function to handle profile switch to priv
+    local function handle_priv_switch() {
+
+        # export envs for other apps that may need these
+        export AWS_ACCESS_KEY_ID=$(cat "$HOME/.aws/config" | rg priv -A 5 | rg aws_access_key_id | sd ".* = (.*)" '$1')
+        export AWS_SECRET_ACCESS_KEY=$(cat "$HOME/.aws/config" | rg priv -A 5 | rg aws_secret_access_key | sd ".* = (.*)" '$1')
+        export AWS_DEFAULT_REGION=$(cat "$HOME/.aws/config" | rg priv -A 5 | rg region | sd ".* = (.*)" '$1')
+        export AWS_PROFILE="priv"
     }
 
     echo "Select the AWS profile:"
@@ -64,7 +78,7 @@ function set_aws_profile() {
         (1) handle_profile_switch "LIVEDATA_IGP_NONPROD" "nonprod-euc1-igp-srld-io" ;;
         (2) handle_profile_switch "LIVEDATA_IGP_PROD" "prod-euc1-igp-srld-io" ;;
         (3) handle_profile_switch "NO_TRD_LIVEDATA_K8S_NONPROD" "nonprod-euc1-srlivedata-io" ;;
-        (4) export AWS_PROFILE="priv" ;;
+        (4) handle_priv_switch ;;
         (*) echo "Invalid selection." ;;
     esac
 
