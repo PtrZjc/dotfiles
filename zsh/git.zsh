@@ -19,7 +19,7 @@ alias gcaa='ga; gca'
 alias gck='git checkout'
 alias gt='git for-each-ref --sort=creatordate --format "%(creatordate:iso) %(refname:short)" refs/tags/ | tail -r | head' # shows most recent tags
 
-function bckp() {11§
+function bckp() {
     if [[ "$(git branch -l backup)" != "" ]]; then
         git branch -D backup
     fi

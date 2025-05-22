@@ -120,41 +120,45 @@ function rob() {
     done
 }
 
-function fd_files() {
+fdf() {
     local extensions=""
+    local max_depth=""
+    local hidden=""
+    local pattern="."
+    local excludes="" # allow multiple
 
+    # Parse options
+    while getopts "d:p:e:h" opt; do
+        case $opt in
+        d) max_depth="--max-depth $OPTARG" ;;
+        p) pattern="$OPTARG" ;;
+        e) excludes="$excludes -E '*$OPTARG*'" ;;
+        h) hidden="--no-ignore-vcs --hidden" ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            return 1
+            ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    # Check for extensions
     if [ $# -eq 0 ]; then
         echo "Error: Please provide at least one file extension"
         return 1
     fi
 
+    # Build extensions part
     for ext in "$@"; do
         extensions+=" -e $ext"
     done
 
-    local find_part="fd $extensions"
+    # Build command
+    local find_part="fd $excludes $hidden $extensions $max_depth $pattern"
+    
     local exec_part="-x sh -c 'echo \"<!-- FILE: {} -->\n\\\`\\\`\\\`\"; cat {}; echo \"\\\`\\\`\\\`\n\"'"
 
-    echo "Found files:"
-    eval "$find_part"
-    eval "$find_part $exec_part | pbcopy"
-}
-
-function fd_files_h() {
-    local extensions=""
-
-    if [ $# -eq 0 ]; then
-        echo "Error: Please provide at least one file extension"
-        return 1
-    fi
-
-    for ext in "$@"; do
-        extensions+=" -e $ext"
-    done
-
-    local find_part="fd --no-ignore-vcs --hidden $extensions"
-    local exec_part="-x sh -c 'echo \"<!-- FILE: {} -->\n\\\`\\\`\\\`\"; cat {}; echo \"\\\`\\\`\\\`\n\"'"
-
+    # Execute
     echo "Found files:"
     eval "$find_part"
     eval "$find_part $exec_part | pbcopy"
