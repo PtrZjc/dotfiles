@@ -26,15 +26,9 @@ mv /tmp/font/MesloLGSNerdFont-*.ttf "${HOME}/Library/Fonts"
 
 echo 'configuring nvim'
 
-git clone https://github.com/NvChad/NvChad "${HOME}/.config/nvim" --depth 1
-mkdir -p "${HOME}/.config/nvim/lua/custom/configs"
+mkdir -p "${HOME}/.config/nvim"
 
-ln -sf "${DOTFILES_DIR}/nvim/chadrc.lua" "$HOME/.config/nvim/lua/custom/chadrc.lua"
-ln -s "${DOTFILES_DIR}/nvim/plugins.lua" "$HOME/.config/nvim/lua/custom/plugins.lua"
-ln -s "${DOTFILES_DIR}/nvim/configs/lspconfig.lua" "$HOME/.config/nvim/lua/custom/configs/lspconfig.lua"
-ln -s "${DOTFILES_DIR}/nvim/init.lua" "$HOME/.config/nvim/lua/custom/init.lua"
-ln -s "${DOTFILES_DIR}/nvim/mappings.lua" "$HOME/.config/nvim/lua/custom/mappings.lua"
-ln -s "${DOTFILES_DIR}/nvim/configs/null-ls.lua" "$HOME/.config/nvim/lua/custom/configs/null-ls.lua"
+ln -sf "${DOTFILES_DIR}/nvim/init.lua" "$HOME/.config/nvim/init.lua"
 
 #####################
 # ZSH CONFIGURATION #
