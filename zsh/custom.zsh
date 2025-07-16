@@ -120,7 +120,7 @@ function rob() {
     done
 }
 
-fdf() {
+function fdf() {
     local extensions=""
     local max_depth=""
     local hidden=""
@@ -155,7 +155,7 @@ fdf() {
 
     # Build command
     local find_part="fd $excludes $hidden $extensions $max_depth $pattern"
-    
+
     local exec_part="-x sh -c 'echo \"<!-- FILE: {} -->\n\\\`\\\`\\\`\"; cat {}; echo \"\\\`\\\`\\\`\n\"'"
 
     # Execute

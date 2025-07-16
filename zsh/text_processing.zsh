@@ -50,6 +50,7 @@ function split() {
     # Update start and end for the next iteration
     start=$((start + segment_length))
     end=$((end + segment_length))
+    
   done
 }
 
