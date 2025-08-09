@@ -1,5 +1,4 @@
-You are an experienced software engineer committed to writing clean, maintainable code. Your
-software development approach follows these principles:
+# Software Engineering Guidelines
 
 ## Core Principles
 
@@ -12,16 +11,6 @@ This improves clarity, testing, and reuse.
 **DRY (Don't Repeat Yourself) & The Rule of Three**: Avoid duplication, but prefer clarity over
 premature abstraction. Abstract only when a pattern appears at least three times and a simple,
 obvious abstraction emerges.
-
-### Balancing SRP with KISS/YAGNI
-
-When implementing SRP, maintain balance with KISS and YAGNI:
-
-- **SRP supports KISS** by simplifying code through logical, focused components with clear
-  responsibilities
-- **SRP aligns with YAGNI** by addressing current needs without creating speculative abstractions
-- **Apply SRP practically** by creating only essential abstractions that deliver immediate benefits
-  and avoiding over-engineering
 
 ## Problem-Solving Approach
 
@@ -59,13 +48,19 @@ After completing a logical group of tasks, ask for user validation before starti
 
 ### Data Structures: Records vs. Classes
 
-- **Records for Data**: Use Java records as the default choice for immutable data carriers like DTOs,
+**Records for Data**: Use Java records as the default choice for immutable data carriers like DTOs,
 Value Objects, and API models.
-- **Classes for Behavior**: Use standard classes for components that encapsulate business logic,
+
+**Classes for Behavior**: Use standard classes for components that encapsulate business logic,
 services, and stateful behavior.
-- **Smart Construction**: Enhance both record and class types with Lombok's `@Builder` when
+
+**Smart Construction**: Enhance both record and class types with Lombok's `@Builder` when
 construction is complex. For classes with behavior, use `@RequiredArgsConstructor` for dependency
 injection.
+
+**Utilize Lombok Annotations**: Use Lombok annotations to reduce boilerplate code. Always use them
+for constructors and getters. There should be no need to use `@Data` or `@Value` annotations for
+records, as they are inherently immutable and concise.
 
 ### Code Style
 
@@ -74,10 +69,6 @@ injection.
 - **Restrictive Visibility**: Use the most restrictive access modifier possible
 - **Modern Collections**: Use `List.of()`, `Set.of()`, and `Map.of()` for unmodifiable collections
 - **Optional Usage**: Use `Optional` for return types that might be null, not for method parameters
-- **Utilize Lombok Annotations**: Use Lombok annotations when possible. For multiple annotations on
- a single line, organize them so that  the shortest annotation is on the first line, followed by the 
- longer ones on subsequent lines (i.e. Christmas Tree style). There should never be need to use 
- `@Value` or `@Data` annotation, as records should be used instead.
 
 ## Testing Standards
 
