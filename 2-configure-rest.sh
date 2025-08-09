@@ -35,8 +35,8 @@ ln -sf "${DOTFILES_DIR}/nvim/init.lua" "$HOME/.config/nvim/init.lua"
 #####################
 
 echo 'configuring zsh'
-
-# symlinks to dotfiles
+q
+## symlinks to dotfiles
 ln -sf "${DOTFILES_DIR}/zsh/.zshrc" ~/.zshrc
 
 find  "${DOTFILES_DIR}/zsh" \
@@ -52,6 +52,15 @@ ln -sf "${DOTFILES_DIR}/other/.p10k.zsh" "$HOME/.p10k.zsh"
 # wezterm
 mkdir -p "${HOME}/.config/wezterm"
 ln -s "${DOTFILES_DIR}/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"
+
+# github copilot
+mkdir -p "$HOME/.config/github-copilot/intellij"
+ln -sf "$DOTFILES_DIR/ai/copilot/mcp.json" "$HOME/.config/github-copilot/intellij/mcp.json"
+ln -sf "$DOTFILES_DIR/ai/copilot/global-copilot-instructions.md" "$HOME/.config/github-copilot/intellij/global-copilot-instructions.md"
+
+# claude desktop
+mkdir -p "$HOME/Library/Application Support/Claude"
+ln -sf "$DOTFILES_DIR/ai/claude_desktop_config.json" "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
 
 # z plugin 
 curl https://raw.githubusercontent.com/agkozak/zsh-z/master/zsh-z.plugin.zsh --output "$ZSH/custom/plugins/zsh-z.plugin.zsh"
@@ -70,6 +79,8 @@ git clone https://github.com/Aloxaf/fzf-tab "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/cust
 
 # zsh-histdb
 git clone https://github.com/larkery/zsh-histdb "${HOME}/.oh-my-zsh/custom/plugins/zsh-histdb"
+
+
 
 # zsh/fzf History Search plugin https://github.com/joshskidmore/zsh-fzf-history-search
 FZF_HISTORY_FOLDER="$ZSH/custom/plugins/zsh-fzf-history-search"
