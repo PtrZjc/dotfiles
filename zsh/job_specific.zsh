@@ -87,7 +87,7 @@ function set_aws_profile() {
     echo $AWS_PROFILE > "$HOME/.aws/aws_profile"
 }
 
-function k_set_ns() {
+function k-set-ns() {
    local project=$1
    local env=$2
    local namespace=""

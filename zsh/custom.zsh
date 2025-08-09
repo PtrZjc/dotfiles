@@ -28,7 +28,7 @@ alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
 alias pip='pip3'
 alias cop='gh copilot suggest'
 alias cope='gh copilot explain'
-
+alias fd-ext="fd -t f | sd '.*\\.' '' | awk '{count[\$0]++} END {for(line in count) print count[line] \" - \" line}'"
 alias -g H='| head'
 alias -g T='>$TMP && cat $TMP'
 alias -g T2='>$TMP2 && cat $TMP2'
@@ -119,21 +119,20 @@ function rob() {
         eval $command
     done
 }
-
 function fdf() {
-    local extensions=""
-    local max_depth=""
-    local hidden=""
+    local extensions=()
+    local max_depth_args=()
+    local hidden_args=()
     local pattern="."
-    local excludes="" # allow multiple
+    local exclude_args=()
 
     # Parse options
     while getopts "d:p:e:h" opt; do
         case $opt in
-        d) max_depth="--max-depth $OPTARG" ;;
+        d) max_depth_args=(--max-depth "$OPTARG") ;;
         p) pattern="$OPTARG" ;;
-        e) excludes="$excludes -E '*$OPTARG*'" ;;
-        h) hidden="--no-ignore-vcs --hidden" ;;
+        e) exclude_args+=(-E "*$OPTARG*") ;;
+        h) hidden_args=(--no-ignore-vcs --hidden) ;;
         \?)
             echo "Invalid option: -$OPTARG" >&2
             return 1
@@ -148,20 +147,18 @@ function fdf() {
         return 1
     fi
 
-    # Build extensions part
+    # Build extensions array
     for ext in "$@"; do
-        extensions+=" -e $ext"
+        extensions+=(-e "$ext")
     done
 
-    # Build command
-    local find_part="fd $excludes $hidden $extensions $max_depth $pattern"
-
-    local exec_part="-x sh -c 'echo \"<!-- FILE: {} -->\n\\\`\\\`\\\`\"; cat {}; echo \"\\\`\\\`\\\`\n\"'"
-
-    # Execute
+    # Build and execute the find command
     echo "Found files:"
-    eval "$find_part"
-    eval "$find_part $exec_part | pbcopy"
+    fd "${exclude_args[@]}" "${hidden_args[@]}" "${extensions[@]}" "${max_depth_args[@]}" "$pattern"
+
+    # Execute with file processing and copy to clipboard
+    fd "${exclude_args[@]}" "${hidden_args[@]}" "${extensions[@]}" "${max_depth_args[@]}" "$pattern" \
+        -x sh -c 'echo "<!-- FILE: $1 -->\n\`\`\`"; cat "$1"; echo "\`\`\`\n"' _ {} | pbcopy
 }
 
 #from awesome-fzf
