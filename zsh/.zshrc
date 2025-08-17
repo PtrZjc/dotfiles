@@ -188,6 +188,8 @@ if [[ -f "$HOME/.aws/aws_profile" ]]; then
     export AWS_PROFILE=$(cat "$HOME/.aws/aws_profile")
 fi
 
+# Swap right command and option keys (source: https://rakhesh.com/mac/using-hidutil-to-map-macos-keyboard-keys/)
+launchctl start local.hidutilKeyMapping
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-eval "$(gh copilot alias -- zsh)"
