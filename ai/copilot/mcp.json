@@ -15,34 +15,12 @@
         "mcp-server-fetch"
       ]
     },
-    "git": {
-      "command": "uvx",
-      "args": [
-        "mcp-server-git"
-      ]
-    },
-    "sequential-thinking": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ]
-    },
     "context7": {
       "command": "npx",
       "args": [
         "-y",
         "@upstash/context7-mcp"
       ]
-    },
-    "Ref": {
-      "command": "npx",
-      "args": [
-        "ref-tools-mcp@latest"
-      ],
-      "env": {
-        "REF_API_KEY": "ref-63aa1a39b175bfb37e9b"
-      }
     }
   }
 }
