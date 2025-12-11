@@ -165,3 +165,13 @@ function fdf() {
 function feval() {
     echo | fzf -q "$*" --preview-window=up:99% --no-mouse --preview="eval {q}"
 }
+
+# Copilot Agent Initialization
+function agent_mode() {
+  # 1. Set environment variables for the UPCOMING shell
+  export NO_COLOR=1
+  export TERM=dumb
+  export PS1='$ '
+  # 2. Start a clean Zsh session (disable custom terminal theme)
+  zsh -f
+}
