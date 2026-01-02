@@ -35,6 +35,10 @@ alias -g T2='>$TMP2 && cat $TMP2'
 alias -g F=' $(fd --type=file | fzf)'
 alias -g Trim='| cut -c 1-$COLUMNS' # $COLUMNS -> screen width
 alias -g J='| bat -l json'
+alias -g C='| pbcopy'
+
+alias -s sh='sh'
+alias -s properties='$EDITOR'
 
 alias ls='lsd -l'
 alias la='lsd -a'
@@ -161,17 +165,24 @@ function fdf() {
         -x sh -c 'echo "<!-- FILE: $1 -->\n\`\`\`"; cat "$1"; echo "\`\`\`\n"' _ {} | pbcopy
 }
 
+pyv() {
+    local venv_dir=".venv"
+
+    if [[ ! -d "$venv_dir" ]]; then
+        echo "[*] Brak $venv_dir. Tworzenie nowego środowiska..."
+        python3 -m venv "$venv_dir"
+    fi
+
+    if [[ -f "$venv_dir/bin/activate" ]]; then
+        source "$venv_dir/bin/activate"
+        echo "[+] Środowisko aktywowane."
+    else
+        echo "[!] Błąd: Nie udało się zlokalizować skryptu aktywacyjnego."
+        return 1
+    fi
+}
+
 #from awesome-fzf
 function feval() {
     echo | fzf -q "$*" --preview-window=up:99% --no-mouse --preview="eval {q}"
-}
-
-# Copilot Agent Initialization
-function agent_mode() {
-  # 1. Set environment variables for the UPCOMING shell
-  export NO_COLOR=1
-  export TERM=dumb
-  export PS1='$ '
-  # 2. Start a clean Zsh session (disable custom terminal theme)
-  zsh -f
 }

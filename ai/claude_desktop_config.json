@@ -25,5 +25,8 @@
         "@jetbrains/mcp-proxy"
       ]
     }
+  },
+  "preferences": {
+    "quickEntryShortcut": "off"
   }
 }

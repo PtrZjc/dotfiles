@@ -92,7 +92,6 @@ plugins=(
   github
 )
 
-
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -121,8 +120,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# z-plugin configuration
-source ~/.oh-my-zsh/custom/plugins/zsh-z.plugin.zsh
 zstyle ':completion:*' menu select
 
 # autoload -Uz bracketed-paste-magic
@@ -196,3 +193,6 @@ launchctl start local.hidutilKeyMapping
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# enable zoxide
+eval "$(zoxide init zsh)"

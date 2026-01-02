@@ -62,9 +62,6 @@ ln -sf "$DOTFILES_DIR/ai/copilot/global-copilot-instructions.md" "$HOME/.config/
 mkdir -p "$HOME/Library/Application Support/Claude"
 ln -sf "$DOTFILES_DIR/ai/claude_desktop_config.json" "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
 
-# z plugin 
-curl https://raw.githubusercontent.com/agkozak/zsh-z/master/zsh-z.plugin.zsh --output "$ZSH/custom/plugins/zsh-z.plugin.zsh"
-
 # theme
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 

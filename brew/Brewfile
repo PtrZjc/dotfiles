@@ -2,7 +2,7 @@ brew "zsh" # Shell
 
 # Shell Enhancements
 brew "fzf" # Fuzzy Finder
-brew "z" # Directory Jumper
+brew "zoxide" # Directory Jumper
 brew "tldr" # Simplified and community-driven man pages
 brew "sd" # Modern sed replacement
 brew "fd" # Modern find replacement

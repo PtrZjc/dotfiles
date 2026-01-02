@@ -46,10 +46,6 @@ After creating the plan and tasks, request user review and approval before proce
 
 ### Implementation
 
-- **Terminal Initialization (CRITICAL)**: At the start of **every** new terminal session, you MUST
-  execute `agent_mode` immediately.
-    - This command disables the colors in terminal and sets terminal prompt to plain `$` ensuring
-      easy output parsing.
 - **Task Execution**: Execute tasks sequentially from `docs/tasks.md`, marking completed tasks with
   `[x]`
 - **Code Reuse**: Before adding code, check if similar functionality already exists using
