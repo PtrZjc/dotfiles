@@ -1,29 +1,72 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+if [[ "$TERMINAL_EMULATOR" != "JetBrains-JediTerm" ]]; then
+  # Disable instant prompt for JetBrains IDE terminal to avoid issues with agent mode
+  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  fi
+
+  ZSH_THEME="powerlevel10k/powerlevel10k"
 fi
 
-# https://vimsheet.com/
+###################################
+### common config for agent mode and normal mode
+###################################
 
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-# Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# pressing del does not close shell with empty prompt
+setopt IGNORE_EOF
 
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+# other configuration
+export PATH="$HOME/.local/bin:$PATH"
+
+#Sdkman config
+if [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
+    export SDKMAN_DIR="$(brew --prefix sdkman-cli)/libexec"
+    [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
+fi
+
+###################################
+### Intellij Agent Mode config (sterile, no colors, no prompts, low latency)
+###################################
+
+if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
+  plugins=(
+    git
+  )
+
+  source $ZSH/oh-my-zsh.sh
+
+  # 1. Minimalist Prompt for easy parsing
+  PROMPT='[%~] $ '
+  RPROMPT=''
+  
+  # 2. Terminal Capabilities (Disable colors and rich formatting)
+  export TERM=xterm
+  export CLICOLOR=0
+  unset LS_COLORS
+
+  # 3. Disable ZSH Interactive Features (prevent blocking/asking)
+  unsetopt CORRECT 
+  unsetopt CORRECT_ALL 
+  unsetopt SHARE_HISTORY 
+  unsetopt PROMPT_SP 
+  unsetopt FLOW_CONTROL 
+  unsetopt BEEP
+
+  # 4. Safe Alias Overrides (Force coreutils, disable lsd/icons)
+  alias ls='ls --color=never'
+  alias ll='ls -l --color=never'
+  alias la='ls -a --color=never'
+  alias grep='grep --color=never'
+  return
+fi
+
+###################################
+### normal mode config
+###################################
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -79,6 +122,7 @@ DISABLE_UPDATE_PROMPT="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+
 plugins=(
 	git
 	zsh-fzf-history-search
@@ -94,32 +138,6 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
 zstyle ':completion:*' menu select
 
 # autoload -Uz bracketed-paste-magic
@@ -130,9 +148,6 @@ zstyle ':completion:*' menu select
 
 # to make psql work with libpq
 # export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
-
-# pressing del does not close shell with empty prompt
-setopt IGNORE_EOF
 
 #bash completion
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
@@ -147,21 +162,13 @@ pasteinit() {
 pastefinish() {
   zle -N self-insert $OLD_SELF_INSERT
 }
+
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 ### Fix slowness end
 
-# other configuration
-export PATH="$HOME/.local/bin:$PATH"
-
 # below keybinding originally pastes "ls\n"
 bindkey "^[l" down-case-word
-
-#Sdkman config
-if [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
-    export SDKMAN_DIR="$(brew --prefix sdkman-cli)/libexec"
-    [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
-fi
 
 # # NVM config
   # export NVM_DIR="$HOME/.nvm"
@@ -192,7 +199,7 @@ fi
 launchctl start local.hidutilKeyMapping
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ ! -f "$HOME/.p10k.zsh" ]] || source "$HOME/.p10k.zsh"
 
 # enable zoxide
 eval "$(zoxide init zsh)"
