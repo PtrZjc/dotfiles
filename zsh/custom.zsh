@@ -22,21 +22,16 @@ alias cls='clear && printf "\e[3J"'
 alias vi='nvim'
 alias vim='nvim'
 alias code='code .'
-alias argbash='${HOME}/.local/argbash-2.10.0/bin/argbash'
-alias argbash-init='${HOME}/.local/argbash-2.10.0/bin/argbash-init'
-alias cop='gh copilot suggest'
-alias cope='gh copilot explain'
-alias fd-ext="fd -t f | sd '.*\\.' '' | awk '{count[\$0]++} END {for(line in count) print count[line] \" - \" line}'"
+alias k="kubectl"
+alias qr='qrencode -t ansiutf8 '
+alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
 alias -g H='| head'
 alias -g T='>$TMP && cat $TMP'
 alias -g T2='>$TMP2 && cat $TMP2'
 alias -g F=' $(fd --type=file | fzf)'
-alias -g Trim='| cut -c 1-$COLUMNS' # $COLUMNS -> screen width
+alias -g TR='| cut -c 1-$COLUMNS' # $COLUMNS -> screen width
 alias -g J='| bat -l json'
 alias -g C='| pbcopy'
-
-alias -s sh='sh'
-alias -s properties='$EDITOR'
 
 alias ls='lsd -l'
 alias la='lsd -a'
@@ -44,6 +39,10 @@ alias lla='lsd -la'
 alias tree='lsd --tree'
 alias wake-time='pmset -g log | grep -E "Wake.*lid|lid.*Wake"'
 alias sleep-time='pmset -g log | rg "(Clamshell|Software) Sleep"'
+
+# open files based on extension
+alias -s sh='sh'
+alias -s properties='$EDITOR'
 
 unalias l
 function l() {
@@ -53,9 +52,6 @@ function l() {
         lsd --tree --depth=$1
     fi
 }
-
-alias qr='qrencode -t ansiutf8 '
-alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
 
 function en() {
     trans :en "$*"

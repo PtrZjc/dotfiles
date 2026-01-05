@@ -35,7 +35,7 @@ ln -sf "${DOTFILES_DIR}/nvim/init.lua" "$HOME/.config/nvim/init.lua"
 #####################
 
 echo 'configuring zsh'
-q
+
 ## symlinks to dotfiles
 ln -sf "${DOTFILES_DIR}/zsh/.zshrc" ~/.zshrc
 
@@ -68,15 +68,14 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-
 # zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
 
-# zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+# synthax highlighting
+git clone https://github.com/z-shell/F-Sy-H.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/F-Sy-H"
 
 # fzf-tab
 git clone https://github.com/Aloxaf/fzf-tab "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab"
 
 # zsh-histdb
 git clone https://github.com/larkery/zsh-histdb "${HOME}/.oh-my-zsh/custom/plugins/zsh-histdb"
-
 
 
 # zsh/fzf History Search plugin https://github.com/joshskidmore/zsh-fzf-history-search

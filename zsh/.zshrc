@@ -22,11 +22,20 @@ setopt IGNORE_EOF
 # other configuration
 export PATH="$HOME/.local/bin:$PATH"
 
-#Sdkman config
-if [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
-    export SDKMAN_DIR="$(brew --prefix sdkman-cli)/libexec"
-    [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
-fi
+# Lazy-load Sdkman (call 'sdk-init' when needed)
+sdk-init() {
+  if [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
+      export SDKMAN_DIR="$(brew --prefix sdkman-cli)/libexec"
+      [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
+  fi
+
+}
+# Auto-initialize sdkman on first use of 'sdk' command
+sdk() {
+  unfunction sdk &>/dev/null
+  sdk-init
+  sdk "$@"
+}
 
 ###################################
 ### Intellij Agent Mode config (sterile, no colors, no prompts, low latency)
@@ -38,7 +47,6 @@ if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
   )
 
   source $ZSH/oh-my-zsh.sh
-
   # 1. Minimalist Prompt for easy parsing
   PROMPT='[%~] $ '
   RPROMPT=''
@@ -61,6 +69,8 @@ if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
   alias ll='ls -l --color=never'
   alias la='ls -a --color=never'
   alias grep='grep --color=never'
+
+  sdk-init
   return
 fi
 
@@ -127,12 +137,12 @@ plugins=(
 	git
 	zsh-fzf-history-search
 	zsh-autosuggestions
-	zsh-syntax-highlighting
   fzf
   fzf-tab
-  docker
-  kubectl
-  aws
+  F-Sy-H
+  # docker  # Lazy-loaded below
+  # kubectl # Lazy-loaded below
+  # aws     # Lazy-loaded below
   github
 )
 
@@ -152,40 +162,41 @@ zstyle ':completion:*' menu select
 #bash completion
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 
-### Fix slowness of pastes with zsh-syntax-highlighting.zsh
-# solution per https://gist.github.com/magicdude4eva/2d4748f8ef3e6bf7b1591964c201c1ab
-pasteinit() {
-  OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
-  zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
-}
-
-pastefinish() {
-  zle -N self-insert $OLD_SELF_INSERT
-}
-
-zstyle :bracketed-paste-magic paste-init pasteinit
-zstyle :bracketed-paste-magic paste-finish pastefinish
-### Fix slowness end
-
 # below keybinding originally pastes "ls\n"
 bindkey "^[l" down-case-word
 
-# # NVM config
-  # export NVM_DIR="$HOME/.nvm"
-  # [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
-  # [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
+# Lazy-load NVM (call 'nvm-init' when needed, or use node/npm/npx directly)
+nvm-init() {
+    if [[ -z "$NVM_DIR" ]]; then
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
+        [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
+    fi
+}
+# Auto-initialize nvm commands as functions that load nvm on first use
+for cmd in nvm node npm npx; do
+    eval "$cmd() { unfunction $cmd &>/dev/null; nvm-init; $cmd \"\$@\"; }"
+done
 
-# fix SSL: CERTIFICATE_VERIFY_FAILED in python:
-export REQUESTS_CA_BUNDLE=/opt/homebrew/lib/python3.12/site-packages/certifi/cacert.pem
-
-# use bat as a colorizing pager for man
-export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
+# Lazy-load kubectl, docker, aws completions
+kubectl() {
+    unfunction kubectl
+    source $ZSH/plugins/kubectl/kubectl.plugin.zsh
+    kubectl "$@"
+}
+docker() {
+    unfunction docker
+    source $ZSH/plugins/docker/docker.plugin.zsh
+    docker "$@"
+}
+aws() {
+    unfunction aws
+    source $ZSH/plugins/aws/aws.plugin.zsh
+    aws "$@"
+}
 
 # Make man pages search case insensitive
 export LESS="-i -R"
-
-## Configure colima - if needed
-# export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
 
 # Configure podman - required podman-mac-helper installed to work
 export DOCKER_HOST='unix:///var/run/docker.sock'
