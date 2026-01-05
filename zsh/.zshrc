@@ -49,7 +49,7 @@ if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
   unset LS_COLORS
 
   # 3. Disable ZSH Interactive Features (prevent blocking/asking)
-  unsetopt CORRECT 
+  unsetopt CORRECT
   unsetopt CORRECT_ALL 
   unsetopt SHARE_HISTORY 
   unsetopt PROMPT_SP 

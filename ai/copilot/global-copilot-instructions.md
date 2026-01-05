@@ -33,6 +33,8 @@ When implementing SRP, maintain balance with KISS and YAGNI:
 
 ## Project Workflow
 
+- **Markdown Output**: Any markdown file created by the agent must always be saved to the `docs/` directory
+
 ### Planning First
 
 - All documentation (plans, tasks) resides in the `docs/` directory
@@ -52,12 +54,15 @@ After creating the plan and tasks, request user review and approval before proce
   `directory_tree`
 - **Deprecation**: Replace any deprecated APIs with their modern alternatives
 - **Test Execution**: ALWAYS use the info flag to prevent timeouts: `./gradlew test --info`.
+- Do not make separate step checking compilation. Always run tests - in worst case, tests will fail if
+  compilation fails.
+- Do not pipe into tail or similar commands that truncate output. Always provide full output.
 
 ### Iterative Validation
 
 After completing a logical group of tasks, ask for user validation before starting the next group.
 
-## MCP Tool Usage Guidelines
+## Tool Usage Guidelines
 
 ### Directory Navigation and File Discovery
 
@@ -66,7 +71,6 @@ After completing a logical group of tasks, ask for user validation before starti
   comprehensive view of the codebase
 - **Never use `directory_tree` at repository root**: Always target specific subdirectories to avoid
   fetching the `.git` folder and other irrelevant repository metadata
-
 ### File Reading Strategy
 
 - **Use `read_multiple_files` for batch operations**: When you need to read the contents of multiple
