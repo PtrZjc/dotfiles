@@ -176,6 +176,13 @@ pyv() {
     fi
 }
 
+yt-get-channel-id() {
+    YT_CHANNEL_URL=$1
+    CHANNEL_ID=$(curl -sL "$YT_CHANNEL_URL" -H "Cookie: SOCS=CAISAiAD" | rg -F 'youtube.com/channel' | head -1 | sd '.*channel/([1-9A-Za-z_-]+).*' '$1')
+    # The SOCS=CAISAiAD cookie tells YouTube you've accepted the consent prompt and redirects accordingly from 302.
+    echo "$CHANNEL_ID"
+}
+
 #from awesome-fzf
 function feval() {
     echo | fzf -q "$*" --preview-window=up:99% --no-mouse --preview="eval {q}"

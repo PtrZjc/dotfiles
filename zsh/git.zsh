@@ -61,12 +61,12 @@ function gcb() {
 }
 
 unalias gc
-function gc() {
+gc() {
     jira_number=$(git branch --show-current | cut -d - -f 2)
     if [[ ! $jira_number =~ ^[0-9]+$ ]]; then
-        git commit -m "$1"
+        git commit -m "$*"
     else
-        git commit -m "LDSI-$jira_number $1"
+        git commit -m "LDSI-$jira_number $*"
     fi
 }
 

@@ -173,10 +173,10 @@ nvm-init() {
         [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
     fi
 }
-# Auto-initialize nvm commands as functions that load nvm on first use
-for cmd in nvm node npm npx; do
-    eval "$cmd() { unfunction $cmd &>/dev/null; nvm-init; $cmd \"\$@\"; }"
-done
+# Auto-initialize nvm commands as functions that load nvm on first use - commented out to avoid issues with some IDEs
+# for cmd in nvm node npm npx; do
+#     eval "$cmd() { unfunction $cmd &>/dev/null; nvm-init; $cmd \"\$@\"; }"
+# done
 
 # Lazy-load kubectl, docker, aws completions
 kubectl() {
@@ -211,6 +211,10 @@ launchctl start local.hidutilKeyMapping
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f "$HOME/.p10k.zsh" ]] || source "$HOME/.p10k.zsh"
+
+# TODO make it prettier, this is just a quick working fix for now
+# fix SSL: CERTIFICATE_VERIFY_FAILED in python:
+export REQUESTS_CA_BUNDLE=/opt/homebrew/lib/python3.12/site-packages/certifi/cacert.pem
 
 # enable zoxide
 eval "$(zoxide init zsh)"
