@@ -11,6 +11,17 @@ function set_aws_profile() {
         set_only=true
     fi
 
+    # Helper to run SSO login and auto-open the URL
+    local function sso_login_with_auto_open() {
+        local profile=$1
+        aws sso login --no-browser --profile "$profile" 2>&1 | while IFS= read -r line; do
+            echo "$line"
+            if [[ "$line" =~ ^https:// ]]; then
+                open "$line"
+            fi
+        done
+    }
+
     # Function to handle profile switch
     local function handle_profile_switch() {
         local profile=$1
@@ -36,14 +47,14 @@ function set_aws_profile() {
         if [[ $current_profile == "$profile" ]]; then
             if ! $valid_token_exists; then
                 echo "Token expired, refreshing login..."
-                aws sso login --no-browser --profile "$profile"
+                sso_login_with_auto_open "$profile"
             else
                 echo "Already logged in with valid token for $profile"
                 return
             fi
         else
-            echo "Switching from profile $profile"
-            aws sso login --no-browser --profile "$profile"
+            echo "Switching to profile $profile"
+            sso_login_with_auto_open "$profile"
         fi
 
         export AWS_PROFILE="$profile"
@@ -67,22 +78,40 @@ function set_aws_profile() {
         export AWS_PROFILE="priv"
     }
 
-    echo "Select the AWS profile:"
-    echo "1) LIVEDATA_IGP_NONPROD"
-    echo "2) LIVEDATA_IGP_PROD_OBSERVER"
-    echo "3) LIVEDATA_IGP_PROD_DEVELOPER"
-    echo "4) NO_TRD_LIVEDATA_K8S_NONPROD"
-    echo "5) priv"
-    read choice
+    # Profile definitions: Display_name|AWS_Profile|Cluster|Region
+    local profiles=(
+        "LIVEDATA_IGP_NONPROD|LIVEDATA_IGP_NONPROD|nonprod-euc1-igp-srld-io|eu-central-1"
+        "LIVEDATA_IGP_PROD_OBSERVER|LIVEDATA_IGP_PROD_OBSERVER|prod-euc1-igp-srld-io|eu-central-1"
+        "LIVEDATA_IGP_PROD_DEVELOPER|LIVEDATA_IGP_PROD_DEVELOPER|prod-euc1-igp-srld-io|eu-central-1"
+        "NO_TRD_LIVEDATA_K8S_NONPROD|NO_TRD_LIVEDATA_K8S_NONPROD|nonprod-euc1-srlivedata-io|eu-central-1"
+        "priv|priv||"
+    )
 
-    case $choice in
-        (1) handle_profile_switch "LIVEDATA_IGP_NONPROD" "nonprod-euc1-igp-srld-io" ;;
-        (2) handle_profile_switch "LIVEDATA_IGP_PROD_OBSERVER" "prod-euc1-igp-srld-io" ;;
-        (3) handle_profile_switch "LIVEDATA_IGP_PROD_DEVELOPER" "prod-euc1-igp-srld-io" ;;
-        (4) handle_profile_switch "NO_TRD_LIVEDATA_K8S_NONPROD" "nonprod-euc1-srlivedata-io" ;;
-        (5) handle_priv_switch ;;
-        (*) echo "Invalid selection." ;;
-    esac
+    local selected=$(printf "%s\n" "${profiles[@]}" | cut -d'|' -f1 | fzf --height 20% --reverse --prompt="Select AWS profile: ")
+
+    if [[ -z "$selected" ]]; then
+        echo "Cancelled."
+        return
+    fi
+
+    # Find the full profile entry matching the selection
+    local profile_entry
+    for entry in "${profiles[@]}"; do
+        if [[ "$entry" == "$selected|"* ]]; then
+            profile_entry="$entry"
+            break
+        fi
+    done
+
+    local profile_name=$(echo "$profile_entry" | cut -d'|' -f2)
+    local cluster=$(echo "$profile_entry" | cut -d'|' -f3)
+    local region=$(echo "$profile_entry" | cut -d'|' -f4)
+
+    if [[ "$profile_name" == "priv" ]]; then
+        handle_priv_switch
+    else
+        handle_profile_switch "$profile_name" "$cluster" "$region"
+    fi
 
     echo $AWS_PROFILE > "$HOME/.aws/aws_profile"
 }
