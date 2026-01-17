@@ -1,5 +1,8 @@
-export REPO="${HOME}/workspace"
-export DOTFILES="${REPO}/private/dotfiles"
+# Dynamic path detection - works regardless of where dotfiles are cloned
+if [[ -z "$DOTFILES" ]]; then
+    export DOTFILES=${0:A:h:h}  # Absolute path to parent of parent of this file
+fi
+export REPO="${DOTFILES:h:h}"   # Two levels up from DOTFILES
 export CUSTOM="${DOTFILES}/zsh/custom.zsh"
 export ZSHRC="${DOTFILES}/zsh/.zshrc"
 export GIT="${DOTFILES}/zsh/git.zsh"
@@ -33,10 +36,10 @@ alias -g TR='| cut -c 1-$COLUMNS' # $COLUMNS -> screen width
 alias -g J='| bat -l json'
 alias -g C='| pbcopy'
 
-alias ls='lsd -l'
-alias la='lsd -a'
-alias lla='lsd -la'
-alias tree='lsd --tree'
+alias ls='eza -l'
+alias la='eza -a'
+alias lla='eza -la'
+alias tree='eza --tree --icons=always'
 alias wake-time='pmset -g log | grep -E "Wake.*lid|lid.*Wake"'
 alias sleep-time='pmset -g log | rg "(Clamshell|Software) Sleep"'
 
@@ -47,9 +50,9 @@ alias -s properties='$EDITOR'
 unalias l
 function l() {
     if [ $# -eq 0 ]; then
-        lsd --tree --depth=1
+        eza --tree --level=1
     else
-        lsd --tree --depth=$1
+        eza --tree --level=$1
     fi
 }
 
