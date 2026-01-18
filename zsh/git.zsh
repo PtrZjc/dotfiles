@@ -80,8 +80,8 @@ function ga() {
     if [ "$#" -eq 0 ]; then
         git add .
     else
-        # Find untracked/modified files matching pattern (case-insensitive)
-        local files=$(git ls-files --others --modified --exclude-standard | grep -i "$1")
+        # Find untracked/modified files matching pattern (case-insensitive, fixed string)
+        local files=$(git ls-files --others --modified --exclude-standard | grep -F -i "$1")
         if [[ -z "$files" ]]; then
             echo "No files matching '$1'"
             return 1
@@ -96,8 +96,8 @@ function gr() {
     if [ "$#" -eq 0 ]; then
         git reset .
     else
-        # Find staged files matching pattern (case-insensitive)
-        local files=$(git diff --cached --name-only | grep -i "$1")
+        # Find staged files matching pattern (case-insensitive, fixed string)
+        local files=$(git diff --cached --name-only | grep -F -i "$1")
         if [[ -z "$files" ]]; then
             echo "No staged files matching '$1'"
             return 1

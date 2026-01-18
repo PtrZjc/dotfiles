@@ -17,12 +17,9 @@ brew "translate-shell" # Command-line translator
 # Development Tools
 brew "shellcheck" # Shell Script Analysis Tool
 brew "gh" # GitHub CLI
-brew "awscli" # AWS CLI
-brew "aws-sam-cli" # AWS Serverless Application Model CLI
 brew "libpq" # PostgreSQL Library
 brew "sdkman-cli" # SDK Management
 brew "pyenv" # Python Version Management
-brew "deviceinsight/packages/kafkactl" # CLI for interaction with Apache Kafka
 brew "nvm" # Multiple node version manager, read prereq https://formulae.brew.sh/formula/nvm
 brew "lusingander/tap/ddv" # TUI for DynamoDb
 
@@ -32,7 +29,8 @@ brew "python-yq" # YAML Processor (also supports XML as xq)
 brew "yj" # YAML and JSON Converter
 brew "jc" # unix tool output to json converter
 brew "jnv" # Interactive JSON filter using jq
-brew "gron" # Make JSON Greppable
+brew "jless" # Interactive JSON filter using jq
+brew "moor" # Modern pager (less replacement)
 brew "visidata" # Data Explorer
 brew "gnuplot" # Plotting Utility
 brew "miller" # Text Data Processing Tool
@@ -57,8 +55,6 @@ brew "btop" # System Monitoring
 
 # Miscellaneous Utilities
 brew "qrencode" # QR Code Generation
-brew "d2" # Diagram Scripting Language
-brew "countdown" # Countdown Timer
 brew "utimer" # Command-line Timer
 brew "pandoc" # document converter (e.g. docx to pdf)
 brew "basictex" # provides pdflatex engine to above

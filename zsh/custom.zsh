@@ -50,6 +50,7 @@ alias vi='nvim'
 alias vim='nvim'
 alias code='code .'
 alias k="kubectl"
+alias less="moor"
 alias p="clip_paste"
 alias qr='qrencode -t ansiutf8 '
 alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
@@ -57,9 +58,9 @@ alias -g H='| head'
 alias -g T='>$TMP && cat $TMP'
 alias -g T2='>$TMP2 && cat $TMP2'
 alias -g F=' $(fd --type=file | fzf)'
-alias -g TR='| cut -c 1-$COLUMNS' # $COLUMNS -> screen width
-alias -g J='| bat -l json'
+alias -g J='| jless'
 alias -g C='| clip_copy'
+alias -g L='| moor'
 
 alias ls='eza -l'
 alias la='eza -a'
