@@ -2,6 +2,30 @@
 if [[ -z "$DOTFILES" ]]; then
     export DOTFILES=${0:A:h:h}  # Absolute path to parent of parent of this file
 fi
+
+# Cross-platform clipboard abstraction (macOS + Linux)
+function clip_copy() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        pbcopy
+    elif command -v xclip &>/dev/null; then
+        xclip -selection clipboard
+    elif command -v wl-copy &>/dev/null; then
+        wl-copy
+    else
+        cat >/dev/null
+    fi
+}
+
+function clip_paste() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        pbpaste
+    elif command -v xclip &>/dev/null; then
+        xclip -selection clipboard -o
+    elif command -v wl-paste &>/dev/null; then
+        wl-paste
+    fi
+}
+
 export REPO="${DOTFILES:h:h}"   # Two levels up from DOTFILES
 export CUSTOM="${DOTFILES}/zsh/custom.zsh"
 export ZSHRC="${DOTFILES}/zsh/.zshrc"
@@ -26,6 +50,7 @@ alias vi='nvim'
 alias vim='nvim'
 alias code='code .'
 alias k="kubectl"
+alias p="clip_paste"
 alias qr='qrencode -t ansiutf8 '
 alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
 alias -g H='| head'
@@ -34,7 +59,7 @@ alias -g T2='>$TMP2 && cat $TMP2'
 alias -g F=' $(fd --type=file | fzf)'
 alias -g TR='| cut -c 1-$COLUMNS' # $COLUMNS -> screen width
 alias -g J='| bat -l json'
-alias -g C='| pbcopy'
+alias -g C='| clip_copy'
 
 alias ls='eza -l'
 alias la='eza -a'
@@ -100,8 +125,8 @@ function ocr() {
     cd /tmp/
     local lang=${1:-eng}
     ipaste - >/tmp/ocr.jpg || return 1
-    tesseract -l "$lang" /tmp/ocr.jpg stdout | pbcopy
-    pbpaste
+    tesseract -l "$lang" /tmp/ocr.jpg stdout | clip_copy
+    clip_paste
     cd - >/dev/null
 }
 
@@ -159,7 +184,7 @@ function fdf() {
 
     # Execute with file processing and copy to clipboard
     fd "${exclude_args[@]}" "${hidden_args[@]}" "${extensions[@]}" "${max_depth_args[@]}" "$pattern" \
-        -x sh -c 'echo "<!-- FILE: $1 -->\n\`\`\`"; cat "$1"; echo "\`\`\`\n"' _ {} | pbcopy
+        -x sh -c 'echo "<!-- FILE: $1 -->\n\`\`\`"; cat "$1"; echo "\`\`\`\n"' _ {} | clip_copy
 }
 
 pyv() {

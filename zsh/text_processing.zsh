@@ -3,7 +3,7 @@ function line() {
 }
 
 function unescape() {
-    pbpaste | \
+    clip_paste | \
     sd '\\\\\\\"' 'ALREADY_ESCAPED' | \
     sd '\\n' '' | \
     sd '\\"' '"' | \
@@ -18,7 +18,7 @@ function ucase() {
 }
 
 function extract_date(){
-  pbpaste | awk -F '\t' '{split($4, a, " "); printf "%02d:%02d\n", a[1], a[2]}'
+  clip_paste | awk -F '\t' '{split($4, a, " "); printf "%02d:%02d\n", a[1], a[2]}'
 }
 
 function split() {
@@ -69,5 +69,5 @@ function tostring_to_json(){
   | sd "=" ": "
 }
 
-alias extract-ids='pbpaste | rg id | sd ".*(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w+{12}).*" "\$1," | pbcopy && pbpaste'
-alias wrap-with-uuid='pbpaste | sd ".*?(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}).*" "UUID(\"\$1\"), " | pbcopy && pbpaste'
+alias extract-ids='clip_paste | rg id | sd ".*(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w+{12}).*" "\$1," | clip_copy && clip_paste'
+alias wrap-with-uuid='clip_paste | sd ".*?(\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}).*" "UUID(\"\$1\"), " | clip_copy && clip_paste'
