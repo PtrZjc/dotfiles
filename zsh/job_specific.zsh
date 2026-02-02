@@ -17,7 +17,7 @@ function set_aws_profile() {
         aws sso login --no-browser --profile "$profile" 2>&1 | while IFS= read -r line; do
             echo "$line"
             if [[ "$line" =~ ^https:// ]]; then
-                open "$line"
+                open_url "$line"
             fi
         done
     }
@@ -161,9 +161,4 @@ function k-set-ns() {
    esac
 
    kubectl config set-context --current --namespace="$namespace"
-}
-
-function at_report() {
-    url="https://ldt.pages.sportradar.ag/-/igp/tests/acceptance/-/jobs/$1/artifacts/build/reports/jgiven/test/html/index.html"
-    open -n -a "Google Chrome" --args $url
 }

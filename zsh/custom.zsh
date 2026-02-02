@@ -43,7 +43,12 @@ alias cat=bat
 alias a='alias'
 alias cof='declare -f'
 alias icat='wezterm imgcat'
-alias ipaste='pngpaste'
+# ipaste: paste image from clipboard (cross-platform)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias ipaste='pngpaste'
+else
+    alias ipaste='xclip -selection clipboard -t image/png -o'
+fi
 alias todo='todo.sh'
 alias cls='clear && printf "\e[3J"'
 alias vi='nvim'
@@ -53,7 +58,14 @@ alias k="kubectl"
 alias less="moor"
 alias p="clip_paste"
 alias qr='qrencode -t ansiutf8 '
-alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
+# IntelliJ IDEA alias (cross-platform)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias ij="nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea . > /dev/null 2>&1 &"
+elif [[ -f /snap/bin/intellij-idea-ultimate ]]; then
+    alias ij="nohup /snap/bin/intellij-idea-ultimate . > /dev/null 2>&1 &"
+elif command -v idea &>/dev/null; then
+    alias ij="nohup idea . > /dev/null 2>&1 &"
+fi
 alias -g H='| head'
 alias -g T='>$TMP && cat $TMP'
 alias -g T2='>$TMP2 && cat $TMP2'
@@ -66,8 +78,11 @@ alias ls='eza -l'
 alias la='eza -a'
 alias lla='eza -la'
 alias tree='eza --tree --icons=always'
-alias wake-time='pmset -g log | grep -E "Wake.*lid|lid.*Wake"'
-alias sleep-time='pmset -g log | rg "(Clamshell|Software) Sleep"'
+# Power management aliases (macOS only)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias wake-time='pmset -g log | grep -E "Wake.*lid|lid.*Wake"'
+    alias sleep-time='pmset -g log | rg "(Clamshell|Software) Sleep"'
+fi
 
 # open files based on extension
 alias -s sh='sh'

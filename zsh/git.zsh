@@ -57,7 +57,7 @@ function og() {
         starting_page=""
     fi
 
-    open "https://$host/${repository}${starting_page}"
+    open_url "https://$host/${repository}${starting_page}"
 }
 
 alias ogh=og

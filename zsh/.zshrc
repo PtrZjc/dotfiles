@@ -24,11 +24,15 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Lazy-load Sdkman (call 'sdk-init' when needed)
 sdk-init() {
-  if [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
+  # Try Homebrew-installed sdkman first (macOS)
+  if command -v brew &>/dev/null && [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
       export SDKMAN_DIR="$(brew --prefix sdkman-cli)/libexec"
-      [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
+      source "${SDKMAN_DIR}/bin/sdkman-init.sh"
+  # Fall back to standard sdkman location (Linux)
+  elif [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
+      export SDKMAN_DIR="$HOME/.sdkman"
+      source "${SDKMAN_DIR}/bin/sdkman-init.sh"
   fi
-
 }
 # Auto-initialize sdkman on first use of 'sdk' command
 sdk() {
@@ -169,8 +173,15 @@ bindkey "^[l" down-case-word
 nvm-init() {
     if [[ -z "$NVM_DIR" ]]; then
         export NVM_DIR="$HOME/.nvm"
-        [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
-        [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
+        # Try Homebrew-installed NVM first (macOS)
+        if [[ -n "$HOMEBREW_PREFIX" ]] && [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ]; then
+            source "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
+            [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && source "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
+        # Fall back to standard NVM location (Linux)
+        elif [ -s "$NVM_DIR/nvm.sh" ]; then
+            source "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+        fi
     fi
 }
 # Auto-initialize nvm commands as functions that load nvm on first use - commented out to avoid issues with some IDEs
@@ -210,15 +221,35 @@ if [[ -f "$HOME/.aws/aws_profile" ]]; then
     export AWS_PROFILE=$(cat "$HOME/.aws/aws_profile")
 fi
 
-# Swap right command and option keys (source: https://rakhesh.com/mac/using-hidutil-to-map-macos-keyboard-keys/)
-launchctl start local.hidutilKeyMapping
+# Swap right command and option keys (macOS only)
+# source: https://rakhesh.com/mac/using-hidutil-to-map-macos-keyboard-keys/
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    launchctl start local.hidutilKeyMapping
+fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f "$HOME/.p10k.zsh" ]] || source "$HOME/.p10k.zsh"
 
-# TODO make it prettier, this is just a quick working fix for now
-# fix SSL: CERTIFICATE_VERIFY_FAILED in python:
-export REQUESTS_CA_BUNDLE=/opt/homebrew/lib/python3.12/site-packages/certifi/cacert.pem
+# fix SSL: CERTIFICATE_VERIFY_FAILED in python (macOS Homebrew path)
+if [[ "$OSTYPE" == "darwin"* ]] && [[ -f /opt/homebrew/lib/python3.12/site-packages/certifi/cacert.pem ]]; then
+    export REQUESTS_CA_BUNDLE=/opt/homebrew/lib/python3.12/site-packages/certifi/cacert.pem
+fi
 
 # enable zoxide
 eval "$(zoxide init zsh)"
+
+# OS detection flags
+export IS_MACOS=$([[ "$OSTYPE" == "darwin"* ]] && echo true || echo false)
+export IS_LINUX=$([[ "$OSTYPE" == "linux"* ]] && echo true || echo false)
+
+# Cross-platform URL/file opener
+# Usage: open_url "https://example.com"
+function open_url() {
+    if $IS_MACOS; then
+        open "$@"
+    elif command -v xdg-open &>/dev/null; then
+        xdg-open "$@" &>/dev/null &
+    else
+        echo "URL: $@"
+    fi
+}
