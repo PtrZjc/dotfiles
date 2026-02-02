@@ -194,6 +194,10 @@ aws() {
     source $ZSH/plugins/aws/aws.plugin.zsh
     aws "$@"
 }
+# Edit command line with $EDITOR
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
 
 # Make man pages search case insensitive
 export LESS="-i -R"

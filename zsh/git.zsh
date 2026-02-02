@@ -5,14 +5,14 @@ alias gst='git stash'
 alias gl='git pull --rebase'
 alias gsl='git stash list'
 alias gsp='git stash pop'
-alias gcl='git branch --sort=-committerdate | rg --invert-match "$(git rev-parse --abbrev-ref HEAD)" | head -1 | xargs git checkout'
 alias glg='git log --oneline | head | cut -d " " -f 2- | nl | tail -r'
 alias gst='git stash'
 alias gsp='git stash pop'
 alias gs='git status'
 alias root='cd $(git rev-parse --show-toplevel)'
+alias gb='git branch --sort=committerdate'
 alias gbl='git for-each-ref --sort=-committerdate --format "%(refname:short) %(committerdate:relative)" refs/heads/ | tail -r'
-alias gblr='git for-each-ref --sort=-committerdate --format "%(authorname): %(refname:short) %(committerdate:relative)" refs/heads/ refs/remotes/ | tail -r' 
+alias gblr='git for-each-ref --sort=-committerdate --format "%(authorname): %(refname:short) %(committerdate:relative)" refs/heads/ refs/remotes/ | tail -r'
 alias gd='git diff && git diff --staged'
 alias glog='git log --all --oneline --decorate --graph'
 alias gcaa='ga; gca'
@@ -29,6 +29,17 @@ function bckp() {
 
 function gcr() { #checkout to remote based on input
     git branch -r --sort=-committerdate | rg "$1" | sd 'origin/' '' | head -1 | xargs git checkout
+}
+
+alias gbl='git for-each-ref --sort=-committerdate --format "%(refname:short) %(committerdate:relative)" refs/heads/ | tail -r'
+
+unalias gcl
+gcl() {
+    if [[ -n $1 ]]; then
+        git branch --sort=-committerdate --format='%(refname:short)' | head -$1 | fzf | xargs git checkout
+    else
+        git branch --sort=-committerdate | rg --invert-match "$(git rev-parse --abbrev-ref HEAD)" | head -1 | xargs git checkout
+    fi
 }
 
 function og() {
@@ -87,7 +98,8 @@ function ga() {
             return 1
         fi
         echo "$files" | xargs -I{} git add "{}"
-        echo "Added:"; echo "$files"
+        echo "Added:"
+        echo "$files"
     fi
 }
 
@@ -103,7 +115,8 @@ function gr() {
             return 1
         fi
         echo "$files" | xargs -I{} git reset "{}"
-        echo "Reset:"; echo "$files"
+        echo "Reset:"
+        echo "$files"
     fi
 }
 
