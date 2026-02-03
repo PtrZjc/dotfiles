@@ -1,194 +1,248 @@
 #!/bin/bash
-# Ubuntu/Debian package installation script
-# Equivalent to brew/Brewfile for Linux systems
+# Robust Ubuntu/Debian Setup Script
+# Strictly handles errors, detects architecture, and manages modern package constraints (PEP 668).
 
-set -e
+set -euo pipefail
 
-echo "=== Installing Ubuntu packages ==="
+# --- Configuration ---
+LOG_FILE="${HOME}/install_log_$(date +%Y%m%d_%H%M%S).txt"
+TEMP_DIR=$(mktemp -d)
+ARCH=$(dpkg --print-architecture)
 
-sudo apt update
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
 
-# Core shell and utilities
-echo "Installing core packages..."
-sudo apt install -y \
-    zsh \
-    neovim \
-    curl \
-    wget \
-    git \
-    unzip
+# --- Helpers ---
+log() { echo -e "${GREEN}[INFO]${NC} $1"; echo "[INFO] $1" >> "$LOG_FILE"; }
+warn() { echo -e "${YELLOW}[WARN]${NC} $1"; echo "[WARN] $1" >> "$LOG_FILE"; }
+err()  { echo -e "${RED}[ERR]${NC} $1"; echo "[ERR] $1" >> "$LOG_FILE"; exit 1; }
 
-# Shell enhancements
-echo "Installing shell enhancement tools..."
-sudo apt install -y \
-    fzf \
-    ripgrep \
-    fd-find \
-    jq
+cleanup() {
+    rm -rf "$TEMP_DIR"
+    # Kill the sudo keep-alive background job
+    if [ -n "${SUDO_PID:-}" ]; then kill "$SUDO_PID" 2>/dev/null || true; fi
+}
+trap cleanup EXIT INT TERM
 
-# Development tools
-echo "Installing development tools..."
-sudo apt install -y \
-    shellcheck \
-    gh \
-    libpq-dev
+# Refresh sudo credentials and keep alive
+sudo -v
+(while true; do sudo -v; sleep 60; done) &
+SUDO_PID=$!
 
-# Data processing
-echo "Installing data processing tools..."
-sudo apt install -y \
-    miller \
-    gnuplot \
-    python3-pip
+# --- Architecture Check ---
+if [[ "$ARCH" != "amd64" && "$ARCH" != "arm64" ]]; then
+    warn "Detected architecture: $ARCH. Some binary downloads might fail if upstream does not provide pre-builts."
+fi
 
-# Image processing
-echo "Installing image processing tools..."
-sudo apt install -y \
-    tesseract-ocr \
-    tesseract-ocr-eng \
-    tesseract-ocr-pol \
-    imagemagick
+log "Starting installation. Logs: $LOG_FILE"
+log "System Architecture: $ARCH"
 
-# File management and misc
-echo "Installing misc utilities..."
-sudo apt install -y \
-    qrencode \
-    pandoc \
-    texlive-latex-base \
-    texlive-fonts-recommended
+# --- 1. Core APT Packages ---
+log "Updating apt repositories..."
+export DEBIAN_FRONTEND=noninteractive
+sudo apt update -q
 
-# System monitoring
-echo "Installing system monitoring tools..."
-sudo apt install -y \
-    btop
+PACKAGES=(
+    # Core
+    zsh neovim curl wget git unzip
+    # Shell
+    fzf ripgrep jq
+    # Dev
+    shellcheck gh libpq-dev build-essential
+    # Python helpers (pipx is critical for modern Ubuntu)
+    python3-pip python3-venv pipx
+    # Data/Image
+    miller gnuplot tesseract-ocr tesseract-ocr-eng tesseract-ocr-pol imagemagick
+    # Misc
+    qrencode pandoc texlive-latex-base texlive-fonts-recommended
+    # Monitoring & Clipboard
+    btop xclip wl-clipboard
+)
 
-# Clipboard tools (X11 and Wayland)
-echo "Installing clipboard tools..."
-sudo apt install -y xclip wl-clipboard
+log "Installing APT packages..."
+# Filter out already installed packages to speed up apt
+TO_INSTALL=()
+for pkg in "${PACKAGES[@]}"; do
+    if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+        TO_INSTALL+=("$pkg")
+    fi
+done
 
-# Create symlinks for differently-named packages (Ubuntu naming quirks)
-echo "Creating compatibility symlinks..."
+if [ ${#TO_INSTALL[@]} -gt 0 ]; then
+    sudo apt install -y "${TO_INSTALL[@]}"
+else
+    log "All core apt packages already installed."
+fi
+
+# Ensure pipx path
+if ! echo "$PATH" | grep -q "/.local/bin"; then
+    warn "Ensure ~/.local/bin is in your PATH."
+    export PATH="$HOME/.local/bin:$PATH"
+fi
+pipx ensurepath --force >/dev/null 2>&1 || true
+
+# --- 2. Shell Compatibility Symlinks ---
 mkdir -p "$HOME/.local/bin"
 
-# fd is named fdfind on Ubuntu
-if command -v fdfind &>/dev/null && [ ! -f "$HOME/.local/bin/fd" ]; then
-    ln -sf "$(which fdfind)" "$HOME/.local/bin/fd"
-    echo "  Created fd -> fdfind symlink"
-fi
-
-# bat is named batcat on Ubuntu
-if command -v batcat &>/dev/null && [ ! -f "$HOME/.local/bin/bat" ]; then
-    ln -sf "$(which batcat)" "$HOME/.local/bin/bat"
-    echo "  Created bat -> batcat symlink"
-fi
-
-echo ""
-echo "=== Installing tools not available via apt ==="
-
-# eza (modern ls replacement)
-if ! command -v eza &>/dev/null; then
-    echo "Installing eza..."
-    sudo apt install -y gpg
-    sudo mkdir -p /etc/apt/keyrings
-    wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
-    echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
-    sudo chmod 644 /etc/apt/keyrings/gierens.gpg
-    sudo apt update && sudo apt install -y eza
-else
-    echo "eza already installed"
-fi
-
-# zoxide (directory jumper)
-if ! command -v zoxide &>/dev/null; then
-    echo "Installing zoxide..."
-    curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
-else
-    echo "zoxide already installed"
-fi
-
-# bat (if not available via apt)
-if ! command -v bat &>/dev/null && ! command -v batcat &>/dev/null; then
-    echo "Installing bat..."
-    sudo apt install -y bat || {
-        # Fallback: download from GitHub releases
-        wget -O /tmp/bat.deb "https://github.com/sharkdp/bat/releases/latest/download/bat_0.24.0_amd64.deb"
-        sudo dpkg -i /tmp/bat.deb
-    }
-else
-    echo "bat already installed"
-fi
-
-# delta (git diff viewer)
-if ! command -v delta &>/dev/null; then
-    echo "Installing git-delta..."
-    wget -O /tmp/delta.deb "https://github.com/dandavison/delta/releases/download/0.16.5/git-delta_0.16.5_amd64.deb"
-    sudo dpkg -i /tmp/delta.deb || sudo apt install -f -y
-else
-    echo "delta already installed"
-fi
-
-# sd (sed replacement) - requires cargo
-if ! command -v sd &>/dev/null; then
-    echo "Installing sd..."
-    if command -v cargo &>/dev/null; then
-        cargo install sd
+# fd-find
+if ! command -v fd &>/dev/null; then
+    if command -v fdfind &>/dev/null; then
+        ln -sf "$(which fdfind)" "$HOME/.local/bin/fd"
+        log "Symlinked fdfind -> fd"
     else
-        echo "  SKIP: cargo not installed. Install with: sudo apt install cargo && cargo install sd"
+        # Install fd-find explicitly if missed above or named differently
+        sudo apt install -y fd-find
+        ln -sf "$(which fdfind)" "$HOME/.local/bin/fd"
     fi
-else
-    echo "sd already installed"
 fi
 
-# NVM (Node Version Manager)
+# bat (Ubuntu names it batcat)
+if ! command -v bat &>/dev/null && command -v batcat &>/dev/null; then
+    ln -sf "$(which batcat)" "$HOME/.local/bin/bat"
+    log "Symlinked batcat -> bat"
+fi
+
+# --- 3. Third-Party Repositories (Eza) ---
+if ! command -v eza &>/dev/null; then
+    log "Installing eza..."
+    sudo mkdir -p /etc/apt/keyrings
+    wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg --yes
+    echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+    sudo apt update -q && sudo apt install -y eza
+fi
+
+# --- 4. Binary Installs (GitHub Releases) ---
+
+# Helper for GitHub releases
+install_github_deb() {
+    local repo="$1"
+    local name="$2"
+    local grep_pattern="$3"
+    
+    if command -v "$name" &>/dev/null; then
+        log "$name already installed."
+        return
+    fi
+    
+    log "Installing $name from GitHub ($repo)..."
+    
+    # Get latest release tag
+    local latest_url
+    latest_url=$(curl -Ls -o /dev/null -w %{url_effective} "https://github.com/${repo}/releases/latest")
+    local tag="${latest_url##*/}"
+    
+    # Construct download URL (Robust method: verify URL exists first or parse API)
+    # Using API to find asset avoids guessing version string formats (v0.1 vs 0.1)
+    local asset_url
+    asset_url=$(curl -s "https://api.github.com/repos/${repo}/releases/latest" | \
+        grep "browser_download_url" | \
+        grep -i "$grep_pattern" | \
+        grep -i "$ARCH" | \
+        head -n 1 | \
+        cut -d '"' -f 4)
+
+    if [ -z "$asset_url" ]; then
+        warn "Could not find $name asset for $ARCH via API. Attempting fallback or skipping."
+        return
+    fi
+
+    local deb_file="$TEMP_DIR/$name.deb"
+    wget -qO "$deb_file" "$asset_url"
+    sudo dpkg -i "$deb_file"
+}
+
+# Bat (If not via apt/batcat) - Only if not symlinked/installed
+if ! command -v bat &>/dev/null; then
+    install_github_deb "sharkdp/bat" "bat" "musl" # musl builds are usually statically linked/safer
+fi
+
+# Delta
+install_github_deb "dandavison/delta" "git-delta" "git-delta_.*_$ARCH.deb"
+
+# sd (sed replacement) - Binary preferred over cargo for speed
+if ! command -v sd &>/dev/null; then
+    log "Installing sd..."
+    # sd doesn't always provide debs, use tarball strategy
+    SD_VER=$(curl -s "https://api.github.com/repos/chmln/sd/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    # Determine target based on ARCH
+    if [ "$ARCH" == "amd64" ]; then TARGET="x86_64-unknown-linux-musl"; 
+    elif [ "$ARCH" == "arm64" ]; then TARGET="aarch64-unknown-linux-musl"; fi
+    
+    if [ -n "${TARGET:-}" ]; then
+        wget -qO "$TEMP_DIR/sd.tar.gz" "https://github.com/chmln/sd/releases/download/${SD_VER}/sd-${SD_VER}-${TARGET}.tar.gz"
+        tar -xzf "$TEMP_DIR/sd.tar.gz" -C "$TEMP_DIR"
+        # Find binary inside extracted dir
+        find "$TEMP_DIR" -name "sd" -type f -exec install -m 755 {} "$HOME/.local/bin/sd" \;
+        log "sd installed to ~/.local/bin"
+    else
+        warn "sd build not found for architecture $ARCH"
+    fi
+fi
+
+# Zoxide
+if ! command -v zoxide &>/dev/null; then
+    log "Installing zoxide..."
+    curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+fi
+
+# --- 5. Language Version Managers ---
+
+# NVM
 if [ ! -d "$HOME/.nvm" ]; then
-    echo "Installing NVM..."
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    log "Installing NVM..."
+    # Fetch latest version dynamically
+    NVM_VER=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VER}/install.sh" | bash
 else
-    echo "NVM already installed"
+    log "NVM already installed."
 fi
 
-# SDKMAN (Java SDK Manager)
+# SDKMAN
 if [ ! -d "$HOME/.sdkman" ]; then
-    echo "Installing SDKMAN..."
+    log "Installing SDKMAN..."
     curl -s "https://get.sdkman.io" | bash
 else
-    echo "SDKMAN already installed"
+    log "SDKMAN already installed."
 fi
 
-# pyenv (Python version manager)
-if ! command -v pyenv &>/dev/null && [ ! -d "$HOME/.pyenv" ]; then
-    echo "Installing pyenv..."
-    # Install pyenv dependencies first
-    sudo apt install -y make build-essential libssl-dev zlib1g-dev \
-        libbz2-dev libreadline-dev libsqlite3-dev llvm \
-        libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+# Pyenv
+if [ ! -d "$HOME/.pyenv" ]; then
+    log "Installing pyenv..."
+    # Deps already installed in step 1
     curl https://pyenv.run | bash
 else
-    echo "pyenv already installed"
+    log "pyenv already installed."
 fi
 
-# tldr (simplified man pages)
-if ! command -v tldr &>/dev/null; then
-    echo "Installing tldr..."
-    pip3 install --user tldr
-else
-    echo "tldr already installed"
-fi
+# --- 6. Python Tools (via pipx) ---
+# Modern Ubuntu blocks raw 'pip install --user'. pipx is the standard fix.
 
-# yq (YAML processor)
-if ! command -v yq &>/dev/null; then
-    echo "Installing yq..."
-    pip3 install --user yq
-else
-    echo "yq already installed"
-fi
+install_pipx_tool() {
+    local tool="$1"
+    if ! pipx list | grep -q "$tool "; then
+        log "Installing $tool via pipx..."
+        pipx install "$tool"
+    else
+        log "$tool already installed via pipx."
+    fi
+}
 
+install_pipx_tool "tldr"
+install_pipx_tool "yq"
+
+# --- 7. Final Checks ---
+
+log "Installation complete."
 echo ""
-echo "=== Optional: GUI applications ==="
-echo "Install these manually if needed:"
-echo "  - WezTerm: https://wezfurlong.org/wezterm/install/linux.html"
-echo "  - VS Code: https://code.visualstudio.com/docs/setup/linux"
-echo "  - KeePassXC: sudo apt install keepassxc"
-echo "  - IntelliJ IDEA: sudo snap install intellij-idea-ultimate --classic"
+echo "=== Manual Action Required ==="
+echo "1. Restart your shell or run: source ~/.zshrc (or ~/.bashrc)"
+echo "2. Add the following to your shell config if not present:"
+echo "   export PATH=\"\$HOME/.local/bin:\$PATH\""
+echo "   eval \"\$(zoxide init zsh)\"  # or bash"
+echo "   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh"
 echo ""
-echo "=== Done ==="
-echo "Make sure ~/.local/bin is in your PATH"
+
+exit 0
