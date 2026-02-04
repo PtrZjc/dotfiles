@@ -3,28 +3,7 @@ if [[ -z "$DOTFILES" ]]; then
     export DOTFILES=${0:A:h:h}  # Absolute path to parent of parent of this file
 fi
 
-# Cross-platform clipboard abstraction (macOS + Linux)
-function clip_copy() {
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        pbcopy
-    elif command -v xclip &>/dev/null; then
-        xclip -selection clipboard
-    elif command -v wl-copy &>/dev/null; then
-        wl-copy
-    else
-        cat >/dev/null
-    fi
-}
-
-function clip_paste() {
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        pbpaste
-    elif command -v xclip &>/dev/null; then
-        xclip -selection clipboard -o
-    elif command -v wl-paste &>/dev/null; then
-        wl-paste
-    fi
-}
+source "$DOTFILES/zsh/utils.zsh"
 
 export REPO="${DOTFILES:h:h}"   # Two levels up from DOTFILES
 export CUSTOM="${DOTFILES}/zsh/custom.zsh"

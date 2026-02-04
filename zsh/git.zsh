@@ -1,3 +1,10 @@
+# Dynamic path detection - works regardless of where dotfiles are cloned
+if [[ -z "$DOTFILES" ]]; then
+    export DOTFILES=${0:A:h:h}  # Absolute path to parent of parent of this file
+fi
+
+source "$DOTFILES/zsh/utils.zsh"
+
 alias grst='git reset HEAD~1 && ga .'
 alias gmm='git merge master || git merge main'
 alias grm='git rebase master || git rebase main'

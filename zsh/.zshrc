@@ -237,19 +237,3 @@ fi
 
 # enable zoxide
 eval "$(zoxide init zsh)"
-
-# OS detection flags
-export IS_MACOS=$([[ "$OSTYPE" == "darwin"* ]] && echo true || echo false)
-export IS_LINUX=$([[ "$OSTYPE" == "linux"* ]] && echo true || echo false)
-
-# Cross-platform URL/file opener
-# Usage: open_url "https://example.com"
-function open_url() {
-    if $IS_MACOS; then
-        open "$@"
-    elif command -v xdg-open &>/dev/null; then
-        xdg-open "$@" &>/dev/null &
-    else
-        echo "URL: $@"
-    fi
-}
