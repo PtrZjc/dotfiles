@@ -47,7 +47,7 @@ sudo apt update -q
 
 PACKAGES=(
     # Core
-    zsh neovim curl wget git unzip
+    zsh neovim curl wget git unzip zip
     # Shell
     fzf ripgrep jq
     # Dev
