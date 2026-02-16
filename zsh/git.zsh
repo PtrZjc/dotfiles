@@ -13,6 +13,8 @@ alias gl='git pull --rebase'
 alias gsl='git stash list'
 alias gsp='git stash pop'
 alias glg='git log --oneline | head | cut -d " " -f 2- | nl | tail -r'
+alias gp='git push'
+alias gpf='git push --force-with-lease --force-if-includes'
 alias gst='git stash'
 alias gsp='git stash pop'
 alias gs='git status'
@@ -40,7 +42,6 @@ function gcr() { #checkout to remote based on input
 
 alias gbl='git for-each-ref --sort=-committerdate --format "%(refname:short) %(committerdate:relative)" refs/heads/ | tail -r'
 
-unalias gcl
 gcl() {
     if [[ -n $1 ]]; then
         git branch --sort=-committerdate --format='%(refname:short)' | head -$1 | fzf | xargs git checkout
@@ -93,7 +94,6 @@ og () {
 
 alias ogh=og
 
-unalias gcb
 function gcb() {
     if [[ $1 =~ ^[0-9] ]]; then
         git checkout -b LDSI-"$1"
@@ -102,7 +102,6 @@ function gcb() {
     fi
 }
 
-unalias gc
 gc() {
     jira_number=$(git branch --show-current | cut -d - -f 2)
     if [[ ! $jira_number =~ ^[0-9]+$ ]]; then
@@ -112,12 +111,10 @@ gc() {
     fi
 }
 
-unalias gca
 function gca() {
     git commit --amend --no-edit
 }
 
-unalias ga
 function ga() {
     if [ "$#" -eq 0 ]; then
         git add .
@@ -134,7 +131,6 @@ function ga() {
     fi
 }
 
-unalias gr
 function gr() {
     if [ "$#" -eq 0 ]; then
         git reset .

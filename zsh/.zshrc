@@ -47,7 +47,7 @@ sdk() {
 
 if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
   plugins=(
-    git
+    # git
   )
 
   source $ZSH/oh-my-zsh.sh
@@ -138,7 +138,7 @@ DISABLE_UPDATE_PROMPT="true"
 # Add wisely, as too many plugins slow down shell startup.
 
 plugins=(
-	git
+	# git
 	zsh-fzf-history-search
 	zsh-autosuggestions
     fzf
