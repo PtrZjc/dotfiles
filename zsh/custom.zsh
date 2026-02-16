@@ -16,6 +16,8 @@ export EDITOR="nvim"
 export TMP="/tmp/tmp"
 export TMP2="/tmp/tmp2"
 
+alias c='code .'
+alias o='open .'
 alias rst="exec zsh"
 alias co=tldr
 alias cat=bat
@@ -35,6 +37,7 @@ alias vim='nvim'
 alias code='code .'
 alias k="kubectl"
 alias less="moor"
+alias jq="jaq"
 alias p="clip_paste"
 alias qr='qrencode -t ansiutf8 '
 # IntelliJ IDEA alias (cross-platform)
@@ -211,7 +214,11 @@ yt-get-channel-id() {
     echo "$CHANNEL_ID"
 }
 
-#from awesome-fzf
-function feval() {
-    echo | fzf -q "$*" --preview-window=up:99% --no-mouse --preview="eval {q}"
+feval () {
+        local cmd
+        cmd=$(echo | fzf --print-query -q "$*" --preview-window=up:99% --no-mouse --preview="eval {q}")
+        if [[ -n "$cmd" ]]
+        then
+                print -r -z "$cmd"
+        fi
 }

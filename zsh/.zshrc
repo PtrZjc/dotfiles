@@ -141,13 +141,13 @@ plugins=(
 	git
 	zsh-fzf-history-search
 	zsh-autosuggestions
-  fzf
-  fzf-tab
-  F-Sy-H
-  # docker  # Lazy-loaded below
-  # kubectl # Lazy-loaded below
-  # aws     # Lazy-loaded below
-  github
+    fzf
+    fzf-tab
+    F-Sy-H
+    # docker  # Lazy-loaded below
+    # kubectl # Lazy-loaded below
+    # aws     # Lazy-loaded below
+    github
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -210,6 +210,30 @@ autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '^X^E' edit-command-line
 
+copy_buffer_to_clipboard() {
+    local clip_cmd
+
+    if command -v pbcopy >/dev/null 2>&1; then
+        clip_cmd="pbcopy" # macOS
+    elif command -v xclip >/dev/null 2>&1; then
+        clip_cmd="xclip -selection clipboard" # Linux (X11)
+    elif command -v wl-copy >/dev/null 2>&1; then
+        clip_cmd="wl-copy" # Linux (Wayland)
+    elif command -v clip.exe >/dev/null 2>&1; then
+        clip_cmd="clip.exe" # Windows (WSL)
+    else
+        zle -M "Nie znaleziono programu do obsługi schowka (pbcopy, xclip, wl-copy, clip.exe)."
+        return 1
+    fi
+
+    # Przekazanie aktualnego bufora ZLE ($BUFFER) do schowka
+    printf "%s" "$BUFFER" | eval "$clip_cmd"
+    
+    zle -M "Skopiowano do schowka!"
+}
+zle -N copy_buffer_to_clipboard
+bindkey '^X^X' copy_buffer_to_clipboard
+
 # Make man pages search case insensitive
 export LESS="-i -R"
 
@@ -237,3 +261,7 @@ fi
 
 # enable zoxide
 eval "$(zoxide init zsh)"
+
+# enable atuin
+. "$HOME/.atuin/bin/env"
+eval "$(atuin init zsh)"

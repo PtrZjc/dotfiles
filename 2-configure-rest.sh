@@ -96,37 +96,32 @@ ln -sf "$DOTFILES_DIR/ai/copilot/global-copilot-instructions.md" "$HOME/.config/
 
 echo 'Installing zsh plugins...'
 
+echo 'Installing zoxide...'
 # theme
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 fi
 
+echo 'Installing zsh-autosuggestions'
 # zsh-autosuggestions
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
 fi
 
+echo 'Installing syntax highlighting'
 # syntax highlighting
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/F-Sy-H" ]; then
     git clone https://github.com/z-shell/F-Sy-H.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/F-Sy-H"
 fi
 
+echo 'Installing fzf-tab'
 # fzf-tab
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab" ]; then
     git clone https://github.com/Aloxaf/fzf-tab "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab"
 fi
 
-# zsh-histdb
-if [ ! -d "${HOME}/.oh-my-zsh/custom/plugins/zsh-histdb" ]; then
-    git clone https://github.com/larkery/zsh-histdb "${HOME}/.oh-my-zsh/custom/plugins/zsh-histdb"
-fi
-
-# zsh/fzf History Search plugin
-FZF_HISTORY_FOLDER="$ZSH/custom/plugins/zsh-fzf-history-search"
-if [ ! -d "$FZF_HISTORY_FOLDER" ]; then
-    mkdir -p "$FZF_HISTORY_FOLDER"
-    curl https://raw.githubusercontent.com/joshskidmore/zsh-fzf-history-search/master/zsh-fzf-history-search.zsh --output "$FZF_HISTORY_FOLDER/zsh-fzf-history-search.zsh"
-    curl https://raw.githubusercontent.com/joshskidmore/zsh-fzf-history-search/master/zsh-fzf-history-search.plugin.zsh --output "$FZF_HISTORY_FOLDER/zsh-fzf-history-search.plugin.zsh"
-fi
+echo 'Installing atuin...'
+curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+ln -sf "$DOTFILES_DIR/other/atuin/config.toml" "$HOME/.config/atuin/config.toml"
 
 echo 'Done! Restart your shell or run: exec zsh'

@@ -1,10 +1,9 @@
-[includeIf "gitdir:~/private/"]
+[include]
   path = .config/.gitconfig-private
 [includeIf "hasconfig:remote.*.url:git@github.com*/**"]
   path = .config/.gitconfig-private
 [includeIf "hasconfig:remote.*.url:git@gitlab.sportradar.ag*/**"]
   path = .config/.gitconfig-sportradar
-
 [push]
   autoSetupRemote = true
 

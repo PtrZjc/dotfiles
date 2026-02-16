@@ -49,22 +49,46 @@ gcl() {
     fi
 }
 
-function og() {
-    origin=$(git remote -v | rg origin | head -1)
-    if [[ $origin == "fatal" ]]; then
-        echo "No origin found"
-        return
-    fi
-    host=$(echo $origin | sd '.*@(.*):.*' '$1')
-    repository=$(echo $origin | sd '.*:(.*)\.git.*' '$1')
+og () {
+        origin=$(git remote -v | rg origin | head -1)
+        if [[ $origin == "fatal" ]]
+        then
+                echo "No origin found"
+                return
+        fi
+        
+        host=$(echo $origin | sd '.*@(.*):.*' '$1')
+        repository=$(echo $origin | sd '.*:(.*)\.git.*' '$1')
+        
+        # Get the path relative to the git root (e.g., "folder/subfolder/")
+        relative_path=$(git rev-parse --show-prefix)
+        
+        # Check if we are in the root folder (empty relative path)
+        if [[ -z "$relative_path" ]]
+        then
+                # --- Root Folder Logic ---
+                if [[ $host == *"gitlab"* ]]
+                then
+                        url_suffix="/-/merge_requests"
+                else
+                        url_suffix=""
+                fi
+        else
+                # --- Deep Folder Logic ---
+                # Remove the trailing slash provided by rev-parse
+                clean_path=$(echo $relative_path | sd '/$' '')
+                
+                if [[ $host == *"gitlab"* ]]
+                then
+                        # GitLab structure: /-/tree/branch/folder
+                        url_suffix="/-/tree/main/${clean_path}"
+                else
+                        # GitHub/Generic structure: /tree/branch/folder
+                        url_suffix="/tree/main/${clean_path}"
+                fi
+        fi
 
-    if [[ $host == *"gitlab"* ]]; then
-        starting_page="/-/merge_requests"
-    else
-        starting_page=""
-    fi
-
-    open_url "https://$host/${repository}${starting_page}"
+        open_url "https://$host/${repository}${url_suffix}"
 }
 
 alias ogh=og
