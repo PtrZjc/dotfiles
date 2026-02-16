@@ -222,14 +222,14 @@ copy_buffer_to_clipboard() {
     elif command -v clip.exe >/dev/null 2>&1; then
         clip_cmd="clip.exe" # Windows (WSL)
     else
-        zle -M "Nie znaleziono programu do obsługi schowka (pbcopy, xclip, wl-copy, clip.exe)."
+        zle -M "No clipboard program found (pbcopy, xclip, wl-copy, clip.exe)."
         return 1
     fi
 
-    # Przekazanie aktualnego bufora ZLE ($BUFFER) do schowka
+    # Copy the current ZLE buffer ($BUFFER) to the clipboard
     printf "%s" "$BUFFER" | eval "$clip_cmd"
     
-    zle -M "Skopiowano do schowka!"
+    zle -M "Copied to system clipboard!"
 }
 zle -N copy_buffer_to_clipboard
 bindkey '^X^X' copy_buffer_to_clipboard
@@ -264,4 +264,4 @@ eval "$(zoxide init zsh)"
 
 # enable atuin
 . "$HOME/.atuin/bin/env"
-eval "$(atuin init zsh)"
+eval "$(atuin init zsh --disable-up-arrow)"

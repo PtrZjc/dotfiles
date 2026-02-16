@@ -1,9 +1,38 @@
 #!/bin/bash
+set -e
+
 DOTFILES_DIR=$(cd -- $(dirname -- ${BASH_SOURCE[0]}) &>/dev/null && pwd)
 
 # OS detection
 IS_MACOS=$([[ "$OSTYPE" == "darwin"* ]] && echo true || echo false)
 IS_LINUX=$([[ "$OSTYPE" == "linux"* ]] && echo true || echo false)
+
+# Helper: create symlink with status feedback
+create_symlink() {
+    local src="$1"
+    local dest="$2"
+
+    if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
+        echo "  [skip] $dest (already linked)"
+    else
+        ln -sf "$src" "$dest"
+        echo "  [link] $dest -> $src"
+    fi
+}
+
+# Helper: clone git repo if not exists, or update if exists
+clone_or_update() {
+    local repo="$1"
+    local dest="$2"
+    local name=$(basename "$dest")
+
+    if [ -d "$dest" ]; then
+        echo "  [skip] $name (already installed)"
+    else
+        echo "  [install] $name"
+        git clone --depth=1 "$repo" "$dest"
+    fi
+}
 
 ######################
 # PACKAGE INSTALLATION
@@ -41,17 +70,31 @@ fi
 
 mkdir -p "$FONT_DIR"
 
-echo "Installing fonts to $FONT_DIR..."
-curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip --output /tmp/font-jb.zip
-curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip --output /tmp/font-meslo.zip
-unzip -o /tmp/font-jb.zip -d /tmp/font-jb
-unzip -o /tmp/font-meslo.zip -d /tmp/font-meslo
-mv /tmp/font-jb/*.ttf "$FONT_DIR/" 2>/dev/null || true
-mv /tmp/font-meslo/MesloLGSNerdFont-*.ttf "$FONT_DIR/" 2>/dev/null || true
+# Check if fonts are already installed
+FONTS_INSTALLED=true
+if ! ls "$FONT_DIR"/JetBrainsMonoNerdFont*.ttf &>/dev/null; then
+    FONTS_INSTALLED=false
+fi
+if ! ls "$FONT_DIR"/MesloLGSNerdFont*.ttf &>/dev/null; then
+    FONTS_INSTALLED=false
+fi
 
-# Rebuild font cache on Linux
-if $IS_LINUX; then
-    fc-cache -fv
+if $FONTS_INSTALLED; then
+    echo "Fonts already installed in $FONT_DIR, skipping..."
+else
+    echo "Installing fonts to $FONT_DIR..."
+    curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip --output /tmp/font-jb.zip
+    curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip --output /tmp/font-meslo.zip
+    unzip -o /tmp/font-jb.zip -d /tmp/font-jb
+    unzip -o /tmp/font-meslo.zip -d /tmp/font-meslo
+    mv /tmp/font-jb/*.ttf "$FONT_DIR/" 2>/dev/null || true
+    mv /tmp/font-meslo/MesloLGSNerdFont-*.ttf "$FONT_DIR/" 2>/dev/null || true
+    rm -rf /tmp/font-jb /tmp/font-meslo /tmp/font-jb.zip /tmp/font-meslo.zip
+
+    # Rebuild font cache on Linux
+    if $IS_LINUX; then
+        fc-cache -fv
+    fi
 fi
 
 ######################
@@ -60,7 +103,7 @@ fi
 
 echo 'Configuring nvim...'
 mkdir -p "${HOME}/.config/nvim"
-ln -sf "${DOTFILES_DIR}/nvim/init.lua" "$HOME/.config/nvim/init.lua"
+create_symlink "${DOTFILES_DIR}/nvim/init.lua" "$HOME/.config/nvim/init.lua"
 
 #####################
 # ZSH CONFIGURATION #
@@ -68,27 +111,30 @@ ln -sf "${DOTFILES_DIR}/nvim/init.lua" "$HOME/.config/nvim/init.lua"
 
 echo 'Configuring zsh...'
 
-## symlinks to dotfiles
-ln -sf "${DOTFILES_DIR}/zsh/.zshrc" ~/.zshrc
+# Ensure ZSH_CUSTOM is set
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
-find "${DOTFILES_DIR}/zsh" \
-    -name '*.zsh' \
-    -exec sh -c 'ln -sf "$1" "$ZSH/custom/$(basename $1)"' _ {} \;
+## symlinks to dotfiles
+create_symlink "${DOTFILES_DIR}/zsh/.zshrc" "$HOME/.zshrc"
+
+for zsh_file in "${DOTFILES_DIR}/zsh"/*.zsh; do
+    create_symlink "$zsh_file" "$ZSH_CUSTOM/$(basename "$zsh_file")"
+done
 
 # git
-ln -sf "${DOTFILES_DIR}/other/.gitconfig" "$HOME/.gitconfig"
+create_symlink "${DOTFILES_DIR}/other/.gitconfig" "$HOME/.gitconfig"
 
 # powerlevel10k theme
-ln -sf "${DOTFILES_DIR}/other/.p10k.zsh" "$HOME/.p10k.zsh"
+create_symlink "${DOTFILES_DIR}/other/.p10k.zsh" "$HOME/.p10k.zsh"
 
 # wezterm
 mkdir -p "${HOME}/.config/wezterm"
-ln -sf "${DOTFILES_DIR}/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"
+create_symlink "${DOTFILES_DIR}/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"
 
 # github copilot
 mkdir -p "$HOME/.config/github-copilot/intellij"
-ln -sf "$DOTFILES_DIR/ai/copilot/mcp.json" "$HOME/.config/github-copilot/intellij/mcp.json"
-ln -sf "$DOTFILES_DIR/ai/copilot/global-copilot-instructions.md" "$HOME/.config/github-copilot/intellij/global-copilot-instructions.md"
+create_symlink "$DOTFILES_DIR/ai/copilot/mcp.json" "$HOME/.config/github-copilot/intellij/mcp.json"
+create_symlink "$DOTFILES_DIR/ai/copilot/global-copilot-instructions.md" "$HOME/.config/github-copilot/intellij/global-copilot-instructions.md"
 
 ######################
 # ZSH PLUGINS        #
@@ -96,32 +142,27 @@ ln -sf "$DOTFILES_DIR/ai/copilot/global-copilot-instructions.md" "$HOME/.config/
 
 echo 'Installing zsh plugins...'
 
-echo 'Installing zoxide...'
 # theme
-if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
-fi
+clone_or_update "https://github.com/romkatv/powerlevel10k.git" "$ZSH_CUSTOM/themes/powerlevel10k"
 
-echo 'Installing zsh-autosuggestions'
 # zsh-autosuggestions
-if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-fi
+clone_or_update "https://github.com/zsh-users/zsh-autosuggestions" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 
-echo 'Installing syntax highlighting'
 # syntax highlighting
-if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/F-Sy-H" ]; then
-    git clone https://github.com/z-shell/F-Sy-H.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/F-Sy-H"
-fi
+clone_or_update "https://github.com/z-shell/F-Sy-H.git" "$ZSH_CUSTOM/plugins/F-Sy-H"
 
-echo 'Installing fzf-tab'
 # fzf-tab
-if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab" ]; then
-    git clone https://github.com/Aloxaf/fzf-tab "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab"
+clone_or_update "https://github.com/Aloxaf/fzf-tab" "$ZSH_CUSTOM/plugins/fzf-tab"
+
+# atuin
+if command -v atuin &>/dev/null; then
+    echo "  [skip] atuin (already installed)"
+else
+    echo "  [install] atuin"
+    curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 fi
+mkdir -p "$HOME/.config/atuin"
+create_symlink "$DOTFILES_DIR/other/atuin/config.toml" "$HOME/.config/atuin/config.toml"
 
-echo 'Installing atuin...'
-curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
-ln -sf "$DOTFILES_DIR/other/atuin/config.toml" "$HOME/.config/atuin/config.toml"
-
+echo ''
 echo 'Done! Restart your shell or run: exec zsh'
