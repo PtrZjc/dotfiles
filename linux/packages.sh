@@ -99,11 +99,11 @@ if ! command -v fd &>/dev/null; then
     fi
 fi
 
-# bat (Ubuntu names it batcat)
-if ! command -v bat &>/dev/null && command -v batcat &>/dev/null; then
-    ln -sf "$(which batcat)" "$HOME/.local/bin/bat"
-    log "Symlinked batcat -> bat"
-fi
+# # bat (Ubuntu names it batcat)
+# if ! command -v bat &>/dev/null && command -v batcat &>/dev/null; then
+#     ln -sf "$(which batcat)" "$HOME/.local/bin/bat"
+#     log "Symlinked batcat -> bat"
+# fi
 
 # --- 3. Third-Party Repositories (Eza) ---
 if ! command -v eza &>/dev/null; then
@@ -154,10 +154,10 @@ install_github_deb() {
     sudo dpkg -i "$deb_file"
 }
 
-# Bat (If not via apt/batcat) - Only if not symlinked/installed
-if ! command -v bat &>/dev/null; then
-    install_github_deb "sharkdp/bat" "bat" "musl" # musl builds are usually statically linked/safer
-fi
+# # Bat (If not via apt/batcat) - Only if not symlinked/installed
+# if ! command -v bat &>/dev/null; then
+#     install_github_deb "sharkdp/bat" "bat" "musl" # musl builds are usually statically linked/safer
+# fi
 
 # Delta
 install_github_deb "dandavison/delta" "git-delta" "git-delta_.*_$ARCH.deb"
