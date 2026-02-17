@@ -182,6 +182,21 @@ if ! command -v sd &>/dev/null; then
     fi
 fi
 
+# jaq (jq clone, faster)
+if ! command -v jaq &>/dev/null; then
+    log "Installing jaq..."
+    if [ "$ARCH" == "amd64" ]; then JAQ_TARGET="x86_64-unknown-linux-musl";
+    elif [ "$ARCH" == "arm64" ]; then JAQ_TARGET="aarch64-unknown-linux-musl"; fi
+
+    if [ -n "${JAQ_TARGET:-}" ]; then
+        curl -fsSL "https://github.com/01mf02/jaq/releases/latest/download/jaq-${JAQ_TARGET}" -o "$TEMP_DIR/jaq"
+        install -m 755 "$TEMP_DIR/jaq" "$HOME/.local/bin/jaq"
+        log "jaq installed to ~/.local/bin"
+    else
+        warn "jaq build not found for architecture $ARCH"
+    fi
+fi
+
 # Zoxide
 if ! command -v zoxide &>/dev/null; then
     log "Installing zoxide..."
