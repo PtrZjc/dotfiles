@@ -237,6 +237,10 @@ bindkey '^X^X' copy_buffer_to_clipboard
 # Make man pages search case insensitive
 export LESS="-i -R"
 
+# Use bat to colorize help
+alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
+alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+
 # Configure podman - required podman-mac-helper installed to work
 export DOCKER_HOST='unix:///var/run/docker.sock'
 

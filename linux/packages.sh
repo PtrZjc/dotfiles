@@ -49,7 +49,7 @@ PACKAGES=(
     # Core
     zsh neovim curl wget git unzip zip
     # Shell
-    fzf ripgrep jq
+    fzf ripgrep jq bat
     # Dev
     shellcheck gh libpq-dev build-essential
     # Python helpers (pipx is critical for modern Ubuntu)
@@ -99,11 +99,11 @@ if ! command -v fd &>/dev/null; then
     fi
 fi
 
-# # bat (Ubuntu names it batcat)
-# if ! command -v bat &>/dev/null && command -v batcat &>/dev/null; then
-#     ln -sf "$(which batcat)" "$HOME/.local/bin/bat"
-#     log "Symlinked batcat -> bat"
-# fi
+# bat (Ubuntu names it batcat)
+if ! command -v bat &>/dev/null && command -v batcat &>/dev/null; then
+    ln -sf "$(which batcat)" "$HOME/.local/bin/bat"
+    log "Symlinked batcat -> bat"
+fi
 
 # --- 3. Third-Party Repositories (Eza) ---
 if ! command -v eza &>/dev/null; then
