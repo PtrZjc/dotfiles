@@ -47,9 +47,9 @@ sudo apt update -q
 
 PACKAGES=(
     # Core
-    zsh neovim curl wget git unzip
+    zsh neovim curl wget git unzip zip
     # Shell
-    fzf ripgrep jq
+    fzf ripgrep jq bat
     # Dev
     shellcheck gh libpq-dev build-essential
     # Python helpers (pipx is critical for modern Ubuntu)
@@ -154,10 +154,10 @@ install_github_deb() {
     sudo dpkg -i "$deb_file"
 }
 
-# Bat (If not via apt/batcat) - Only if not symlinked/installed
-if ! command -v bat &>/dev/null; then
-    install_github_deb "sharkdp/bat" "bat" "musl" # musl builds are usually statically linked/safer
-fi
+# # Bat (If not via apt/batcat) - Only if not symlinked/installed
+# if ! command -v bat &>/dev/null; then
+#     install_github_deb "sharkdp/bat" "bat" "musl" # musl builds are usually statically linked/safer
+# fi
 
 # Delta
 install_github_deb "dandavison/delta" "git-delta" "git-delta_.*_$ARCH.deb"
@@ -179,6 +179,21 @@ if ! command -v sd &>/dev/null; then
         log "sd installed to ~/.local/bin"
     else
         warn "sd build not found for architecture $ARCH"
+    fi
+fi
+
+# jaq (jq clone, faster)
+if ! command -v jaq &>/dev/null; then
+    log "Installing jaq..."
+    if [ "$ARCH" == "amd64" ]; then JAQ_TARGET="x86_64-unknown-linux-musl";
+    elif [ "$ARCH" == "arm64" ]; then JAQ_TARGET="aarch64-unknown-linux-musl"; fi
+
+    if [ -n "${JAQ_TARGET:-}" ]; then
+        curl -fsSL "https://github.com/01mf02/jaq/releases/latest/download/jaq-${JAQ_TARGET}" -o "$TEMP_DIR/jaq"
+        install -m 755 "$TEMP_DIR/jaq" "$HOME/.local/bin/jaq"
+        log "jaq installed to ~/.local/bin"
+    else
+        warn "jaq build not found for architecture $ARCH"
     fi
 fi
 

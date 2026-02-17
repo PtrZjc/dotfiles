@@ -9,10 +9,10 @@ alias grst='git reset HEAD~1 && ga .'
 alias gmm='git merge master || git merge main'
 alias grm='git rebase master || git rebase main'
 alias gst='git stash'
+alias gcm='git checkout main'
 alias gl='git pull --rebase'
 alias gsl='git stash list'
 alias gsp='git stash pop'
-alias glg='git log --oneline | head | cut -d " " -f 2- | nl | tail -r'
 alias gp='git push'
 alias gpf='git push --force-with-lease --force-if-includes'
 alias gst='git stash'
@@ -34,6 +34,14 @@ function bckp() {
     fi
     git checkout -b backup
     git switch -
+}
+
+glg() {
+    if [[ "$IS_MACOS" == "true" ]]; then
+        git log --oneline | head | cut -d " " -f 2- | nl | tail -r
+    else
+        git log --oneline | head | cut -d " " -f 2- | nl | tac
+    fi
 }
 
 function gcr() { #checkout to remote based on input

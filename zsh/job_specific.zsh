@@ -1,5 +1,3 @@
-export CURL_CA_BUNDLE="$HOME/Zscaler_CA.pem"
-
 function set_aws_profile() {
     # takes 1 argument -s or --set-only when only AWS_PROFILE should be changed
 
