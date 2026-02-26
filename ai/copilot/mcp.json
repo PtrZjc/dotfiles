@@ -9,12 +9,6 @@
       ],
       "env": {}
     },
-    "fetch": {
-      "command": "uvx",
-      "args": [
-        "mcp-server-fetch"
-      ]
-    },
     "context7": {
       "command": "npx",
       "args": [
