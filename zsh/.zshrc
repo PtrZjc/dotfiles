@@ -41,6 +41,10 @@ sdk() {
   sdk "$@"
 }
 
+# enable atuin
+. "$HOME/.atuin/bin/env"
+eval "$(atuin init zsh --disable-up-arrow)"
+
 ###################################
 ### Intellij Agent Mode config (sterile, no colors, no prompts, low latency)
 ###################################
@@ -265,7 +269,3 @@ fi
 
 # enable zoxide
 eval "$(zoxide init zsh)"
-
-# enable atuin
-. "$HOME/.atuin/bin/env"
-eval "$(atuin init zsh --disable-up-arrow)"

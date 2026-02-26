@@ -122,8 +122,8 @@ function k-set-ns() {
    if [[ -z "$project" || -z "$env" ]]; then
        echo "Error: Please provide both project and environment"
        echo "Usage: k_set_ns <project> <env>"
-       echo "Projects: igp, ldla"
-       echo "Environments: dev, qa, perf, prod"
+       echo "Projects: igp, ldla, ldi"
+       echo "Environments: dev, qa, perf, prod (ldi: dev only)"
        return 1
    fi
 
@@ -152,8 +152,17 @@ function k-set-ns() {
                    ;;
            esac
            ;;
+       ldi)
+           case $env in
+               dev) namespace="ldi-dev-lda-adapter" ;;
+               *)
+                   echo "Error: Invalid environment for ldi. Use: dev"
+                   return 1
+                   ;;
+           esac
+           ;;
        *)
-           echo "Error: Invalid project. Use: igp or ldla"
+           echo "Error: Invalid project. Use: igp, ldla, or ldi"
            return 1
            ;;
    esac
