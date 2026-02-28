@@ -1,20 +1,23 @@
-# Visual studio copilot locations:
+# AI Tool Configurations
 
-~/Library/Application Support/Code/User/prompts
-in this location are defined:
-agents (xxx.agents.md),
-instructions (xxx.instructions.md)
-prompts (xxx.prompts.md)
+Source files live in `ai/copilot/` and are symlinked to their system locations. Run `ai/copy.sh` to force-refresh all symlinks.
 
-mcp:
-~/Library/Application Support/Code/User/mcp.json
+## Copilot — IntelliJ
 
-#  copilot CLI global locations
-~/.config/copilot/agents/
-~/.copilot/skills/
+Target: `~/.config/github-copilot/intellij/`
 
-no global instructions
+Symlinked files: `mcp.json`, `global-copilot-instructions.md`
 
+## Copilot — VS Code
 
-# Intellij
+Target: `~/Library/Application Support/Code/User/`
 
+Symlinked files: `mcp.json`
+
+VS Code also reads custom prompts from its own `prompts/` directory — agents (`*.agent.md`), instructions (`*.instructions.md`), and prompts (`*.prompt.md`).
+
+## Copilot CLI
+
+Global config locations (not currently symlinked):
+- Agents: `~/.config/copilot/agents/`
+- Skills: `~/.copilot/skills/`
