@@ -1,23 +1,51 @@
-# AI Tool Configurations
 
-Source files live in `ai/copilot/` and are symlinked to their system locations. Run `ai/copy.sh` to force-refresh all symlinks.
+## 1. Visual Studio Code (VS Code)
 
-## Copilot — IntelliJ
+**Global (User Profile / System-wide)**
+These settings apply across all your open projects and workspaces.
 
-Target: `~/.config/github-copilot/intellij/`
+| Configuration Type    | Path / Location                                                     |
+| --------------------- | ------------------------------------------------------------------- |
+| **MCP Configuration** | `~/Library/Application Support/Code/User/mcp.json`                  |
+| **Agents**            | `~/Library/Application Support/Code/User/prompts/*.agent.md`        |
+| **Instruction Files** | `~/Library/Application Support/Code/User/prompts/*.instructions.md` |
+| **Prompts**           | `~/Library/Application Support/Code/User/prompts/*.prompt.md`       |
 
-Symlinked files: `mcp.json`, `global-copilot-instructions.md`
+**Local (Workspace / Repository)**
+Configurations specific to a given project, typically committed to version control.
 
-## Copilot — VS Code
+| Configuration Type           | Path / Location                                                             |
+| ---------------------------- | --------------------------------------------------------------------------- |
+| **Global Instruction File**  | `.github/copilot-instructions.md`                                           |
+| **Instruction Files**        | `.github/instructions/`                                                     |
+| **Agents**                   | `.github/agents/`                                                           |
+| **Prompts (Slash commands)** | `.github/prompts/`                                                          |
+| **Skills**                   | `.agents/skills/` *(also supports `.github/skills/` and `.claude/skills/`)* |
 
-Target: `~/Library/Application Support/Code/User/`
+## 2. Copilot — IntelliJ IDEA
 
-Symlinked files: `mcp.json`
+**Global (User Profile)**
+These configurations are stored in your user profile and apply across your IntelliJ environment. *(Note: Global agents are not supported at this level).*
 
-VS Code also reads custom prompts from its own `prompts/` directory — agents (`*.agent.md`), instructions (`*.instructions.md`), and prompts (`*.prompt.md`).
+| Configuration Type          | Path / Location                                                    |
+| --------------------------- | ------------------------------------------------------------------ |
+| **Global Instruction File** | `~/.config/github-copilot/intellij/global-copilot-instructions.md` |
+| **Instruction Files**       | `~/.config/github-copilot/intellij/*.instructions.md`              |
+| **MCP Configuration**       | `~/.config/github-copilot/intellij/mcp.json`                       |
 
-## Copilot CLI
+**Local (Workspace / Repository)**
+Configurations specific to the opened project in IntelliJ.
 
-Global config locations (not currently symlinked):
-- Agents: `~/.config/copilot/agents/`
-- Skills: `~/.copilot/skills/`
+| Configuration Type | Path / Location   |
+| ------------------ | ----------------- |
+| **Agents**         | `.github/agents/` |
+
+## 3. Copilot CLI
+
+**Global (User Profile)**
+Global configurations for the command-line interface. *(Note: The CLI currently does not support custom `.prompt.md` files).*
+
+| Configuration Type | Path / Location                                 |
+| ------------------ | ----------------------------------------------- |
+| **Agents**         | `~/.copilot/agents/`                            |
+| **Skills**         | `~/.agents/skills/` *(or `~/.copilot/skills/`)* |

@@ -4,7 +4,7 @@
 
 # Source Control & Git Workflow
 - **No Direct Git Commands**: NEVER execute Git commands (e.g., `git add`, `git commit`, `git push`) via terminal tools unless explicitly requested by the user.
-- **Automatic Commit Messages**: Upon successfully completing a feature or task implementation, ALWAYS generate a short, descriptive git commit message as the final part of your response. Use the Conventional Commits format (e.g., `feat: add user authentication`, `fix: resolve null pointer in validation`).
+- **Automatic Commit Messages**: Upon successfully completing a feature or task implementation, ALWAYS generate a short, descriptive git commit message as the final part of your response. Use the following format: e.g., `Add user authentication`, `Fix null pointer in validation`.
 
 # Created File Locations
 - **Markdown Output**: Any markdown file created by the agent MUST always be saved to the `docs/` directory.
