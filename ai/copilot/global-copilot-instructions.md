@@ -2,10 +2,6 @@
 - **Implementation**: Default to the simplest functional implementation (KISS/YAGNI). Introduce abstractions (SRP/DRY) only when a pattern repeats at least three times.
 - **Robustness**: Always implement structured logging for diagnostics and explicitly handle edge cases and errors.
 
-# Source Control & Git Workflow
-- **No Direct Git Commands**: NEVER execute Git commands (e.g., `git add`, `git commit`, `git push`) via terminal tools unless explicitly requested by the user.
-- **Automatic Commit Messages**: Upon successfully completing a feature or task implementation, ALWAYS generate a short, descriptive git commit message as the final part of your response. Use the following format: e.g., `Add user authentication`, `Fix null pointer in validation`.
-
 # Created File Locations
 - **Markdown Output**: Any markdown file created by the agent MUST always be saved to the `docs/` directory.
 
