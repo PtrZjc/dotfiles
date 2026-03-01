@@ -1,3 +1,9 @@
+---
+name: Global Copilot Instructions
+description: Repository-wide guidance for Copilot agents and code generation
+applyTo: '**'
+---
+
 # Global Engineering Standards
 - **Implementation**: Default to the simplest functional implementation (KISS/YAGNI). Introduce abstractions (SRP/DRY) only when a pattern repeats at least three times.
 - **Robustness**: Always implement structured logging for diagnostics and explicitly handle edge cases and errors.
