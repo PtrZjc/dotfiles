@@ -22,24 +22,15 @@ setopt IGNORE_EOF
 # other configuration
 export PATH="$HOME/.local/bin:$PATH"
 
-# Lazy-load Sdkman (call 'sdk-init' when needed)
-sdk-init() {
-  # Try Homebrew-installed sdkman first (macOS)
-  if command -v brew &>/dev/null && [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
-      export SDKMAN_DIR="$(brew --prefix sdkman-cli)/libexec"
-      source "${SDKMAN_DIR}/bin/sdkman-init.sh"
-  # Fall back to standard sdkman location (Linux)
-  elif [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
-      export SDKMAN_DIR="$HOME/.sdkman"
-      source "${SDKMAN_DIR}/bin/sdkman-init.sh"
-  fi
-}
-# Auto-initialize sdkman on first use of 'sdk' command
-sdk() {
-  unfunction sdk &>/dev/null
-  sdk-init
-  sdk "$@"
-}
+# Initialize SDKMAN directly (eager load) to ensure PATH is correctly set on startup
+if command -v brew &>/dev/null && [ -s "$(brew --prefix sdkman-cli)/libexec/bin/sdkman-init.sh" ]; then
+    export SDKMAN_DIR="$(brew --prefix sdkman-cli)/libexec"
+    source "${SDKMAN_DIR}/bin/sdkman-init.sh"
+# Fall back to standard sdkman location (Linux)
+elif [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
+    export SDKMAN_DIR="$HOME/.sdkman"
+    source "${SDKMAN_DIR}/bin/sdkman-init.sh"
+fi
 
 # enable atuin
 . "$HOME/.atuin/bin/env"
@@ -78,7 +69,6 @@ if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
   alias la='ls -a --color=never'
   alias grep='grep --color=never'
 
-  sdk-init
   return
 fi
 
@@ -158,16 +148,7 @@ source $ZSH/oh-my-zsh.sh
 
 zstyle ':completion:*' menu select
 
-# autoload -Uz bracketed-paste-magic
-# zle -N bracketed-paste bracketed-paste-magic
-
-# autoload -Uz url-quote-magic
-# zle -N self-insert url-quote-magic
-
-# to make psql work with libpq
-# export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
-
-#bash completion
+# bash completion
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 
 # below keybinding originally pastes "ls\n"
@@ -209,6 +190,7 @@ aws() {
     source $ZSH/plugins/aws/aws.plugin.zsh
     aws "$@"
 }
+
 # Edit command line with $EDITOR
 autoload -U edit-command-line
 zle -N edit-command-line

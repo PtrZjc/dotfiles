@@ -126,16 +126,31 @@ function gca() {
 function ga() {
     if [ "$#" -eq 0 ]; then
         git add .
+        echo "Added all files in the current directory."
+    elif [ -e "$1" ]; then
+        # Jeśli argument jest istniejącym plikiem lub katalogiem (np. "."), 
+        # przekaż go bezpośrednio do git add.
+        git add "$@"
+        echo "Added:"
+        printf "  %s\n" "$@"
     else
-        # Find untracked/modified files matching pattern (case-insensitive, fixed string)
-        local files=$(git ls-files --others --modified --exclude-standard | grep -F -i "$1")
-        if [[ -z "$files" ]]; then
+        # Fallback: Wyszukiwanie po wzorcu w zmodyfikowanych i nieśledzonych plikach
+        local files=()
+        
+        # Bezpieczne czytanie linia po linii z obsługą spacji w nazwach plików
+        while IFS= read -r file; do
+            [[ -n "$file" ]] && files+=("$file")
+        done < <(git ls-files --others --modified --exclude-standard | grep -F -i "$1")
+
+        if [[ ${#files[@]} -eq 0 ]]; then
             echo "No files matching '$1'"
             return 1
         fi
-        echo "$files" | xargs -I{} git add "{}"
+
+        # Przekazanie tablicy plików zachowuje integralność nazw ze spacjami
+        git add "${files[@]}"
         echo "Added:"
-        echo "$files"
+        printf "  %s\n" "${files[@]}"
     fi
 }
 
