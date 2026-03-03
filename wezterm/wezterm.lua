@@ -70,7 +70,7 @@ local function getAdjustPaneSizeConfig(direction)
     }
 end
 
--- Bash Shortcuts:  https://gist.github.com/tuxfight3r/60051ac67c5f0445efee 
+-- Bash Shortcuts:  https://gist.github.com/tuxfight3r/60051ac67c5f0445efee
 config.keys = {
     getSplitPaneConfig('Left'), getSplitPaneConfig('Up'),
     getSplitPaneConfig('Down'), getSplitPaneConfig('Right'),

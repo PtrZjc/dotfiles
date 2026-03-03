@@ -1,6 +1,6 @@
 ---
 name: Java Testing Standards
-description: Guidelines for writing, structuring, and running tests using AssertJ and JUnit 5.
+description: Guidelines for writing, structuring, and running tests using AssertJ, JUnit 5, and Spring Boot.
 applyTo: "src/test/java/**/*.java,**/*Test.java,**/*Tests.java"
 ---
 
@@ -18,6 +18,10 @@ applyTo: "src/test/java/**/*.java,**/*Test.java,**/*Tests.java"
 ## Parameterization & Data
 - **Parameterized Tests**: Use `@ParameterizedTest` where possible to reduce code duplication and test multiple scenarios efficiently.
 - **Data Sources**: Prefer `@CsvSource` over `@MethodSource` when possible for better readability and simpler test data management.
+
+## Spring Boot & State Management
+- **Avoid @DirtiesContext**: NEVER use `@DirtiesContext` in Spring Boot tests, as it severely degrades test suite performance by forcing the application context to reload.
+- **Explicit State Reset**: Instead of dirtying the context, explicitly clean up and manage state. Use `@BeforeEach` or `@AfterEach` (or `@BeforeAll` / `@AfterAll`) to manually reset database tables, clear caches, reset mocks (e.g., `Mockito.reset()`), or clear wiremock servers. 
 
 ## Test Execution (When using Chat/Agents)
 - **Running Tests**: When executing tests or verify your work, ALWAYS use the `--info` flag to prevent timeouts: `./gradlew test --info`.

@@ -107,16 +107,41 @@ function color() {
     fi
 }
 
-function goto() {
-    DEPTH=$1
-    if [[ -z "$DEPTH" ]]; then
-        DEPTH=99
-    fi
-    DESTINATION=$(fd -t d --max-depth "$DEPTH" | fzf)
-    if [ "$DESTINATION" = g"" ]; then
-        echo "Empty destination" && return 1
+goto () {
+    local DEPTH=99
+    # Always exclude the .git directory to keep the list clean
+    local FD_OPTIONS=(--exclude .git)
+
+    # Parse provided arguments
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -h|--hidden)
+                # Include hidden directories AND directories ignored by .gitignore.
+                # Regular (non-hidden) directories are always included by default!
+                FD_OPTIONS+=(--hidden)
+                shift
+                ;;
+            *)
+                # If the argument is a number, assign it to the DEPTH variable
+                if [[ "$1" =~ ^[0-9]+$ ]]; then
+                    DEPTH="$1"
+                fi
+                shift
+                ;;
+        esac
+    done
+
+    local DESTINATION
+    # Execute fd with the constructed options and pipe to fzf
+    DESTINATION=$(fd -t d "${FD_OPTIONS[@]}" --max-depth "$DEPTH" | fzf)
+
+    # Verify that a selection was made
+    if [[ -z "$DESTINATION" ]]; then
+        echo "Empty destination"
+        return 1
     else
-        cd "./$DESTINATION"
+        # Change to the selected directory
+        cd "$DESTINATION" || return 1
     fi
 }
 

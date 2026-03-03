@@ -13,9 +13,10 @@ applyTo: "**/*.java"
 
 ## Code Style & Conventions
 - **Immutability First**: Default to immutable objects and data structures. Never mutate state unless absolutely necessary.
+- **Avoid Raw Arrays**: Never use raw arrays (e.g., `String[]` or `int[]`). Instead, use standard typed Collections (e.g., `List<T>` or `Set<T>`) to ensure compatibility with the Stream API and to maintain immutability guarantees.
+- **Modern Collections**: Use `List.of()`, `Set.of()`, and `Map.of()` to create unmodifiable collections.
 - **Functional Style**: Prefer streams, collectors, and lambda expressions over traditional `for` or `while` loops.
 - **Restrictive Visibility**: Use the most restrictive access modifier possible (e.g., `private`, package-private).
-- **Modern Collections**: Use `List.of()`, `Set.of()`, and `Map.of()` to create unmodifiable collections.
 - **Optional Usage**: Use `Optional` strictly for return types that might be null. Never use `Optional` for method parameters or class fields.
 
 ## Lombok Usage

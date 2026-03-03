@@ -37,9 +37,12 @@ fi
 eval "$(atuin init zsh --disable-up-arrow)"
 
 ###################################
-### Intellij Agent Mode config (sterile, no colors, no prompts, low latency)
+### Agent Mode configs 
 ###################################
 
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
+
+# IntelliJ - sterile, no colors, no prompts, low latency
 if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
   plugins=(
     # git
@@ -132,12 +135,11 @@ DISABLE_UPDATE_PROMPT="true"
 # Add wisely, as too many plugins slow down shell startup.
 
 plugins=(
-	# git
 	zsh-fzf-history-search
 	zsh-autosuggestions
     fzf
     fzf-tab
-    F-Sy-H
+    F-Sy-H # Feature-rich Syntax Highlighting
     # docker  # Lazy-loaded below
     # kubectl # Lazy-loaded below
     # aws     # Lazy-loaded below
