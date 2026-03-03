@@ -20,5 +20,4 @@ applyTo: "**/*.java"
 
 ## Lombok Usage
 - Use Lombok annotations to reduce boilerplate.
-- For multiple annotations on a single line, organize them so that the shortest annotation is on the first line, followed by the longer ones on subsequent lines (Christmas Tree style).
 - Do not use `@Value` or `@Data` annotations; use `record` instead.
