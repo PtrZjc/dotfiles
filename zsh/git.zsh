@@ -59,45 +59,48 @@ gcl() {
 }
 
 og () {
-        origin=$(git remote -v | rg origin | head -1)
-        if [[ $origin == "fatal" ]]
+        local origin=$(git remote -v | rg origin | head -1)
+        if [[ -z "$origin" || "$origin" == *"fatal"* ]]
         then
                 echo "No origin found"
                 return
         fi
         
-        host=$(echo $origin | sd '.*@(.*):.*' '$1')
-        repository=$(echo $origin | sd '.*:(.*)\.git.*' '$1')
+        # Extract host and repository (supports both SSH and HTTPS formats)
+        local host=$(echo "$origin" | sd '.*(?:@|://)([^:/]+).*' '$1')
+        local repository=$(echo "$origin" | sd '.*(?:@|://)[^:/]+[:/](.+?)(?:\.git)?\s+\(fetch\).*' '$1')
         
-        # Get the path relative to the git root (e.g., "folder/subfolder/")
-        relative_path=$(git rev-parse --show-prefix)
-        
-        # Check if we are in the root folder (empty relative path)
-        if [[ -z "$relative_path" ]]
+        # Get current branch instead of hardcoding 'main'
+        local branch=$(git branch --show-current)
+        [[ -z "$branch" ]] && branch="main"
+
+        local relative_path=$(git rev-parse --show-prefix)
+        local url_suffix=""
+        local clean_path=""
+
+        if [[ -n "$relative_path" ]]
         then
-                # --- Root Folder Logic ---
-                if [[ $host == *"gitlab"* ]]
+                clean_path=$(echo "$relative_path" | sd '/$' '')
+        fi
+
+        if [[ "$host" == *"gitlab"* ]]
+        then
+                if [[ -z "$clean_path" ]]
                 then
                         url_suffix="/-/merge_requests"
                 else
-                        url_suffix=""
+                        url_suffix="/-/tree/${branch}/${clean_path}"
                 fi
         else
-                # --- Deep Folder Logic ---
-                # Remove the trailing slash provided by rev-parse
-                clean_path=$(echo $relative_path | sd '/$' '')
-                
-                if [[ $host == *"gitlab"* ]]
+                if [[ -n "$clean_path" ]]
                 then
-                        # GitLab structure: /-/tree/branch/folder
-                        url_suffix="/-/tree/main/${clean_path}"
+                        url_suffix="/tree/${branch}/${clean_path}"
                 else
-                        # GitHub/Generic structure: /tree/branch/folder
-                        url_suffix="/tree/main/${clean_path}"
+                        url_suffix="/tree/${branch}"
                 fi
         fi
 
-        open_url "https://$host/${repository}${url_suffix}"
+        open_url "https://${host}/${repository}${url_suffix}"
 }
 
 alias ogh=og
@@ -117,6 +120,44 @@ gc() {
     else
         git commit -m "LDSI-$jira_number $*"
     fi
+}
+
+gwt() {
+        local input="$1"
+        if [[ -z "$input" ]]
+        then
+                echo "Usage: gwt <branch-name-or-ticket-number>"
+                return 1
+        fi
+
+        # Apply gcb logic to determine the final branch name
+        local branch="$input"
+        if [[ "$input" =~ ^[0-9] ]]
+        then
+                branch="LDSI-${input}"
+        fi
+
+        local toplevel=$(git rev-parse --show-toplevel 2>/dev/null)
+        if [[ -z "$toplevel" ]]
+        then
+                echo "Not a git repository"
+                return 1
+        fi
+
+        # Extract base directory name and strip any existing worktree suffix
+        local base_name=$(basename "$toplevel" | sd -- '-wt-.*' '')
+        local parent_dir=$(dirname "$toplevel")
+        local wt_path="${parent_dir}/${base_name}-wt-${branch}"
+
+        # Create worktree using existing branch or create a new one
+        if git rev-parse --verify --quiet "refs/heads/$branch" >/dev/null
+        then
+                git worktree add "$wt_path" "$branch"
+        else
+                git worktree add -b "$branch" "$wt_path"
+        fi
+
+        cd "$wt_path" || return 1
 }
 
 function gca() {
