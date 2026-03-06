@@ -35,7 +35,6 @@ alias cls='clear && printf "\e[3J"'
 alias vi='nvim'
 alias vim='nvim'
 alias code='code .'
-alias cursor='cursor .'
 alias k="kubectl"
 alias less="moor"
 alias jq="jaq"

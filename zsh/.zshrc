@@ -1,18 +1,11 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ "$TERMINAL_EMULATOR" != "JetBrains-JediTerm" ]]; then
-  # Disable instant prompt for JetBrains IDE terminal to avoid issues with agent mode
-  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-  fi
-
-  ZSH_THEME="powerlevel10k/powerlevel10k"
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-###################################
-### common config for agent mode and normal mode
-###################################
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -35,49 +28,6 @@ fi
 # enable atuin
 . "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh --disable-up-arrow)"
-
-###################################
-### Agent Mode configs 
-###################################
-
-[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
-
-# IntelliJ - sterile, no colors, no prompts, low latency
-if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
-  plugins=(
-    # git
-  )
-
-  source $ZSH/oh-my-zsh.sh
-  # 1. Minimalist Prompt for easy parsing
-  PROMPT='[%~] $ '
-  RPROMPT=''
-  
-  # 2. Terminal Capabilities (Disable colors and rich formatting)
-  export TERM=xterm
-  export CLICOLOR=0
-  unset LS_COLORS
-
-  # 3. Disable ZSH Interactive Features (prevent blocking/asking)
-  unsetopt CORRECT
-  unsetopt CORRECT_ALL 
-  unsetopt SHARE_HISTORY 
-  unsetopt PROMPT_SP 
-  unsetopt FLOW_CONTROL 
-  unsetopt BEEP
-
-  # 4. Safe Alias Overrides (Force coreutils, disable lsd/icons)
-  alias ls='ls --color=never'
-  alias ll='ls -l --color=never'
-  alias la='ls -a --color=never'
-  alias grep='grep --color=never'
-
-  return
-fi
-
-###################################
-### normal mode config
-###################################
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -219,6 +169,7 @@ copy_buffer_to_clipboard() {
     
     zle -M "Copied to system clipboard!"
 }
+
 zle -N copy_buffer_to_clipboard
 bindkey '^X^X' copy_buffer_to_clipboard
 
