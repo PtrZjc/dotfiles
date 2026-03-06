@@ -1,0 +1,31 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/p.zajac/workspace"
+      ],
+      "env": {}
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
+    },
+    "ai-coding-handbook": {
+      "url": "https://ai-coding-handbook-mcp.engineering-nonprod.sportradar.online/mcp",
+      "type": "https"
+    },
+    "sportradar-soccer": {
+      "type": "http",
+      "url": "https://developer.sportradar.com/mcp",
+      "headers": {
+        "x-api-key": "vaTAxnNrlO6NGcrgUZygnk65nJ71A09lxcqmgksT"
+      }
+    }
+  }
+}
