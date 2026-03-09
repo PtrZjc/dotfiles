@@ -169,3 +169,27 @@ function k-set-ns() {
 
    kubectl config set-context --current --namespace="$namespace"
 }
+
+# Converts a Confluence page URL to markdown on stdout.
+# Requires: http (httpie), jq, pandoc, and JIRA_API_TOKEN in the environment.
+# Example: confluence-to-markdown "https://sportradar.atlassian.net/wiki/spaces/IGP/pages/238256208/..."
+function confluence-to-markdown() {
+    local url="${1:?Usage: confluence-to-markdown <confluence-page-url>}"
+    local page_id
+
+    if [[ -z "$JIRA_API_TOKEN" ]]; then
+        echo "Error: JIRA_API_TOKEN is not set" >&2
+        return 1
+    fi
+
+    page_id=$(echo "$url" | rg --pcre2 -o '(?<=pages/)\d+')
+    if [[ -z "$page_id" ]]; then
+        echo "Error: Could not extract page ID from URL (expected /pages/<id>/...)" >&2
+        return 1
+    fi
+
+    http --auth "p.zajac@sportradar.com:$JIRA_API_TOKEN" GET \
+        "https://sportradar.atlassian.net/wiki/api/v2/pages/${page_id}?body-format=storage" \
+        | jq -r '.body.storage.value' \
+        | pandoc -f html -t markdown
+}
