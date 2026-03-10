@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
+    },
+    "ai-coding-handbook": {
+      "url": "https://ai-coding-handbook-mcp.engineering-nonprod.sportradar.online/mcp",
+      "type": "https"
+    }
+  }
+}
