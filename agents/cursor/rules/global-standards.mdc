@@ -1,0 +1,17 @@
+---
+description: Global engineering standards, file locations, and tool usage
+alwaysApply: true
+---
+
+# Global Engineering Standards
+
+## Implementation
+- Default to the simplest functional implementation (KISS/YAGNI).
+- Introduce abstractions (SRP/DRY) only when a pattern repeats at least three times.
+
+## Robustness
+- Always implement structured logging for diagnostics.
+- Explicitly handle edge cases and errors.
+
+## Created File Locations
+- Any markdown file created by the agent MUST be saved to the `docs/` directory.

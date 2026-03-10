@@ -1,0 +1,30 @@
+---
+description: Java testing with AssertJ, JUnit 5, and Spring Boot
+globs: "**/src/test/**/*.java,**/*Test.java,**/*Tests.java"
+alwaysApply: false
+---
+
+# Java Testing Standards
+
+## Framework & Assertions
+- **AssertJ only**: Use AssertJ (`assertThat()`) for all assertions. Do not use JUnit `assertEquals`, `assertTrue`, etc.
+- **DTOs/simple types**: Use a single assertion: `assertThat(result).usingRecursiveComparison().isEqualTo(expected)` for DTOs, value objects, maps, and unordered collections.
+
+## Structure & Naming
+- **Names**: Short, descriptive, `shouldXxxx` pattern (e.g. `shouldReturnEmptyWhenListIsNull`).
+- **Structure**: Use `// given`, `// when`, `// then`; omit `// given` if no setup.
+- Prioritize readability and clear intent over complex setup.
+
+## Parameterized Tests
+- Use `@ParameterizedTest` to reduce duplication and cover multiple scenarios.
+- Prefer `@CsvSource` over `@MethodSource` for readability.
+
+## Spring Boot & State
+- **Never use `@DirtiesContext`**: It reloads the context and degrades performance.
+- Reset state explicitly: use `@BeforeEach`/`@AfterEach` (or `@BeforeAll`/`@AfterAll`) to reset DB, clear caches, `Mockito.reset()`, or wiremock.
+
+## Running Tests (Chat/Agents)
+- Use `--info` to avoid timeouts: `./gradlew test --info`.
+- Run the specific test class or method, not the full suite.
+- Do not add a separate compilation step; run tests directly.
+- Do not pipe output through `tail`; read full output.

@@ -1,0 +1,23 @@
+---
+description: Java coding standards, immutability, records, and Lombok
+globs: "**/*.java"
+alwaysApply: false
+---
+# Java Development Guidelines
+
+## Data Structures: Records vs. Classes
+- **Records for data**: Use Java `record` as the default for immutable data carriers (DTOs, value objects, API models).
+- **Classes for behavior**: Use `class` for components with business logic, services, and stateful behavior.
+- Use Lombok `@Builder` when construction is complex; use `@RequiredArgsConstructor` for DI on classes with behavior.
+
+## Code Style & Conventions
+- **Immutability first**: Default to immutable objects; never mutate state unless necessary.
+- **No raw arrays**: Use typed collections (`List<T>`, `Set<T>`) instead of `String[]` or `int[]` for Stream API and immutability.
+- Use `List.of()`, `Set.of()`, and `Map.of()` for unmodifiable collections.
+- Prefer streams, collectors, and lambdas over `for`/`while` loops.
+- Use the most restrictive access modifier (e.g. `private`, package-private).
+- Use `Optional` only for return types that may be null; never for parameters or fields.
+
+## Lombok
+- Use Lombok to reduce boilerplate.
+- Do not use `@Value` or `@Data`; use `record` instead.
