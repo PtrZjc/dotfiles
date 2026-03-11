@@ -5,14 +5,15 @@ export CLIP="/tmp/clip"
 function clip_copy() {
     local content
     content=$(cat)
-    echo -n "$content"
-    echo -n "$content" >"$CLIP"
     if $IS_MACOS; then
         echo -n "$content" | pbcopy
+        echo -n "$content" | bat
     elif command -v xclip &>/dev/null; then
         echo -n "$content" | xclip -selection clipboard
+        echo -n "$content" | cat
     elif command -v wl-copy &>/dev/null; then
         echo -n "$content" | wl-copy
+        echo -n "$content" | cat
     fi
 }
 

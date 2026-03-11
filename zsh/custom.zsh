@@ -69,6 +69,7 @@ fi
 # open files based on extension
 alias -s sh='sh'
 alias -s properties='$EDITOR'
+alias -s py='python3'
 
 unalias l
 function l() {
