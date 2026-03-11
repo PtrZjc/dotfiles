@@ -1,62 +1,102 @@
+# Shell & Core Environment
 brew "zsh" # Shell
+brew "zoxide" # Smarter cd command (modern z)
 
-# Shell Enhancements
+# Shell Enhancements (Modern Replacements)
 brew "fzf" # Fuzzy Finder
 brew "tldr" # Simplified and community-driven man pages
 brew "sd" # Modern sed replacement
 brew "fd" # Modern find replacement
 brew "ripgrep" # Modern grep replacement
 brew "eza" # Modern ls replacement
+brew "bat" # Modern cat replacement
+brew "dust" # Modern du replacement
+brew "procs" # Modern ps replacement
 brew "git-delta" # Modern file and git diff
+brew "moor" # Modern pager (less replacement)
 
-# Utilities
+# Editors & Core Utilities
 brew "neovim" # Text Editor
 brew "translate-shell" # Command-line translator
 
-# Development Tools
-brew "shellcheck" # Shell Script Analysis Tool
-brew "gh" # GitHub CLI
-brew "libpq" # PostgreSQL Library
-brew "sdkman-cli" # SDK Management
-brew "pyenv" # Python Version Management
-brew "nvm" # Multiple node version manager, read prereq https://formulae.brew.sh/formula/nvm
-brew "lusingander/tap/ddv" # TUI for DynamoDb
+# Infrastructure & Containers
+brew "awscli" # AWS command-line interface
+brew "cfn-lint" # CloudFormation Linter
+brew "docker" # Container CLI
+brew "docker-compose" # Multi-container orchestration
+brew "podman" # Daemonless container engine
+brew "helm" # Kubernetes package manager
+brew "kubernetes-cli" # Kubernetes command-line interface (kubectl)
+brew "k9s" # Kubernetes CLI UI
+brew "dopplerhq/cli/doppler" # SecretOps platform CLI
 
-# Data Processing
+# Development Tools & Languages
+brew "gh" # GitHub CLI
+brew "glab" # GitLab CLI
+brew "jira-cli" # Jira command-line interface
+brew "git-lfs" # Git Large File Storage
+brew "pyenv" # Python Version Management
+brew "python@3.11" # Python 3.11
+brew "pipx" # Execute binaries from Python packages
+brew "nvm" # Multiple node version manager, read prereq https://formulae.brew.sh/formula/nvm
+brew "pnpm" # Fast, disk space efficient package manager
+brew "yarn" # Node package manager
+brew "rustup" # Rust toolchain installer
+brew "maven" # Java build tool
+brew "sdkman/tap/sdkman-cli" # SDK Management
+brew "shellcheck" # Shell Script Analysis Tool
+brew "shfmt" # Shell parser and formatter
+brew "vscode-langservers-extracted" # Language servers for HTML, CSS, JSON, ESLint
+brew "gromgit/brewtils/taproom" # Homebrew tap management
+brew "repomix" # Pack codebase into a single AI-friendly file
+
+# Data Processing & Databases
 brew "jq" # JSON Processor
+brew "jaq" # jq clone focused on correctness, speed, and simplicity
+brew "jnv" # Interactive JSON filter using jq
+brew "jless" # Interactive JSON pager
+brew "gron" # Make JSON greppable
 brew "python-yq" # YAML Processor (also supports XML as xq)
 brew "yj" # YAML and JSON Converter
-brew "jc" # unix tool output to json converter
-brew "jnv" # Interactive JSON filter using jq
-brew "jless" # Interactive JSON filter using jq
-brew "moor" # Modern pager (less replacement)
-brew "visidata" # Data Explorer
+brew "jc" # Unix tool output to JSON converter
+brew "saulpw/vd/visidata" # Data Explorer
 brew "miller" # Text Data Processing Tool
 brew "harelba/q/q" # SQL-like queries on CSVs
-brew "youplot" # easy CLI plotter
+brew "libpq" # PostgreSQL Library
+brew "mariadb" # Relational database
+brew "kafka" # Distributed streaming platform
+brew "kafkactl" # Command-line interface for Apache Kafka
+brew "kcat" # Generic command-line non-JVM Kafka producer and consumer
+brew "lusingander/tap/ddv" # TUI for DynamoDb
+brew "youplot" # Easy CLI plotter
 
-# Image Processing
-brew "tesseract" # OCR Reader
-brew "tesseract-lang" # OCR Language Packs
-brew "pngpaste" # Clipboard Image Saving
-brew "thezoraiz/ascii-image-converter/ascii-image-converter" # ASCII Image Conversion
-brew "imagemagick" # Image Processing Tool
+# System, Performance Monitoring & Utilities
+brew "btop" # System Monitoring
+brew "ncdu" # NCurses disk usage
+brew "duti" # Select default apps for document types and URL schemes on macOS
+brew "countdown" # Terminal countdown timer
+brew "qt" # Cross-platform application and UI framework
 
-# File Managament
+# File Management & Archiving
 brew "lf" # TUI File Manager
 brew "dbxcli" # Dropbox CLI
 brew "qrcp" # File Transfer via QR Codes
-brew "qpdf" # PDF Processing Tool
 brew "rnr" # File Renaming Tool
+brew "p7zip" # 7-Zip file archiver
+brew "unar" # Command-line unarchiver
 
-# System and Performance Monitoring
-brew "btop" # System Monitoring
-
-# Miscellaneous Utilities
+# Media, Image & Document Processing
+brew "imagemagick" # Image Processing Tool
+brew "pngpaste" # Clipboard Image Saving
+brew "tesseract" # OCR Reader
+brew "tesseract-lang" # OCR Language Packs
+brew "thezoraiz/ascii-image-converter/ascii-image-converter" # ASCII Image Conversion
 brew "qrencode" # QR Code Generation
-brew "utimer" # Command-line Timer
-brew "pandoc" # document converter (e.g. docx to pdf)
-brew "basictex" # provides pdflatex engine to above
+brew "ffmpeg" # Play, record, convert, and stream audio and video
+brew "yt-dlp" # Feature-rich command-line audio/video downloader
+brew "qpdf" # PDF Processing Tool
+brew "pandoc" # Document converter (e.g. docx to pdf)
+brew "basictex" # Provides pdflatex engine to above
 
 # Casks
 cask "wezterm"
@@ -65,3 +105,6 @@ cask "clipy"
 cask "keepassxc"
 cask "visual-studio-code"
 cask "lunar"
+
+# Other packages to install manually
+# https://atuin.sh/ # shell history manager
