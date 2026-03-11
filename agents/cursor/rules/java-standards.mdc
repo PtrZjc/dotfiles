@@ -12,9 +12,17 @@ alwaysApply: false
 
 ## Code Style & Conventions
 - **Immutability first**: Default to immutable objects; never mutate state unless necessary.
-- **No raw arrays**: Use typed collections (`List<T>`, `Set<T>`) instead of `String[]` or `int[]` for Stream API and immutability.
+- **Modularize proactively**: Break down logic into small, focused, private helper methods immediately during initial code generation. Do not write long, monolithic methods.
+- **Flat code structure (No deep nesting)**: Absolutely NO multiply nested `if` or `for` blocks. You must use early returns (guard clauses) and method extraction to keep code as flat as possible.
+- **Streams > Loops**: The Java Stream API is mandatory for collection processing. Traditional `for`, `for-each`, and `while` loops are a STRICT LAST RESORT. Never use loops for simple filtering, mapping, or reducing.
+```java
+// PREFERRED:
+var activeUsers = users.stream()
+    .filter(User::isActive)
+    .toList();
+```
+- **No raw arrays**: Use typed collections (`List<T>`, `Set<T>`) instead of `String[]` or `int[]` for Stream API compatibility and immutability.
 - Use `List.of()`, `Set.of()`, and `Map.of()` for unmodifiable collections.
-- Prefer streams, collectors, and lambdas over `for`/`while` loops.
 - Use the most restrictive access modifier (e.g. `private`, package-private).
 - Use `Optional` only for return types that may be null; never for parameters or fields.
 
