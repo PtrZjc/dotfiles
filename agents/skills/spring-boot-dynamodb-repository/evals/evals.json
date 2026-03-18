@@ -1,0 +1,10 @@
+[
+  {
+    "prompt": "Create a Spring Boot DynamoDB repository implementation for a User entity. The user has an ID and a nested Address record. Generate the Entity, the Repository, the Custom JSON converter for the Address, and the Component and Unit tests. Use the provided practices.",
+    "expected_output": "Outputs Java code containing a UserEntity mapped with StaticTableSchema, a custom AttributeConverter for the Address record, an operation wrapper, a BaseDynamoComponentTest setup, and Unit tests that only test exception translation."
+  },
+  {
+    "prompt": "Review my DynamoDB component test. It uses Mockito to mock the DynamoDbTable.",
+    "expected_output": "The agent should identify that mocking `DynamoDbTable` violates the component testing guidelines. It should instruct the user to move the mock tests to the unit test package (`src/test`) and update the component test to use `@ConfigureDynamoDbServer` for real database verification."
+  }
+]

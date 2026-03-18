@@ -1,8 +1,9 @@
 ---
-description: Java coding standards, immutability, records, and Lombok
+description: 
 globs: "**/*.java"
 alwaysApply: false
 ---
+
 # Java Development Guidelines
 
 ## Data Structures: Records vs. Classes
@@ -29,3 +30,6 @@ var activeUsers = users.stream()
 ## Lombok
 - Use Lombok to reduce boilerplate.
 - Do not use `@Value` or `@Data`; use `record` instead.
+
+## Code Formatting 
+- Never reformat or change the indentation of code outside of the exact logical changes requested. Do not organize imports unless explicitly asked.

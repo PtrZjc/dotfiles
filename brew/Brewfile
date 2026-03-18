@@ -36,7 +36,6 @@ brew "glab" # GitLab CLI
 brew "jira-cli" # Jira command-line interface
 brew "git-lfs" # Git Large File Storage
 brew "pyenv" # Python Version Management
-brew "python@3.11" # Python 3.11
 brew "pipx" # Execute binaries from Python packages
 brew "nvm" # Multiple node version manager, read prereq https://formulae.brew.sh/formula/nvm
 brew "pnpm" # Fast, disk space efficient package manager
@@ -73,7 +72,6 @@ brew "youplot" # Easy CLI plotter
 # System, Performance Monitoring & Utilities
 brew "btop" # System Monitoring
 brew "ncdu" # NCurses disk usage
-brew "duti" # Select default apps for document types and URL schemes on macOS
 brew "countdown" # Terminal countdown timer
 brew "qt" # Cross-platform application and UI framework
 
@@ -92,7 +90,7 @@ brew "tesseract" # OCR Reader
 brew "tesseract-lang" # OCR Language Packs
 brew "thezoraiz/ascii-image-converter/ascii-image-converter" # ASCII Image Conversion
 brew "qrencode" # QR Code Generation
-brew "ffmpeg" # Play, record, convert, and stream audio and video
+brew "homebrew-ffmpeg/ffmpeg/ffmpeg" # Play, record, convert, and stream audio and video (/w additional libs)
 brew "yt-dlp" # Feature-rich command-line audio/video downloader
 brew "qpdf" # PDF Processing Tool
 brew "pandoc" # Document converter (e.g. docx to pdf)

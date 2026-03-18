@@ -211,21 +211,21 @@ function fdf() {
         -x sh -c 'echo "<!-- FILE: $1 -->\n\`\`\`"; cat "$1"; echo "\`\`\`\n"' _ {} | clip_copy
 }
 
-pyv() {
-    local venv_dir=".venv"
-
-    if [[ ! -d "$venv_dir" ]]; then
-        echo "[*] Brak $venv_dir. Tworzenie nowego środowiska..."
-        python3 -m venv "$venv_dir"
-    fi
-
-    if [[ -f "$venv_dir/bin/activate" ]]; then
-        source "$venv_dir/bin/activate"
-        echo "[+] Środowisko aktywowane."
-    else
-        echo "[!] Błąd: Nie udało się zlokalizować skryptu aktywacyjnego."
-        return 1
-    fi
+pyv () {
+        local venv_dir=".venv"
+        if [[ ! -d "$venv_dir" ]]
+        then
+                echo "[*] Missing $venv_dir. Creating new environment..."
+                python3 -m venv "$venv_dir"
+        fi
+        if [[ -f "$venv_dir/bin/activate" ]]
+        then
+                source "$venv_dir/bin/activate"
+                echo "[+] Environment activated."
+        else
+                echo "[!] Error: Failed to locate the activation script."
+                return 1
+        fi
 }
 
 yt-get-channel-id() {

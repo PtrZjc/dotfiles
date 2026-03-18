@@ -5,7 +5,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-SOURCE_DIR="$SCRIPT_DIR/copilot"
+SOURCE_DIR="$SCRIPT_DIR"
 
 # Target base directories
 VSCODE_USER="$HOME/Library/Application Support/Code/User"
@@ -60,3 +60,5 @@ link_glob "$SOURCE_DIR/instructions/*.instructions.md"    "$INTELLIJ_DIR"
 
 # ── Copilot CLI (global) ─────────────────────────────────────
 link_glob "$SOURCE_DIR/agents/*.agent.md"                 "$HOME/.copilot/agents"
+
+echo "done"

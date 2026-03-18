@@ -1,0 +1,5 @@
+---
+description: Enforce Python virtual environment setup using pyv
+globs: "*.py"
+---
+Always execute the `pyv` shell function to initialize and activate the virtual environment before running Python commands, executing scripts, or managing dependencies. Rely strictly on the `pyv` wrapper present in the shell environment.

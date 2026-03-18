@@ -3,15 +3,12 @@ description: Global engineering standards, file locations, and tool usage
 alwaysApply: true
 ---
 
-# Global Engineering Standards
+- **File Location:** Save all newly created markdown files to the `docs/` directory.
 
-## Implementation
-- Default to the simplest functional implementation (KISS/YAGNI).
-- Introduce abstractions (SRP/DRY) only when a pattern repeats at least three times.
+## Documentation Research (No Guessing)
+When unsure about APIs, configurations, or best practices, delegate to the **`docs-researcher` subagent** (via plugin). 
 
-## Robustness
-- Always implement structured logging for diagnostics.
-- Explicitly handle edge cases and errors.
-
-## Created File Locations
-- Any markdown file created by the agent MUST be saved to the `docs/` directory.
+**Workflow:**
+- Do not guess or hallucinate code.
+- Pass the target library, version (if specified), and your specific question directly to `docs-researcher`.
+- Use the subagent's concise, code-backed response to continue your task without cluttering the main context window.

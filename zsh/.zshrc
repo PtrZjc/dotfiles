@@ -25,10 +25,6 @@ elif [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
     source "${SDKMAN_DIR}/bin/sdkman-init.sh"
 fi
 
-# enable atuin
-. "$HOME/.atuin/bin/env"
-eval "$(atuin init zsh --disable-up-arrow)"
-
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
@@ -85,7 +81,6 @@ DISABLE_UPDATE_PROMPT="true"
 # Add wisely, as too many plugins slow down shell startup.
 
 plugins=(
-	zsh-fzf-history-search
 	zsh-autosuggestions
     fzf
     fzf-tab
@@ -102,6 +97,10 @@ zstyle ':completion:*' menu select
 
 # bash completion
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+
+# enable atuin
+. "$HOME/.atuin/bin/env"
+eval "$(atuin init zsh --disable-up-arrow)"
 
 # below keybinding originally pastes "ls\n"
 bindkey "^[l" down-case-word
