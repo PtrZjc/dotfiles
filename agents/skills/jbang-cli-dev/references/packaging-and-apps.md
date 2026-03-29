@@ -1,27 +1,39 @@
-# App Installation and Exporting
+# Packaging and global commands
 
-JBang provides robust ways to package and distribute scripts.
+## `jbang app install`
 
-## Installing as a System Command (App)
+Installs a script as a command on `PATH` (JBang manages launchers).
 
-The `jbang app` system allows installing scripts as system commands, making them available anywhere on the host system.
+- `jbang app install script.java`
+- `jbang app install --name mytool script.java`
+- `jbang app install --force --name mytool script.java` — replace existing
+- `jbang app list` / `jbang app uninstall mytool`
 
-* **Basic install**: `jbang app install myscript.java`
-* **Install with custom name**: `jbang app install --name mytool myscript.java`
-* **Update/Force install**: `jbang app install --force --name mytool myscript.java`
-* **Uninstall**: `jbang app uninstall mytool`
-* **List installed apps**: `jbang app list`
+Optional: `//GAV` in the script helps metadata when exporting or publishing.
 
-## Exporting Scripts
+## `jbang export`
 
-Use `jbang export` to convert a JBang script into a portable format or full project.
+Produces distributable artifacts or projects (each subcommand has its own flags; use `jbang export <subcommand> -h`).
 
-* **Fat JAR (Includes all dependencies)**:
-  `jbang export fatjar myscript.java`
-* **Portable JAR (Dependencies placed in a relative `lib/` folder)**:
-  `jbang export portable myscript.java`
-* **Native Executable (Requires GraalVM)**:
-  `jbang export native myscript.java`
-* **Export to Maven/Gradle Project**:
-  `jbang export maven --group org.acme --artifact mytool --version 1.0.0-SNAPSHOT myscript.java`
-  `jbang export gradle --group org.acme --artifact mytool --version 1.0.0-SNAPSHOT myscript.java`
+| Subcommand | Purpose |
+|------------|---------|
+| `fatjar` | Single executable JAR with dependencies inside |
+| `portable` | JAR plus `lib/` for relative classpath |
+| `local` | JAR with machine-local classpath layout |
+| `native` | GraalVM `native-image` binary |
+| `jlink` | Custom runtime image |
+| `maven` | Maven project (`-g` / `--group`, `-a` / `--artifact`, `-v` / `--version`, `-O` output) |
+| `gradle` | Gradle project (same style of coordinates) |
+| `mavenrepo` | Layout suitable for publishing as a Maven repo |
+
+Examples:
+
+```bash
+jbang export fatjar myapp.java
+jbang export portable myapp.java
+jbang export native myapp.java
+jbang export maven -g org.acme -a mytool -v 1.0.0-SNAPSHOT myapp.java
+jbang export gradle -g org.acme -a mytool -v 1.0.0-SNAPSHOT myapp.java
+```
+
+Native image requires a GraalVM-capable JDK and correct `//NATIVE_OPTIONS` when reflection/resources need registration.

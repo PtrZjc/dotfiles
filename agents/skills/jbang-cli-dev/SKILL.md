@@ -1,33 +1,44 @@
 ---
 name: jbang-cli-dev
 description: >-
-  Single-file Java scripting and Picocli CLIs with JBang—create, edit, run, debug,
-  package, and IDE workflows. Use when the user works with JBang, Picocli,
-  //DEPS directives, jbang app install, jbang export, jbang edit, or debugging
-  JBang scripts.
+  Covers authoring and running single-file Java (and Kotlin/Groovy) scripts with JBang: //DEPS,
+  //JAVA, Picocli CLIs, jbang init and templates, jbang edit (IDE projects), jbang run/build,
+  jbang export (fatjar, portable, native, maven, gradle, jlink), jbang app install,
+  remote URLs, trust, aliases/catalogs, and debugging. Use when the user mentions JBang,
+  .java scripts with directives, Picocli, jbang edit, export, app install, catalogs,
+  or running Java from a URL or gist.
 ---
 
-# JBang & Picocli Development
+# JBang and Picocli development
 
-JBang enables lightweight, quick scripting using modern Java and popular libraries with zero project setup overhead. This skill provides instructions on authoring, managing, and packaging JBang scripts, with a primary focus on building CLIs using the Picocli library.
+JBang runs and builds Java (and other JVM languages) from minimal or single-file sources without a permanent Maven/Gradle project. This skill focuses on scripts and small CLIs, especially with Picocli.
 
-## Progressive Disclosure Reference
+## When to read which reference
 
-Read the following reference files based on the specific task the user is trying to accomplish:
+| Task | Open |
+|------|------|
+| Dependencies, repos, Java version, compile/runtime/native options, `//SOURCES` / `//FILES`, `//GAV`, `//MAIN` | [references/directives.md](references/directives.md) |
+| New Picocli CLI shape, `main`, exit codes | [references/picocli-template.md](references/picocli-template.md) |
+| `jbang init`, templates, `deps@jbangdev`, `jbang build` / `jbang info` | [references/scaffolding-and-discovery.md](references/scaffolding-and-discovery.md) |
+| `jbang app`, `jbang export` subcommands | [references/packaging-and-apps.md](references/packaging-and-apps.md) |
+| `jbang edit`, sandbox, debugging, `JBANG_EDITOR` | [references/ide-and-debugging.md](references/ide-and-debugging.md) |
+| HTTPS/GitHub scripts, `jbang trust`, aliases like `script@repo` | [references/remote-trust-and-catalogs.md](references/remote-trust-and-catalogs.md) |
 
-* **Read `references/directives.md`** when the user needs to add dependencies, specify Java versions, configure JVM options, or add custom repositories.
-* **Read `references/picocli-template.md`** when generating a new script, or when you need the structural boilerplate for a Picocli command-line app.
-* **Read `references/packaging-and-apps.md`** when the user wants to install the script as a system command (`jbang app install`) or export it as a binary/jar (`jbang export`).
-* **Read `references/ide-and-debugging.md`** when the user asks about editing the script in an IDE (VS Code, IntelliJ, Eclipse) or attaching a debugger.
+## Quick commands
+
+- Run: `jbang Script.java [args]` (default command is `run`).
+- Override JDK for one run: `jbang -j 21 Script.java`.
+- Extra deps on CLI: `jbang --deps com.example:lib:1.0 Script.java` (comma-separated coordinates).
 
 ## Gotchas
 
-* **No spaces in `//DEPS`**: The dependency directive must be placed exactly at the start of the line. There must be NO space between `//` and `DEPS`.
-* **Shebang compatibility**: Always use `///usr/bin/env jbang "$0" "$@" ; exit $?` as the first line. Do NOT use the standard bash `#!` because standard Java compilers and IDEs will report a syntax error.
-* **Class naming conventions**: The main class name should match the filename (e.g., `myscript.java` -> `class myscript` or `class MyScript`). While standard Java uses CamelCase, JBang scripts often use lowercase class names so the resulting CLI command matches standard lowercase Unix tool conventions.
-* **Package declarations**: Single-file CLIs typically do not use `package` declarations. Avoid them unless building a complex multi-file application.
-* **Interactive Mode (JShell) Limitation**: JShell cannot access classes in the default package. If the user intends to use interactive mode (`jbang --interactive`), the script *must* include a `package` statement.
+- **Directives**: Must start at the beginning of a line with `//` and sit in the first comment block before code. **No space** between `//` and the directive name (e.g. `//DEPS`, not `// DEPS`).
+- **Shebang**: For executable scripts use `///usr/bin/env jbang "$0" "$@" ; exit $?` on line 1. A normal `#!` breaks Java parsing in many tools.
+- **Class name and file**: Prefer the public/top-level class name to match the file stem (e.g. `Hello.java` and `class Hello`). Lowercase class names are common when the file is also the installed command name.
+- **Default package**: Omit `package` for typical single-file scripts. **Exception**: `jbang --interactive` uses JShell, which cannot see default-package classes—add a `package` if using interactive mode.
+- **`//REPOS`**: If any custom repo line is present, **include Maven Central explicitly** (e.g. `central` or `https://repo1.maven.org/maven2/`). Built-in shortcuts include `central`, `google`, `jitpack`.
+- **Debug JBang itself** vs script: script debugging uses `jbang --debug ...`. For the JBang process, use `JBANG_JAVA_OPTIONS` (see IDE reference).
 
-## Out of Scope
+## Out of scope
 
-Full multi-module backends (e.g. Spring Boot with JPA and PostgreSQL) are not single-file JBang/Picocli scripts. Advise accordingly or fall back to general Java knowledge without presenting this skill as the primary guide.
+Full multi-module backends (e.g. Spring Boot with JPA across many modules) are not what this skill optimizes for. Prefer a normal Gradle/Maven app; JBang can still bootstrap prototypes via `jbang init` or exports.

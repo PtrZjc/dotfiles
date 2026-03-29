@@ -1,32 +1,85 @@
-# JBang Directives (Magic Comments)
+# JBang directives (header comments)
 
-JBang uses special comments at the top of the `.java` file to configure the runtime, dependencies, and compiler.
+JBang reads special `//` comments at the **start of the file** (first comment block, before code). Directives are **case-sensitive**. Many can repeat where noted.
 
-## Dependencies (`//DEPS`)
+## `//DEPS`
 
-Used to declare Maven coordinates. JBang will automatically download them.
+Maven coordinates (Gradle-style locators) or GitHub/GitLab/Bitbucket links (resolved via JitPack).
 
-* Standard: `//DEPS info.picocli:picocli:4.7.0`
-* With Classifier: `//DEPS io.netty:netty-transport-native-kqueue:4.1.107.Final:osx-aarch_64`
-* Fatjar (Maven 4+ experimental feature): `//DEPS eu.maveniverse.maven.plugins:toolbox:0.1.9:cli@fatjar`
-* BOM/POM Management: `//DEPS io.quarkus:quarkus-bom:2.11.2.Final@pom` (Allows subsequent dependencies to omit versions).
+- Syntax: `//DEPS groupId:artifactId:version[:classifier][@type]`
+- One line can list **multiple** coordinates separated by spaces.
+- Examples:
+  - `//DEPS info.picocli:picocli:4.7.0`
+  - Classifier: `//DEPS io.netty:netty-transport-native-kqueue:4.1.107.Final:osx-aarch_64`
+  - BOM: first `//DEPS ...@pom` supplies managed versions for later lines without versions.
+  - `@fatjar`: dependency packaged as fat JAR; transitive resolution differs—see upstream docs.
 
-## Repositories (`//REPOS`)
+## `//REPOS`
 
-By default, JBang uses Maven Central. Add custom repos using `//REPOS`.
+Extra Maven repositories. Default is Maven Central only.
 
-* Example: `//REPOS mavencentral,acme=https://maven.acme.local/maven`
-* *Note: If you add custom repos, you must explicitly include `mavencentral` if you still need it.*
+- Syntax: `//REPOS [name=]url[,name=url...]` or comma-separated list.
+- Shortcuts: `central`, `google`, `jitpack`.
+- **If you add any `//REPOS`, add `central` (or the Central URL) if you still need Maven Central.**
 
-## Java Version (`//JAVA`)
+Auth for private repos: `~/.m2/settings.xml`.
 
-Forces the script to run with a specific or minimum Java version. JBang will download the JDK if missing.
+## `//JAVA`
 
-* Exact version: `//JAVA 17`
-* Minimum version: `//JAVA 17+`
+- `//JAVA 17` — exact major version.
+- `//JAVA 17+` — minimum version (JBang can fetch a JDK).
 
-## Compiler and Runtime Options
+Use with `//PREVIEW` when the language level needs preview flags.
 
-* **Compiler Options**: `//COMPILE_OPTIONS --enable-preview -source 17 -Xlint:unchecked`
-* **Runtime Options**: `//RUNTIME_OPTIONS --enable-preview -Xmx2g -Dfile.encoding=UTF-8`
-* **Preview Features**: `//PREVIEW` (Automatically adds necessary compile and runtime options for Java preview features).
+## `//PREVIEW`
+
+Enables preview features (adds the usual `--enable-preview` compile and runtime behavior). Pair with a sufficient `//JAVA`.
+
+## `//COMPILE_OPTIONS` / `//RUNTIME_OPTIONS` / `//NATIVE_OPTIONS`
+
+Space-separated flags for `javac`, `java`, and `native-image` respectively. CLI equivalents: `--compile-option` (`-C`), `--runtime-option` (`-R` / `--java-options`), `--native-option` (`-N`).
+
+## `//JAVAC_OPTIONS`
+
+Additional flags passed to `javac` when `//COMPILE_OPTIONS` is not enough.
+
+## `//SOURCES`
+
+Additional source files compiled with the main script (paths relative to the script).
+
+```java
+//SOURCES util/Helper.java
+```
+
+## `//FILES`
+
+Resources copied into the run/export layout (properties, data dirs, etc.).
+
+```java
+//FILES config.properties templates/
+```
+
+## `//GAV`
+
+Coordinates for the script itself (`group:artifact[:version]`). Used when exporting to Maven/Gradle projects.
+
+## `//MAIN`
+
+Fully qualified class name when JBang should not infer `main` (multiple mains or non-standard layout).
+
+## `//MANIFEST`
+
+`key=value` pairs for the generated JAR manifest; entries without `=` default to `true`.
+
+## `//DESCRIPTION` / `//DOCS`
+
+Human-oriented metadata (catalogs, `jbang info docs`, alias listings). `//DOCS` can be tagged, e.g. `//DOCS guide=./readme.md`.
+
+## Other (use when needed)
+
+- `//CDS` — class data sharing (JDK 13+; experimental).
+- `//JAVAAGENT` — agents (coordinate, path, or URL).
+- `//MODULE` — experimental Java module mode (typically requires a `package`).
+- `//KOTLIN` / `//GROOVY` — language version for `.kt` / `.groovy` scripts.
+
+For the full directive list and ordering tips, see JBang’s script directives documentation.

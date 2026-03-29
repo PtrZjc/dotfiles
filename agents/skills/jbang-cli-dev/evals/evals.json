@@ -30,5 +30,17 @@
   {
     "prompt": "I need to make this script available as a global command on my terminal. What's the easiest way?",
     "expected_output": "The response explains how to use the `jbang app install --name <command> <script>.java` command."
+  },
+  {
+    "prompt": "How do I scaffold a new JBang CLI with Picocli instead of writing everything from scratch?",
+    "expected_output": "The response mentions `jbang init` with the `cli` template (e.g. `--template=cli` or `-t cli`) and optionally `jbang template list`."
+  },
+  {
+    "prompt": "JBang says my GitHub script URL is not trusted. How do I trust it?",
+    "expected_output": "The response explains `jbang trust add` with a URL prefix, and optionally `jbang trust list` / `jbang trust remove`."
+  },
+  {
+    "prompt": "What is //SOURCES for in JBang?",
+    "expected_output": "The response explains that //SOURCES lists extra Java source files compiled together with the main script, relative to the script path."
   }
 ]
