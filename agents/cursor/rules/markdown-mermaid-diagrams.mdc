@@ -1,0 +1,30 @@
+---
+description: Use Mermaid for diagrams in Markdown; split busy diagrams
+globs: "**/*.md,**/*.mdc"
+alwaysApply: false
+---
+
+# Diagrams in Markdown (`.md`, `.mdc`)
+
+## Prefer Mermaid over ASCII
+
+- **Do not** use ASCII art, box-drawing characters, or monospace “sketches” for flowcharts, sequences, architectures, or state.
+- **Do** use [Mermaid](https://mermaid.js.org/) fenced code blocks (` ```mermaid `) so diagrams render in viewers that support it and stay editable as text.
+
+```markdown
+<!-- ❌ Avoid: ASCII / box-drawing “plots” -->
+┌──────┐     ┌──────┐
+│  A   │────▶│  B   │
+└──────┘     └──────┘
+
+<!-- ✅ Prefer: Mermaid -->
+```mermaid
+flowchart LR
+  A --> B
+```
+```
+
+## Split busy diagrams
+
+- If a single diagram has **many nodes**, **crossing edges**, or **unrelated concerns** in one canvas, **split it** into several smaller Mermaid blocks (e.g. one flow per subsection, or “overview” + “detail”).
+- Each block should answer **one** question at a glance; link sections with short prose (“See … below”) instead of cramming everything into one graph.

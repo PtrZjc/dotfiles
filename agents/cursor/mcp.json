@@ -1,15 +1,22 @@
 {
   "mcpServers": {
-    "context7": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp"
-      ]
-    },
     "ai-coding-handbook": {
       "url": "https://ai-coding-handbook-mcp.engineering-nonprod.sportradar.online/mcp",
       "type": "https"
+    },
+    "n8n-mcp": {
+      "command": "npx",
+      "args": [
+        "envmcp",
+        "npx",
+        "n8n-mcp"
+      ],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://n8n.blenny-company.ts.net:5678"
+      }
     }
   }
 }

@@ -13,11 +13,11 @@ alwaysApply: false
 
 ## Code Style & Conventions
 - **Immutability first**: Default to immutable objects; never mutate state unless necessary.
-- **Modularize proactively**: Break down logic into small, focused, private helper methods immediately during initial code generation. Do not write long, monolithic methods.
-- **Flat code structure (No deep nesting)**: Absolutely NO multiply nested `if` or `for` blocks. You must use early returns (guard clauses) and method extraction to keep code as flat as possible.
-- **Streams > Loops**: The Java Stream API is mandatory for collection processing. Traditional `for`, `for-each`, and `while` loops are a STRICT LAST RESORT. Never use loops for simple filtering, mapping, or reducing.
+- **Favor simplicity (KISS) and strict YAGNI**: Write straightforward, inline code. Extract private helper methods only when a method becomes difficult to read or logic is demonstrably reused. Do not preemptively over-engineer.
+- **Minimize nesting**: Prefer early returns (guard clauses) to minimize nesting. Extract methods to handle deep nesting only if it directly improves readability.
+- **Streams over Loops**: The Java Stream API is mandatory for collection processing. Traditional `for`, `for-each`, and `while` loops are a STRICT LAST RESORT. Never use loops for simple filtering, mapping, or reducing.
 ```java
-// PREFERRED:
+// PREFERRED FOR SIMPLE OPERATIONS:
 var activeUsers = users.stream()
     .filter(User::isActive)
     .toList();

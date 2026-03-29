@@ -3,6 +3,8 @@ description: Global engineering standards, file locations, and tool usage
 alwaysApply: true
 ---
 
+- **Minimalist Implementations:** Do not introduce unrequested abstractions, design patterns, generic types, or interfaces. Always provide the most direct, minimal code required to solve the specific prompt.
+
 - **File Location:** Save all newly created markdown files to the `docs/` directory.
 
 ## Documentation Research (No Guessing)

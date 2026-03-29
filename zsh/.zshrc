@@ -201,5 +201,9 @@ if [[ "$OSTYPE" == "darwin"* ]] && [[ -f /opt/homebrew/lib/python3.12/site-packa
     export REQUESTS_CA_BUNDLE=/opt/homebrew/lib/python3.12/site-packages/certifi/cacert.pem
 fi
 
+if command -v jbang >/dev/null 2>&1; then
+      source <(jbang completion)
+fi
+
 # enable zoxide
 eval "$(zoxide init zsh)"

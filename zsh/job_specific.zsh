@@ -82,6 +82,7 @@ function set_aws_profile() {
         "LIVEDATA_IGP_PROD_OBSERVER|LIVEDATA_IGP_PROD_OBSERVER|prod-euc1-igp-srld-io|eu-central-1"
         "LIVEDATA_IGP_PROD_DEVELOPER|LIVEDATA_IGP_PROD_DEVELOPER|prod-euc1-igp-srld-io|eu-central-1"
         "NO_TRD_LIVEDATA_K8S_NONPROD|NO_TRD_LIVEDATA_K8S_NONPROD|nonprod-euc1-srlivedata-io|eu-central-1"
+        "NO_TRD_LIVEDATA_SHARED_NONPROD|NO_TRD_LIVEDATA_SHARED_NONPROD|nonprod-euc1-srlivedata-io|eu-central-1"
         "NO_TRD_LIVEDATA_K8S_PROD|NO_TRD_LIVEDATA_K8S_PROD|prod-euc1-srlivedata-io|eu-central-1"
         "priv|priv||"
     )

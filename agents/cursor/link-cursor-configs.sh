@@ -19,8 +19,14 @@ SKILLS_DEST="$CURSOR_DIR/skills"
 link_item() {
     local src="$1" dest="$2"
     mkdir -p "$(dirname "$dest")"
-    ln -sf "$src" "$dest"
-    echo "linked: $(basename "$src") -> $dest"
+    # If dest is a real directory (not a symlink), ln -s would create a link *inside* it
+    # (e.g. skill/skill -> src). Remove so we can place the symlink at dest.
+    if [[ -d "$dest" && ! -L "$dest" ]]; then
+        rm -rf "$dest"
+    fi
+    # -n: if dest is a symlink to a directory, replace that symlink; do not follow into it
+    ln -snf "$src" "$dest"
+    echo "linked: $src -> $dest"
 }
 
 # Symlink each item inside source dir into target dir (not the whole folder)
