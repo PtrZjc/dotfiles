@@ -1,0 +1,34 @@
+[
+  {
+    "prompt": "Write a JBang script using picocli that fetches the weather for a city. The user should be able to pass the city name as an argument.",
+    "expected_output": "The output contains a valid Java file with the JBang shebang, `//DEPS` for picocli, and a class annotated with `@Command` that implements Runnable."
+  },
+  {
+    "prompt": "How do I add a dependency on Jackson in my JBang script?",
+    "expected_output": "The response explains the use of the `//DEPS` directive (e.g., `//DEPS com.fasterxml.jackson.core:jackson-databind:2.15.2`) placed at the top of the file without spaces between the slashes and DEPS."
+  },
+  {
+    "prompt": "I want to edit my jbang script in VS Code with proper autocomplete for picocli. How do I do that?",
+    "expected_output": "The response instructs the user to run `jbang edit --open=code <scriptname>.java` to launch a properly configured temporary project."
+  },
+  {
+    "prompt": "How do I compile my JBang script into a GraalVM native image?",
+    "expected_output": "The response provides the command `jbang export native <scriptname>.java` and notes that it requires GraalVM."
+  },
+  {
+    "prompt": "Can you convert my JBang script into a standard Maven project?",
+    "expected_output": "The response provides the `jbang export maven` command, including how to set the group, artifact, and version flags."
+  },
+  {
+    "prompt": "Write a Spring Boot backend with JPA and PostgreSQL.",
+    "expected_output": "The skill should recognize this is outside the scope of a single-file JBang/Picocli script and advise the user accordingly, or fall back to general Java knowledge."
+  },
+  {
+    "prompt": "How do I require Java 17 for my JBang script?",
+    "expected_output": "The response instructs the user to add the `//JAVA 17+` directive to the top of the script."
+  },
+  {
+    "prompt": "I need to make this script available as a global command on my terminal. What's the easiest way?",
+    "expected_output": "The response explains how to use the `jbang app install --name <command> <script>.java` command."
+  }
+]
