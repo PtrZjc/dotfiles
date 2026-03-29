@@ -42,5 +42,9 @@
   {
     "prompt": "What is //SOURCES for in JBang?",
     "expected_output": "The response explains that //SOURCES lists extra Java source files compiled together with the main script, relative to the script path."
+  },
+  {
+    "prompt": "Write a JBang script that runs `git --version` and prints the output.",
+    "expected_output": "The output is a valid JBang Java file with `//DEPS org.zeroturnaround:zt-exec:1.12`, uses `org.zeroturnaround.exec.ProcessExecutor` to run the command, and captures or prints stdout (e.g. via readOutput/outputUTF8)—not ProcessBuilder or Runtime.exec."
   }
 ]
