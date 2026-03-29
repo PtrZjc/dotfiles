@@ -1,25 +1,27 @@
 ///usr/bin/env jbang "$0" "$@" ; exit $?
 //DEPS info.picocli:picocli:4.6.3
+//DEPS org.zeroturnaround:zt-exec:1.12
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import org.zeroturnaround.exec.ProcessExecutor;
+import org.zeroturnaround.exec.ProcessResult;
+import org.zeroturnaround.exec.stream.LogOutputStream;
+
 import java.awt.Desktop;
-import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Stream;
 
 @Command(name = "set_aws_profile", mixinStandardHelpOptions = true, version = "set_aws_profile 0.1",
@@ -161,28 +163,31 @@ class set_aws_profile implements Callable<Integer> {
         Files.writeString(dir.resolve("aws_profile"), profileName + "\n", StandardCharsets.UTF_8);
     }
 
-    private static String runFzf() throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder(
-                "fzf", "--height", "20%", "--reverse", "--prompt=Select AWS profile: ");
-        pb.redirectError(ProcessBuilder.Redirect.INHERIT);
-        pb.redirectInput(ProcessBuilder.Redirect.PIPE);
-        pb.redirectOutput(ProcessBuilder.Redirect.PIPE);
-        Process p = pb.start();
-        try (Writer w = new OutputStreamWriter(p.getOutputStream(), StandardCharsets.UTF_8)) {
-            for (ProfileRow pr : PROFILES) {
-                w.write(pr.display);
-                w.write('\n');
-            }
+    private static String runFzf() throws IOException, InterruptedException, TimeoutException {
+        StringBuilder stdin = new StringBuilder();
+        for (ProfileRow pr : PROFILES) {
+            stdin.append(pr.display).append('\n');
         }
-        String line;
-        try (BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
-            line = r.readLine();
+        byte[] stdinBytes = stdin.toString().getBytes(StandardCharsets.UTF_8);
+        ProcessResult result = new ProcessExecutor(
+                "fzf", "--height", "20%", "--reverse", "--prompt=Select AWS profile: ")
+                .redirectErrorStream(false)
+                .redirectError(System.err)
+                .redirectInput(new ByteArrayInputStream(stdinBytes))
+                .readOutput(true)
+                .execute();
+        int code = result.getExitValue();
+        String raw = result.outputUTF8();
+        String line = null;
+        if (raw != null && !raw.isEmpty()) {
+            String trimmed = raw.trim();
+            int nl = trimmed.indexOf('\n');
+            line = (nl < 0 ? trimmed : trimmed.substring(0, nl)).trim();
         }
-        int code = p.waitFor();
         if (code != 0 && (line == null || line.isBlank())) {
             return null;
         }
-        return line != null ? line.trim() : null;
+        return line;
     }
 
     private static boolean hasRecentCliCacheJson(Path cacheDir) throws IOException {
@@ -204,21 +209,20 @@ class set_aws_profile implements Callable<Integer> {
         }
     }
 
-    private static int ssoLoginWithAutoOpen(String profile) throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder("aws", "sso", "login", "--no-browser", "--profile", profile);
-        pb.redirectErrorStream(true);
-        Process p = pb.start();
-        try (BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = r.readLine()) != null) {
-                err(line);
-                String t = line.trim();
-                if (t.startsWith("https://")) {
-                    openUrl(t);
-                }
-            }
-        }
-        return p.waitFor();
+    private static int ssoLoginWithAutoOpen(String profile) throws IOException, InterruptedException, TimeoutException {
+        return new ProcessExecutor("aws", "sso", "login", "--no-browser", "--profile", profile)
+                .redirectOutput(new LogOutputStream() {
+                    @Override
+                    protected void processLine(String line) {
+                        err(line);
+                        String t = line.trim();
+                        if (t.startsWith("https://")) {
+                            openUrl(t);
+                        }
+                    }
+                })
+                .execute()
+                .getExitValue();
     }
 
     private static void openUrl(String url) {
@@ -237,20 +241,31 @@ class set_aws_profile implements Callable<Integer> {
         String os = System.getProperty("os.name", "").toLowerCase(Locale.ROOT);
         try {
             if (os.contains("mac")) {
-                new ProcessBuilder("open", url).inheritIO().start().waitFor();
+                new ProcessExecutor("open", url)
+                        .redirectErrorStream(false)
+                        .redirectOutput(System.out)
+                        .redirectError(System.err)
+                        .execute();
             } else {
-                new ProcessBuilder("xdg-open", url).inheritIO().start().waitFor();
+                new ProcessExecutor("xdg-open", url)
+                        .redirectErrorStream(false)
+                        .redirectOutput(System.out)
+                        .redirectError(System.err)
+                        .execute();
             }
         } catch (Exception e) {
             err("URL: " + url);
         }
     }
 
-    private static int runInheritIo(List<String> command) throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder(command);
-        pb.inheritIO();
-        Process p = pb.start();
-        return p.waitFor();
+    private static int runInheritIo(List<String> command) throws IOException, InterruptedException, TimeoutException {
+        return new ProcessExecutor()
+                .command(command)
+                .redirectErrorStream(false)
+                .redirectOutput(System.out)
+                .redirectError(System.err)
+                .execute()
+                .getExitValue();
     }
 
     private record PrivCreds(String accessKeyId, String secretAccessKey, String region) {}
