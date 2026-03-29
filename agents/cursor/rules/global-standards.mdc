@@ -1,5 +1,5 @@
 ---
-description: Global engineering standards, file locations, and tool usage
+description: 
 alwaysApply: true
 ---
 
@@ -14,3 +14,6 @@ When unsure about APIs, configurations, or best practices, delegate to the **`do
 - Do not guess or hallucinate code.
 - Pass the target library, version (if specified), and your specific question directly to `docs-researcher`.
 - Use the subagent's concise, code-backed response to continue your task without cluttering the main context window.
+
+**Git messages:**
+- Generate very short, one-line commit messages (max 8 words). Always start with infinite verb in uppercase
