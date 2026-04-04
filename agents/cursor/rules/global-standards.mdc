@@ -5,7 +5,9 @@ alwaysApply: true
 
 - **Minimalist Implementations:** Do not introduce unrequested abstractions, design patterns, generic types, or interfaces. Always provide the most direct, minimal code required to solve the specific prompt.
 
-- **File Location:** Save all newly created markdown files to the `docs/` directory.
+## Generated markdown files
+- **File Location:** Save all newly created markdown files to the `.cursor/user_docs/` directory (gitignored).
+- **Markdown Filename Format:** Markdown filenames must start with a short date prefix in this format: `YY-MM-DD_document-name.md`.
 
 ## Documentation Research (No Guessing)
 When unsure about APIs, configurations, or best practices, delegate to the **`docs-researcher` subagent** (via plugin). 
@@ -14,6 +16,3 @@ When unsure about APIs, configurations, or best practices, delegate to the **`do
 - Do not guess or hallucinate code.
 - Pass the target library, version (if specified), and your specific question directly to `docs-researcher`.
 - Use the subagent's concise, code-backed response to continue your task without cluttering the main context window.
-
-**Git messages:**
-- Generate very short, one-line commit messages (max 8 words). Always start with infinite verb in uppercase
