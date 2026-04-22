@@ -47,6 +47,15 @@ if $IS_MACOS; then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
 
+    # install.sh does not update this shell's PATH; load Homebrew into the current session
+    if ! command -v brew &>/dev/null; then
+        if [ -x /opt/homebrew/bin/brew ]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        elif [ -x /usr/local/bin/brew ]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
+    fi
+
     export HOMEBREW_BUNDLE_FILE="${DOTFILES_DIR}/brew/Brewfile"
     echo 'Installing brew packages...'
     brew bundle

@@ -77,7 +77,6 @@ brew "qt" # Cross-platform application and UI framework
 
 # File Management & Archiving
 brew "lf" # TUI File Manager
-brew "dbxcli" # Dropbox CLI
 brew "qrcp" # File Transfer via QR Codes
 brew "rnr" # File Renaming Tool
 brew "p7zip" # 7-Zip file archiver
