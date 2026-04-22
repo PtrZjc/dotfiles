@@ -1,6 +1,6 @@
 ---
 name: classical-unit-tests
-description: Write Java unit tests following the Classical (Detroit) school. Covers the four pillars, state-over-interactions, fakes vs mocks for managed/unmanaged dependencies, strict Given/When/Then, in-memory fakes as private nested records (immutable doubles) or classes (stateful doubles), and Lombok on all stateful implementations. Use when writing, reviewing, or refactoring Java unit tests (JUnit 5 + AssertJ), when the user mentions classical school, test doubles, fakes, mocks, records, regression protection, resistance to refactoring, or Lombok.
+description: Write Java unit tests in the Classical (Detroit) school — four pillars, state over interactions, fakes for managed deps, mocks only for unmanaged side effects, records-first doubles with Lombok on stateful ones. Use for JUnit 5 + AssertJ + Spring Boot.
 ---
 
 # Classical-School Java Unit Tests
@@ -19,28 +19,26 @@ Then pick the matching shape from [Test Shapes](#test-shapes).
 
 ## The Four Pillars
 
-| Pillar                    | Rule                                                                                                                      |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Regression protection     | Exercise real domain code; domain entities and value objects are real instances.                                          |
-| Resistance to refactoring | Assert observable behavior: return values, final state, or outgoing commands to unmanaged dependencies.                   |
-| Fast feedback             | Milliseconds per test. Pure JUnit in `src/test/`; Spring context, DB, and network belong in a separate test source set.   |
-| Maintainability           | One behavior per test; minimal setup; factory methods over shared mutable state.                                          |
-
-A failing test for unchanged external behavior is a false positive — it means the test is coupled to internals and must be rewritten against observable behavior.
+| Pillar                    | Rule                                                                                                                                                                                                      |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Regression protection     | Exercise real domain code; domain entities and value objects are real instances.                                                                                                                          |
+| Resistance to refactoring | Assert observable behavior: return values, final state, or outgoing commands to unmanaged dependencies. A failing test for unchanged external behavior is a false positive — rewrite it against observable behavior. |
+| Fast feedback             | Milliseconds per test. Pure JUnit in `src/test/`; Spring context, DB, and network belong in a separate test source set.                                                                                   |
+| Maintainability           | One behavior per test; minimal setup; factory methods over shared mutable state.                                                                                                                          |
 
 ## Test Doubles: The Rules
 
-| Dependency kind                                             | Example                                                                     | Double                                                                 |
-| ----------------------------------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| Domain entity / value object                                | `Order`, `Product`, `Money`                                                 | **Real instance**                                                      |
-| In-process collaborator with only logic                     | Domain service                                                              | **Real instance**                                                      |
-| Managed out-of-process (app-owned DB/table)                 | PostgreSQL owned by this service                                            | **In-memory fake** in unit tests; real DB in integration tests         |
-| Unmanaged out-of-process (observable side effect)           | SMTP, payment gateway, cross-context Kafka producer                         | **Mock**; verify the outgoing command                                  |
-| Pure read (incoming data)                                   | Config provider, clock                                                      | **Stub** returning canned values                                       |
+| Dependency kind                                   | Example                                             | Double                                                         |
+| ------------------------------------------------- | --------------------------------------------------- | -------------------------------------------------------------- |
+| Domain entity / value object                      | `Order`, `Product`, `Money`                         | **Real instance**                                              |
+| In-process collaborator with only logic           | Domain service                                      | **Real instance**                                              |
+| Managed out-of-process (app-owned DB/table)       | PostgreSQL owned by this service                    | **In-memory fake** in unit tests; real DB in integration tests |
+| Unmanaged out-of-process (observable side effect) | SMTP, payment gateway, cross-context Kafka producer | **Mock**; verify the outgoing command                          |
+| Pure read (incoming data)                         | Config provider, clock                              | **Stub** returning canned values                               |
 
 ## Fakes
 
-Write **in-memory fakes** (`HashMap`-backed repos, `List`-backed outboxes) to replace managed dependencies. Fakes implement the same port interface production code depends on.
+Write **in-memory fakes** (`HashMap`-backed repos, `List`-backed outboxes) to replace managed dependencies.
 
 ### Declaration
 
@@ -79,8 +77,6 @@ class OrderServiceTest {
 }
 ```
 
-Implementations follow the [Lombok](#lombok) section; `OrderService` above is `@RequiredArgsConstructor`. `InMemoryOrderRepository` cannot be a `record` because it holds a mutable `Map` — see [Records vs classes for doubles](#records-vs-classes-for-doubles).
-
 When dependency configuration varies per test (e.g., a different `Clock`), use a private factory method that returns a freshly-wired SUT for that test.
 
 ### Scope
@@ -88,84 +84,34 @@ When dependency configuration varies per test (e.g., a different `Clock`), use a
 - Used in one test class → `private static` nested class in that file.
 - Reused across ≥2 test classes → promote to `src/testFixtures/` (or the project's shared test source set).
 
-### Role-based naming — match sophistication to what the test asserts
+### Role, shape, and Lombok — one table
 
-A collaborator's behavior must match the test's assertions exactly. Pick the form by role:
+A collaborator's sophistication must match what the test asserts. Pick the role first; shape follows from whether the double holds mutable state.
 
-| Form             | Role                                                       | When to use                                                                             | Shape      |
-| ---------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------- | ---------- |
-| Bare `mock(...)` | Inert orthogonal collaborator                              | Required constructor arg whose behavior is orthogonal to the test (logging, MDC, tracing, metrics counters no test asserts on) | —          |
-| `InMemoryXxx`    | Real reads after writes over an in-memory store            | Repositories, caches                                                                    | class      |
-| `RecordingXxx`   | Captures arguments/events for later assertion              | A test asserts on what was recorded                                                     | class      |
-| `StubXxx`        | Returns canned value(s) for pure queries                   | `Clock`, config provider, role-selector, or any shared instance tests reconfigure per test | **record** (preferred) / class with `@Setter` when ≥2 tests need different canned responses on a shared field |
+| Role             | Use for                                                                                                 | Shape                                                                     | Lombok                                                |
+| ---------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Bare `mock(...)` | Orthogonal collaborators the test does not care about (logging, MDC, tracing, metrics counters no test asserts on) | —                                                                         | —                                                     |
+| `StubXxx`        | Canned values for pure reads (`Clock`, config provider, role selector)                                  | `record` by default; `class` with `@Setter` when ≥2 tests reconfigure a shared field instance | `@Setter` only on the reconfigurable-class variant    |
+| `InMemoryXxx`    | Managed stores with real reads after writes (repositories, caches)                                      | `class`                                                                   | `@RequiredArgsConstructor` if it has collaborators    |
+| `RecordingXxx`   | Captures calls/events the test asserts on                                                               | `class`                                                                   | `@Getter` on the captured `List`/`Map`                |
 
-The `Shape` column is a default, not an escape valve: the shape follows from whether the double needs mutable state. See [Records vs classes for doubles](#records-vs-classes-for-doubles).
+The rule underneath the table: **`record` unless the double holds mutable state** (`Map`/`List` store, `@Setter` config field, `@Getter`-exposed capture).
 
-`StubXxx` is the single label for any double that serves indirect inputs (canned return values). Whether it's a `record` built once per test or a class with `@Setter` reconfigured per test is a shape decision, not a separate role.
-
-A hand-written `NoopXxx` nested class is rarely needed; reach for one only when Mockito can't mock the type (e.g., a `final` class you don't own) or when a real typed no-op is clearer at the call site.
+Bare `mock(...)` is a notation choice for orthogonal collaborators, not a new category. Declare it as a class-level `private final` field, never inline. The moment you reach for `when(...)`, `verify(...)`, or the return value, it isn't orthogonal — switch to `StubXxx` / `InMemoryXxx` / `RecordingXxx`. Repositories, gateways, payment clients, Kafka producers, email senders, and app-owned DB ports are never orthogonal.
 
 When some tests assert on a collaborator and others don't, keep a bare `mock(...)` as the default field and construct a `RecordingXxx` inside the specific tests that assert on it.
 
-#### Bare `mock()` for orthogonal collaborators
+A hand-written `NoopXxx` is rarely needed — reach for one only when Mockito can't mock the type (e.g., a `final` class you don't own).
 
-When a collaborator is truly inert to the test, a bare Mockito mock declared as a `private final` field is the default — no nested class needed. It is a notation choice, not a new test-double category.
-
-```java
-class OrderProcessorTest {
-
-    private final LoggingContextWrapper loggingContextWrapper = mock(LoggingContextWrapper.class);
-
-    private final InMemoryOrderRepository orderRepository = new InMemoryOrderRepository();
-    private final OrderProcessor processor = new OrderProcessor(orderRepository, loggingContextWrapper);
-
-    @Test
-    void shouldPersistOrderWhenEventHandled() {
-        // given
-        var event = OrderEventFixtures.orderPlaced();
-
-        // when
-        processor.handle(event);
-
-        // then
-        assertThat(orderRepository.findById(event.orderId()))
-            .get().extracting(Order::status).isEqualTo(OrderStatus.PLACED);
-    }
-}
-```
-
-Allowed only when **all** of the following hold:
-
-- **Orthogonal role.** The collaborator is a side-channel the SUT touches but the test does not care about (logging, MDC, tracing, metrics counters no test asserts on). Repositories, gateways, payment clients, Kafka producers, email senders, and app-owned DB ports are never orthogonal — they use `InMemoryXxx` / `RecordingXxx`, or a real Mockito mock under the [unmanaged side-effects rule](#mocks-unmanaged-side-effects-only).
-- **No stubbing.** When `when(...).thenReturn(...)` / `doReturn(...)` / `doAnswer(...)` is needed, the collaborator feeds data into logic flow — switch to `StubXxx` / `InMemoryXxx`.
-- **Return value not consumed.** Either every invoked method is `void`, or the SUT discards the return. When the SUT reads the result, use `StubXxx` / `InMemoryXxx` so the test documents the contract instead of depending on Mockito defaults.
-- **No verification.** No `verify(...)`, no `verifyNoInteractions(...)`, no `ArgumentCaptor`. Interactions that matter belong to an unmanaged dependency (real mock) or a `RecordingXxx` fake.
-- **Class-level `private final` field.** Never inline per test — inline placement signals the test is about to stub or verify it.
-
-When any of the five conditions is violated, write the proper `StubXxx` / `InMemoryXxx` / `RecordingXxx` nested class instead.
-
-### Records vs classes for doubles
-
-Prefer a Java `record` for any test double that has no mutable state. Fall back to a class with `@RequiredArgsConstructor` only when the double must carry mutable state. The decision is mechanical:
-
-| Mutable state in the double                                       | Shape                                         |
-| ----------------------------------------------------------------- | --------------------------------------------- |
-| None — fully defined by constructor args                          | **`record`**                                  |
-| `Map` / `List` store written during the test                      | `class` (InMemory / Recording)                |
-| `@Setter` field reconfigured per test                             | `class` (Stub with `@Setter`)                 |
-| Needs `@Getter` exposure of captured data                         | `class` (Recording)                           |
-
-Records suit `StubXxx` doubles that serve canned values based on their construction (a fixed `Clock`, a role selector, a hard-wired return value), and any inert no-op double you might otherwise hand-write. They enforce immutability, remove boilerplate, and make the absence of `@Setter` self-documenting. When a test needs to swap the canned value per test on a shared field instance, the stub becomes a class with `@Setter` — still a stub, just a mutable shape.
+### Examples
 
 ```java
-// Stateless stub — record because config is fixed at construction
 private record StubClock(Instant fixed, ZoneId zone) implements Clock {
     @Override public Instant instant()        { return fixed; }
     @Override public ZoneId getZone()         { return zone; }
     @Override public Clock withZone(ZoneId z) { return new StubClock(fixed, z); }
 }
 
-// Immutable port stub selecting by an enum — record
 private record StubTaxCalculator(Country supportedCountry) implements TaxCalculator {
     @Override public Money computeTax(Money amount) {
         return amount.multiply(new BigDecimal("0.20"));
@@ -175,46 +121,40 @@ private record StubTaxCalculator(Country supportedCountry) implements TaxCalcula
     }
 }
 
-// Mutable store — class, never a record
 private static final class InMemoryOrderRepository implements OrderRepository {
     private final Map<OrderId, Order> store = new HashMap<>();
     @Override public void save(Order o)                   { store.put(o.id(), o); }
     @Override public Optional<Order> findById(OrderId id) { return Optional.ofNullable(store.get(id)); }
 }
 
-// Captures invocations — class with @Getter, never a record
 private static final class RecordingAuditLog implements AuditLog {
     @Getter private final List<AuditEntry> entries = new ArrayList<>();
     @Override public void append(AuditEntry entry) { entries.add(entry); }
 }
 
-// Reconfigurable stub — class with @Setter because ≥2 tests need different canned responses
-// on this shared field-level instance
 private static final class StubPricingPolicy implements PricingPolicy {
     @Setter private Money configured;
     @Override public Money priceFor(Product product) { return configured; }
 }
 ```
 
-When a port's method name would collide with a record accessor, just implement it explicitly (as in `getSupportedCountry()` above) — that's a styling wrinkle, not a reason to reach for a class. When the record would need no extra methods (all interface methods map 1:1 to components), even better: the body stays empty.
-
-Test-only value types (domain stand-ins referenced by these doubles) should also be records.
+Implement colliding accessors explicitly when a port's method name clashes with a record component (`getSupportedCountry()` above). Test-only value types referenced by these doubles should also be records.
 
 ### Fakes represent working collaborators
 
 A fake records calls, serves canned reads, or mutates an in-memory store. Failure modes live outside the fake: no `willThrow(...)` method, no `nextError` field, no `throw` branch in an overridden port method.
 
-To test how the SUT reacts to a dependency failure, construct a Mockito mock **inline inside that one test**, wire it into a locally-constructed SUT, and keep every other collaborator pointing at its shared field-level fake. Assert on the observable outcome — thrown exception, rolled-back state, or emitted failure event.
+To test how the SUT reacts to a dependency failure, construct a Mockito mock **inline inside that one test**, wire it into a locally-constructed SUT, and keep every other collaborator pointing at its shared field-level fake. Assert on the observable outcome — thrown exception, rolled-back state, or emitted failure event. When the SUT swallows the failure, assert on the recorded side effect via a `RecordingXxx` fake instead.
 
 ```java
 class OrderServiceTest {
 
+    private static final OrderId ORDER_ID = OrderId.of("o-1");
+    private static final Money AMOUNT = Money.of(100);
+
     private final OrderRepository orderRepository = new InMemoryOrderRepository();
     private final NotificationGateway notificationGateway = mock(NotificationGateway.class);
     private final OrderService orderService = new OrderService(orderRepository, notificationGateway);
-
-    private static final OrderId ORDER_ID = OrderId.of("o-1");
-    private static final Money AMOUNT = Money.of(100);
 
     @Test
     void shouldWrapRepositoryFailureAsDomainException() {
@@ -232,9 +172,7 @@ class OrderServiceTest {
 }
 ```
 
-When the SUT swallows the failure (e.g., a handler that emits a failure event or dead-letter entry), assert on the recorded side effect via a `RecordingXxx` fake — same inline-mock injection, different observable outcome.
-
-If you reach for the inline-mock pattern in a second test to feed canned data (rather than to simulate a failure), build a `StubXxx` with `@Setter` instead.
+If you reach for the inline-mock pattern in a second test to feed canned data (rather than simulate a failure), build a `StubXxx` with `@Setter` instead.
 
 ## Mocks: Unmanaged Side Effects Only
 
@@ -248,23 +186,14 @@ verifyNoMoreInteractions(emailGateway);
 
 For managed dependencies (the app's own DB/repository), assert on final state through the fake's public API. Pure read stubs provide inbound data and are read from, not verified.
 
-For orthogonal collaborators (logging, MDC, tracing, metrics counters no test asserts on), use a bare `mock()` field as described in [Role-based naming](#role-based-naming--match-sophistication-to-what-the-test-asserts).
+## Lombok (stateful classes only; never on records or tests)
 
-## Lombok
-
-Lombok is the boilerplate remover for **stateful** implementations; `record` is the first choice for immutable ones. Order of preference for any nested test double or small value type:
-
-1. **`record`** — whenever the type has no mutable state (see [Records vs classes for doubles](#records-vs-classes-for-doubles)). Zero Lombok.
-2. **Class + `@RequiredArgsConstructor`** — when the type needs mutable state (in-memory store, recording buffer, `@Setter` config).
-
-Implementations (SUT, adapters, stateful fakes) use Lombok — never hand-write what it can generate:
-
-- `@RequiredArgsConstructor` for any class with `private final` collaborators (including stateful fakes). Do **not** apply it to a class that could be a `record`.
-- `@Slf4j` for logging.
-- `@Getter` on a recording fake's `List`/`Map` field.
-- `@Setter` on a reconfigurable `StubXxx` fake's scripted-value field.
-- `@Value` only when a `record` won't do; `@Builder` for ≥4 args.
-- Forbidden: `@Data`, `@AllArgsConstructor` / `@NoArgsConstructor` on domain types, any Lombok on test methods or on `record` doubles.
+- `@RequiredArgsConstructor` — any class with `private final` collaborators (including stateful fakes).
+- `@Slf4j` — logging.
+- `@Getter` — on a `RecordingXxx` fake's captured `List`/`Map`.
+- `@Setter` — on a reconfigurable `StubXxx` fake's scripted-value field.
+- `@Value` only when `record` won't do; `@Builder` for ≥4 args.
+- Forbidden: `@Data`, `@AllArgsConstructor` / `@NoArgsConstructor` on domain types, any Lombok on test methods or on records.
 
 ## Structural Rules
 
@@ -288,11 +217,9 @@ void shouldRejectNegativeDeposit() {
 - Exception-path tests use a single `// when then` block and pass the lambda directly to `assertThatThrownBy(...)`.
 - Zero branching in test bodies: use `@ParameterizedTest` + `@CsvSource` for variation.
 
-### Naming
+### Test method naming
 
-- Test methods: `shouldXxxWhenYyy`, or a plain English sentence describing behavior.
-- SUT field: camelCased production type name (`orderService`, `pricingCalculator`). Never `sut` / `SUT` — it hides what the test is actually exercising.
-- Repeated literals (IDs, amounts, tokens, usernames, URLs): `private static final` constants at the top of the test class, named after the role they play (`ORDER_ID`, `AMOUNT`, not `ID_1`).
+`shouldXxxWhenYyy`, or a plain English sentence describing observable behavior. Field-naming rules live in [Declaration](#declaration).
 
 ## Test Shapes
 
@@ -377,16 +304,10 @@ Use `@MethodSource` only when inputs can't be expressed as simple scalars.
 
 ## Pre-Commit Checklist
 
-- [ ] Exactly one `// when` action.
-- [ ] Test body is branch-free (no `if` / `for` / `while` / `switch` / ternary).
-- [ ] Domain entities, value objects, and the app's own DB are real instances or in-memory fakes.
-- [ ] Managed dependencies are asserted via state through the fake's public API; mocks verify only unmanaged outgoing commands.
-- [ ] SUT and collaborators are `private final` fields, or come from a private factory method when configuration varies.
-- [ ] SUT field is named after the production type (no `sut` / `SUT`); literals repeated across tests are `private static final` constants.
-- [ ] Every collaborator is as minimal as the assertions require (bare `mock(...)` for orthogonal / `InMemoryXxx` / `RecordingXxx` / `StubXxx`).
-- [ ] Every immutable double is a `record`; `@RequiredArgsConstructor` classes are reserved for doubles with mutable state (`InMemoryXxx` / `RecordingXxx` / `StubXxx` with `@Setter`). Test-only value types are records.
-- [ ] Stateful implementations use Lombok (`@RequiredArgsConstructor`, `@Slf4j`, `@Getter`, `@Setter`); no `@Data` / `@AllArgsConstructor` / `@NoArgsConstructor` on domain types; no Lombok on records or on test methods.
-- [ ] Fakes contain no scripted-failure machinery; exception paths use an inline Mockito mock in the one test that needs it.
-- [ ] Assertions use AssertJ.
+- [ ] Exactly one `// when` action; test body is branch-free.
+- [ ] Real domain objects; managed deps are in-memory fakes; mocks only for unmanaged side effects.
+- [ ] Shape matches the mutable-state rule: `record` unless the double holds state.
+- [ ] Every collaborator is as minimal as the assertions require.
+- [ ] No scripted failures inside a fake — exception paths use an inline `mock()` in that one test.
+- [ ] AssertJ only; test name describes observable behavior.
 - [ ] Test still passes when production code is refactored without changing behavior.
-- [ ] Test name describes observable behavior.
