@@ -46,8 +46,13 @@ Write **in-memory fakes** (`HashMap`-backed repos, `List`-backed outboxes) to re
 
 Declare the SUT and its collaborators as `private final` instance fields. JUnit 5's default PER_METHOD lifecycle instantiates the test class once per test method, so fields are fresh each test.
 
+Name the SUT field after its production type in camelCase (`orderService`, `pricingCalculator`); never `sut` / `SUT`. Extract literals that repeat across the class (IDs, amounts, tokens, usernames) as `private static final` constants at the top of the test class — one source of truth, and each test reads as prose.
+
 ```java
 class OrderServiceTest {
+
+    private static final OrderId ORDER_ID = OrderId.of("o-1");
+    private static final Money AMOUNT = Money.of(100);
 
     private final OrderRepository orderRepository = new InMemoryOrderRepository();
     private final OrderService orderService = new OrderService(orderRepository);
@@ -55,14 +60,14 @@ class OrderServiceTest {
     @Test
     void shouldMarkOrderPaidWhenPaymentSucceeds() {
         // given
-        var order = new Order(OrderId.of("o-1"), Money.of(100));
+        var order = new Order(ORDER_ID, AMOUNT);
         orderRepository.save(order);
 
         // when
-        orderService.markPaid(OrderId.of("o-1"));
+        orderService.markPaid(ORDER_ID);
 
         // then
-        assertThat(orderRepository.findById(OrderId.of("o-1")).orElseThrow().status())
+        assertThat(orderRepository.findById(ORDER_ID).orElseThrow().status())
             .isEqualTo(OrderStatus.PAID);
     }
 
@@ -208,18 +213,21 @@ class OrderServiceTest {
     private final NotificationGateway notificationGateway = mock(NotificationGateway.class);
     private final OrderService orderService = new OrderService(orderRepository, notificationGateway);
 
+    private static final OrderId ORDER_ID = OrderId.of("o-1");
+    private static final Money AMOUNT = Money.of(100);
+
     @Test
     void shouldWrapRepositoryFailureAsDomainException() {
         // given
         var throwingRepository = mock(OrderRepository.class);
         when(throwingRepository.save(any())).thenThrow(new DataAccessException("boom"));
         var orderService = new OrderService(throwingRepository, notificationGateway);
-        var order = new Order(OrderId.of("o-1"), Money.of(100));
+        var order = new Order(ORDER_ID, AMOUNT);
 
         // when then
         assertThatThrownBy(() -> orderService.place(order))
             .isInstanceOf(OrderPlacementFailedException.class)
-            .hasMessageContaining("o-1");
+            .hasMessageContaining(ORDER_ID.value());
     }
 }
 ```
@@ -282,7 +290,9 @@ void shouldRejectNegativeDeposit() {
 
 ### Naming
 
-`shouldXxxWhenYyy`, or a plain English sentence describing behavior.
+- Test methods: `shouldXxxWhenYyy`, or a plain English sentence describing behavior.
+- SUT field: camelCased production type name (`orderService`, `pricingCalculator`). Never `sut` / `SUT` — it hides what the test is actually exercising.
+- Repeated literals (IDs, amounts, tokens, usernames, URLs): `private static final` constants at the top of the test class, named after the role they play (`ORDER_ID`, `AMOUNT`, not `ID_1`).
 
 ## Test Shapes
 
@@ -372,6 +382,7 @@ Use `@MethodSource` only when inputs can't be expressed as simple scalars.
 - [ ] Domain entities, value objects, and the app's own DB are real instances or in-memory fakes.
 - [ ] Managed dependencies are asserted via state through the fake's public API; mocks verify only unmanaged outgoing commands.
 - [ ] SUT and collaborators are `private final` fields, or come from a private factory method when configuration varies.
+- [ ] SUT field is named after the production type (no `sut` / `SUT`); literals repeated across tests are `private static final` constants.
 - [ ] Every collaborator is as minimal as the assertions require (bare `mock(...)` for orthogonal / `InMemoryXxx` / `RecordingXxx` / `StubXxx`).
 - [ ] Every immutable double is a `record`; `@RequiredArgsConstructor` classes are reserved for doubles with mutable state (`InMemoryXxx` / `RecordingXxx` / `StubXxx` with `@Setter`). Test-only value types are records.
 - [ ] Stateful implementations use Lombok (`@RequiredArgsConstructor`, `@Slf4j`, `@Getter`, `@Setter`); no `@Data` / `@AllArgsConstructor` / `@NoArgsConstructor` on domain types; no Lombok on records or on test methods.
