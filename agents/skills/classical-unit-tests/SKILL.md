@@ -46,6 +46,19 @@ Declare the SUT and its collaborators as `private final` instance fields. JUnit 
 
 Name the SUT field after its production type in camelCase (`orderService`, `pricingCalculator`); never `sut` / `SUT`. Extract literals that repeat across the class (IDs, amounts, tokens, usernames) as `private static final` constants at the top of the test class — one source of truth, and each test reads as prose.
 
+Never wrap a fully-wired fixture in a zero-arg `private static` factory method — promote it to a `private static final` constant so intent and identity are immediate. Keep factory methods only when they take arguments that meaningfully vary per test.
+
+```java
+// ❌ zero-arg factory — no variation to justify a method
+private static Order premiumOrder() {
+    return new Order(ORDER_ID, AMOUNT, CustomerTier.PREMIUM, Map.of());
+}
+
+// ✅ constant
+private static final Order PREMIUM_ORDER =
+    new Order(ORDER_ID, AMOUNT, CustomerTier.PREMIUM, Map.of());
+```
+
 ```java
 class OrderServiceTest {
 
@@ -308,6 +321,7 @@ Use `@MethodSource` only when inputs can't be expressed as simple scalars.
 - [ ] Real domain objects; managed deps are in-memory fakes; mocks only for unmanaged side effects.
 - [ ] Shape matches the mutable-state rule: `record` unless the double holds state.
 - [ ] Every collaborator is as minimal as the assertions require.
+- [ ] Fixtures built once: no zero-arg test factory methods — use `private static final` constants instead.
 - [ ] No scripted failures inside a fake — exception paths use an inline `mock()` in that one test.
 - [ ] AssertJ only; test name describes observable behavior.
 - [ ] Test still passes when production code is refactored without changing behavior.

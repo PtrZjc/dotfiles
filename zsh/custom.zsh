@@ -71,6 +71,8 @@ alias -s sh='sh'
 alias -s properties='$EDITOR'
 alias -s py='python3'
 
+alias json-text-value='clip_paste | jq -sR . | tee >(clip_copy)'
+
 unalias l
 function l() {
     if [ $# -eq 0 ]; then
