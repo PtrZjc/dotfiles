@@ -71,7 +71,7 @@ alias -s sh='sh'
 alias -s properties='$EDITOR'
 alias -s py='python3'
 
-alias json-text-value='clip_paste | jq -sR . | tee >(clip_copy)'
+alias json-text-value='clip_paste | jq -sR . | tee >(pbcopy)'
 
 unalias l
 function l() {

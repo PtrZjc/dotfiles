@@ -165,7 +165,7 @@ copy_buffer_to_clipboard() {
 
     # Copy the current ZLE buffer ($BUFFER) to the clipboard
     printf "%s" "$BUFFER" | eval "$clip_cmd"
-    
+
     zle -M "Copied to system clipboard!"
 }
 
